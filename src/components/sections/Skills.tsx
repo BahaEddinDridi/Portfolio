@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import Particles from "../Particles";
-import ShootingStars from "../ShootingStar";
+import dynamic from "next/dynamic";
+const Particles = dynamic(() => import("../Particles"), { ssr: false });
+const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
 
 interface Skill {
   name: string;

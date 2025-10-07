@@ -4,8 +4,9 @@ import RotatingText from "../RotatingText";
 import Image from "next/image";
 import { useRef } from "react";
 import SparklesText from "../SparklyText";
-import Particles from "../Particles";
-import ShootingStars from "../ShootingStar";
+import dynamic from "next/dynamic";
+const Particles = dynamic(() => import("../Particles"), { ssr: false });
+const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
 import magicAnimation from "@/../public/lotties/magic.json";
 
 export default function Hero() {

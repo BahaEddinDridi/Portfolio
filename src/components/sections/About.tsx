@@ -1,9 +1,10 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useRef } from "react";
 import Image from "next/image";
-import Particles from "../Particles";
-import ShootingStars from "../ShootingStar";
+const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
+const Particles = dynamic(() => import("../Particles"), { ssr: false });
 
 export function AboutMe() {
   const ref = useRef(null);

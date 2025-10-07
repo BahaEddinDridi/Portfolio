@@ -1,9 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { ProjectCarousel } from "../project-carousel";
-import Particles from "../Particles";
-import ShootingStars from "../ShootingStar";
+import dynamic from "next/dynamic";
+
+const ProjectCarousel = dynamic(
+  () => import("../project-carousel").then(mod => mod.ProjectCarousel),
+  { ssr: false } // disable server-side rendering
+);
+import { useRef } from "react";
+const Particles = dynamic(() => import("../Particles"), { ssr: false });
+const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
+
 
 export function Projects() {
   const ref = useRef(null);

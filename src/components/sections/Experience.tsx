@@ -3,10 +3,11 @@
 import { Code, Briefcase, Users } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { ProfessionalTimeline } from "../professional-timeline"
-import Particles from "../Particles"
-import ShootingStars from "../ShootingStar"
+import dynamic from "next/dynamic";
+const Particles = dynamic(() => import("../Particles"), { ssr: false });
+const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
 
-// Timeline data based on user's experience
+
 const experienceData = [
   {
     id: "exp-1",

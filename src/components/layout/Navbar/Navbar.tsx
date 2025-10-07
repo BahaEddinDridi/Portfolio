@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import NavLink from "./NavLink";
-import Particles from "@/components/Particles";
-import ThemeSwitch from "./ThemeSwitch";
+import dynamic from "next/dynamic";
+const ThemeSwitch = dynamic(() => import("@/components/layout/Navbar/ThemeSwitch"), { ssr: false });
+const Particles = dynamic(() => import("@/components/Particles"), { ssr: false });
 
 const links = ["hero", "about", "skills", "experience", "projects", "contact"];
 const labels = ["Home", "About", "Skills", "Experience", "Projects", "Contact"];
