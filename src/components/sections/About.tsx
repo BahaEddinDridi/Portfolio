@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import Particles from "../Particles";
 import ShootingStars from "../ShootingStar";
 
 export function AboutMe() {
-    const ref = useRef(null);
+  const ref = useRef(null);
 
   return (
     <section
@@ -20,13 +20,13 @@ export function AboutMe() {
       >
         <Particles
           particleColors={["#ffffff", "#a5b4fc"]}
-           particleCount={1000}
-            particleSpread={20}
-            speed={0.5}
-            particleBaseSize={160}
-            moveParticlesOnHover={false}
-            alphaParticles={true}
-            disableRotation={true}
+          particleCount={1000}
+          particleSpread={20}
+          speed={0.5}
+          particleBaseSize={160}
+          moveParticlesOnHover={false}
+          alphaParticles={true}
+          disableRotation={true}
         />
       </div>
       <div
@@ -93,15 +93,15 @@ export function AboutMe() {
 
           <div className="max-w-3xl mx-auto space-y-6 text-lg leading-relaxed">
             <p className="text-white/90 backdrop-blur-sm bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300">
-              Hey there! I'm a passionate developer who loves crafting beautiful
-              and functional web experiences. I believe in writing clean code
-              and creating interfaces that feel magical to use.
+              Hey there! I&apos;m a passionate developer who loves crafting
+              beautiful and functional web experiences. I believe in writing
+              clean code and creating interfaces that feel magical to use.
             </p>
 
             <p className="text-white/90 backdrop-blur-sm bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300">
-              When I'm not coding, you'll find me exploring new technologies,
-              contributing to open source, or diving deep into the latest web
-              development trends.
+              When I&apos;m not coding, you&apos;ll find me exploring new
+              technologies, contributing to open source, or diving deep into the
+              latest web development trends.
             </p>
 
             <div className="relative group">
@@ -119,10 +119,10 @@ export function AboutMe() {
                   </svg>
                   <div className="text-left">
                     <h3 className="font-semibold text-xl mb-3 text-white">
-                      Coffee & Code
+                      Coffee &amp; Code
                     </h3>
                     <p className="text-white/90 leading-relaxed">
-                      I've calculated that approximately 60% of my code is
+                      I&apos;ve calculated that approximately 60% of my code is
                       powered by coffee. The other 40%? Also coffee, but iced.
                       My debugging skills are directly proportional to my
                       caffeine levels!

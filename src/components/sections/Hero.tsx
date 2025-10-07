@@ -6,6 +6,7 @@ import { useRef } from "react";
 import SparklesText from "../SparklyText";
 import Particles from "../Particles";
 import ShootingStars from "../ShootingStar";
+import magicAnimation from "@/../public/lotties/magic.json";
 
 export default function Hero() {
   const roles = ["Developer", "Engineer", "Wizard", "Creator"];
@@ -99,7 +100,7 @@ export default function Hero() {
         {/* Wizard animation */}
         <div className="relative flex-none w-40 h-40 sm:w-48 sm:h-48 lg:w-72 lg:h-72 z-10">
           <Lottie
-            animationData={require("/public/lotties/magic.json")}
+            animationData={magicAnimation}
             loop
             className="w-full h-full relative z-10"
           />
