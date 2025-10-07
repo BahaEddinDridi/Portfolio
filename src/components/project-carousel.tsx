@@ -377,7 +377,6 @@ export function ProjectCarousel() {
           {/* Navigation Buttons */}
           <Button
             variant="outline"
-            size="icon"
             className="absolute left-8 top-1/2 -translate-y-1/2 z-50 bg-white/10 dark:bg-white/10 backdrop-blur-sm border-white/20 dark:border-white/20 hover:bg-white/20 dark:hover:bg-white/20 text-white"
             onClick={() => rotateCarousel("prev")}
             disabled={isRotating}
@@ -386,7 +385,6 @@ export function ProjectCarousel() {
           </Button>
           <Button
             variant="outline"
-            size="icon"
             className="absolute right-8 top-1/2 -translate-y-1/2 z-50 bg-white/10 dark:bg-white/10 backdrop-blur-sm border-white/20 dark:border-white/20 hover:bg-white/20 dark:hover:bg-white/20 text-white"
             onClick={() => rotateCarousel("next")}
             disabled={isRotating}
