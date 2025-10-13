@@ -18,7 +18,7 @@ export function Projects() {
     <section
       ref={ref}
       id="projects"
-      className="relative min-h-screen py-20 px-4 bg-white dark:bg-[#030f18] transition-all duration-1000"
+      className="relative min-h-screen py-10 px-4 bg-white dark:bg-[#030f18] transition-all duration-1000"
     >
       <div
         className="absolute inset-0 z-0"

@@ -2,7 +2,7 @@
 
 import type React from "react";
 import { createPortal } from "react-dom";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import Button from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
 interface Project {
   id: number;
@@ -23,7 +24,8 @@ interface Project {
   video: string[];
   technologies: string[];
   liveUrl?: string;
-  githubUrl?: string;
+  frontendGithubUrl?: string;
+  backendGithubUrl?: string;
   category: string;
 }
 
@@ -59,7 +61,9 @@ const projects: Project[] = [
       "Meta Ads API",
     ],
     liveUrl: "",
-    githubUrl: "https://github.com",
+    frontendGithubUrl:
+      "https://github.com/BahaEddinDridi/Marketing-Platform-Frontend",
+    backendGithubUrl: "https://github.com/BahaEddinDridi/Marketing-Platform",
     category: "Full-Stack",
   },
   {
@@ -67,13 +71,16 @@ const projects: Project[] = [
     title: "Horizon Formation",
     shortDescription: "Training center management system",
     fullDescription:
-      "A full-featured management platform built for a professional training center, streamlining administration for students, teachers, sessions, and billing. The system includes role-based dashboards, salary management for instructors, scheduling tools, and payment tracking. Designed for efficient data handling and an intuitive experience for administrators.",
+      "A full-featured management platform built for a professional training center. I collaborated closely with the team, managing the workflow by preparing tasks and organizing sprints, while also actively contributing to coding. The system streamlines administration for students, teachers, sessions, and billing, featuring role-based dashboards, salary management for instructors, scheduling tools, and payment tracking. Designed for efficient data handling and an intuitive experience for administrators.",
     image: "/images/projects/project_2/1.webp",
     video: [],
     gallery: [],
     technologies: ["MongoDB", "Express", "React", "Node.js", "Tailwind CSS"],
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com",
+    liveUrl: "",
+    frontendGithubUrl:
+      "https://github.com/BahaEddinDridi/Horizon-Formation/tree/main/Frontend",
+    backendGithubUrl:
+      "https://github.com/BahaEddinDridi/Horizon-Formation/tree/main/Backend",
     category: "Full-Stack",
   },
   {
@@ -81,18 +88,22 @@ const projects: Project[] = [
     title: "Chalet Booking Platform",
     shortDescription: "Online chalet reservation system",
     fullDescription:
-      "A Nuxt 3-based booking platform that allows users to explore, book, and manage chalet reservations online. Features include availability calendars, dynamic pricing, service add-ons, and admin management for listings. Integrated with a responsive and elegant interface for a smooth booking experience.",
+      "A Nuxt 3-based booking platform developed as a freelance project, allowing users to explore, book, and manage chalet reservations online. I worked on fixing existing issues, implementing new features, and translating the entire website into multiple languages, gaining valuable experience with real-world project requirements. Features include availability calendars, dynamic pricing, service add-ons, and admin management for listings, all integrated within a responsive and elegant interface for a smooth booking experience.",
     image: "/images/projects/project_3/1.jpg",
-    video: ["https://www.youtube.com/watch?v=rya6Ll5n_iU"],
+    video: [],
     gallery: [
       "/images/projects/project_3/1.jpg",
-      "/images/projects/project_3/2.jpg",
-      "/images/projects/project_3/3.jpg",
-      "/images/projects/project_3/4.jpg",
+      "/images/projects/project_3/2.png",
+      "/images/projects/project_3/3.png",
+      "/images/projects/project_3/4.png",
+      "/images/projects/project_3/5.png",
+      "/images/projects/project_3/6.png",
     ],
     technologies: ["Nuxt 3", "Vue.js", "Node.js", "MongoDB", "Tailwind CSS"],
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com",
+    liveUrl: "https://chaletsissi-www.vercel.app",
+    frontendGithubUrl:
+      "https://github.com/fairplay-digital-admin/chaletsissi-www",
+    backendGithubUrl: "",
     category: "Frontend",
   },
   {
@@ -101,16 +112,17 @@ const projects: Project[] = [
     shortDescription: "Workspace management and performance optimization",
     fullDescription:
       "During my internship at Yopex Hub, I worked on improving both the backend performance and user experience of their existing platform. I added a role-based access system that allows seamless transitions between personal and team workspaces, and optimized data queries to boost responsiveness across the app.",
-    image: "/images/projects/project_4/1.jpg",
-    video: ["https://www.youtube.com/watch?v=rya6Ll5n_iU"],
-    gallery: [
-      "/images/projects/project_4/1.jpg",
-      "/images/projects/project_4/2.jpg",
-      "/images/projects/project_4/3.jpg",
+    image: "/images/projects/project_4/1.png",
+    video: [
+      "/images/projects/project_4/1.mp4",
+      "/images/projects/project_4/2.mp4",
+      "/images/projects/project_4/3.mp4",
     ],
+    gallery: [],
     technologies: ["React", "Node.js", "MongoDB", "Redux", "Tailwind CSS"],
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com",
+    liveUrl: "",
+    frontendGithubUrl: "",
+    backendGithubUrl: "",
     category: "Full-Stack",
   },
   {
@@ -119,16 +131,13 @@ const projects: Project[] = [
     shortDescription: "Interactive employee training system",
     fullDescription:
       "An onboarding web platform designed to simplify employee training using video tutorials, interactive quizzes, and progress tracking. Built during my internship at Smart For Green, the system makes onboarding more engaging and data-driven for HR departments.",
-    image: "/images/projects/project_5/1.jpg",
-    video: ["https://www.youtube.com/watch?v=rya6Ll5n_iU"],
-    gallery: [
-      "/images/projects/project_5/1.jpg",
-      "/images/projects/project_5/2.jpg",
-      "/images/projects/project_5/3.jpg",
-    ],
+    image: "/images/projects/project_5/1.png",
+    video: [],
+    gallery: [],
     technologies: ["React", "Node.js", "Express", "MongoDB"],
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com",
+    liveUrl: "",
+    frontendGithubUrl: "",
+    backendGithubUrl: "",
     category: "Full-Stack",
   },
   {
@@ -137,16 +146,13 @@ const projects: Project[] = [
     shortDescription: "Room allocation and maintenance system",
     fullDescription:
       "An academic project developed with Angular and Spring to manage dormitory operations efficiently. Features include room assignment, maintenance requests, and resident records. Built with modular architecture and secure REST APIs.",
-    image: "/images/projects/project_6/1.jpg",
-    video: ["https://www.youtube.com/watch?v=rya6Ll5n_iU"],
-    gallery: [
-      "/images/projects/project_6/1.jpg",
-      "/images/projects/project_6/2.jpg",
-      "/images/projects/project_6/3.jpg",
-    ],
+    image: "/images/projects/project_6/1.png",
+    video: [],
+    gallery: [],
     technologies: ["Angular", "Spring Boot", "MySQL"],
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com",
+    liveUrl: "",
+    frontendGithubUrl: "https://github.com/BAferiel/GestionFoyerAngular",
+    backendGithubUrl: "https://github.com/BahaEddinDridi/springBoot",
     category: "Full-Stack",
   },
   {
@@ -156,15 +162,20 @@ const projects: Project[] = [
     fullDescription:
       "A MERN stack web platform designed to help students and graduates create, analyze, and manage resumes while connecting them with professional opportunities. Includes resume parsing, career analytics, and admin dashboards for job listings.",
     image: "/images/projects/project_7/1.jpg",
-    video: ["https://www.youtube.com/watch?v=rya6Ll5n_iU"],
+    video: [],
     gallery: [
       "/images/projects/project_7/1.jpg",
-      "/images/projects/project_7/2.jpg",
-      "/images/projects/project_7/3.jpg",
+      "/images/projects/project_7/2.png",
+      "/images/projects/project_7/3.png",
+      "/images/projects/project_7/4.png",
+      "/images/projects/project_7/5.png",
+      "/images/projects/project_7/6.png",
     ],
     technologies: ["MongoDB", "Express", "React", "Node.js"],
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com",
+    liveUrl: "",
+    frontendGithubUrl:
+      "https://github.com/BahaEddinDridi/Hestia_PIDEV_Frontend",
+    backendGithubUrl: "https://github.com/BahaEddinDridi/Hestia_PIDEV_Backend",
     category: "Full-Stack",
   },
   {
@@ -173,16 +184,16 @@ const projects: Project[] = [
     shortDescription: "Donation coordination system to reduce food waste",
     fullDescription:
       "A Laravel-based platform connecting restaurants with organizations to redistribute surplus food and minimize waste. Includes donation management, pickup scheduling, and reporting tools for sustainability impact tracking.",
-    image: "/images/projects/project_8/1.jpg",
-    video: ["https://www.youtube.com/watch?v=rya6Ll5n_iU"],
+    image: "/images/projects/project_8/1.png",
+    video: [],
     gallery: [
-      "/images/projects/project_8/1.jpg",
-      "/images/projects/project_8/2.jpg",
-      "/images/projects/project_8/3.jpg",
+      "/images/projects/project_8/1.png",
+      "/images/projects/project_8/2.png",
     ],
     technologies: ["Laravel", "PHP", "MySQL", "Bootstrap"],
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com",
+    liveUrl: "",
+    frontendGithubUrl: "",
+    backendGithubUrl: "https://github.com/BahaEddinDridi/RescueFood",
     category: "Backend",
   },
 ];
@@ -195,7 +206,18 @@ export function ProjectCarousel() {
   const [startX, setStartX] = useState(0);
   const [currentX, setCurrentX] = useState(0);
   const [galleryIndex, setGalleryIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
   const carouselRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const rotateCarousel = (direction: "next" | "prev") => {
     if (isRotating) return;
@@ -268,13 +290,15 @@ export function ProjectCarousel() {
     const position = (index - currentIndex + projects.length) % projects.length;
     const totalCards = projects.length;
     const angle = (360 / totalCards) * position;
-    const radius = 320;
 
+    const radius = isMobile ? 130 : 320;
     const dragOffset = isDragging ? (currentX - startX) * 0.2 : 0;
 
     const x = Math.sin(((angle + dragOffset) * Math.PI) / 180) * radius;
     const z = Math.cos(((angle + dragOffset) * Math.PI) / 180) * radius;
-    const scale = 0.7 + (z + radius) / (radius * 3);
+    const scale = isMobile
+      ? 0.5 + (z + radius) / (radius * 4)
+      : 0.7 + (z + radius) / (radius * 3);
     const opacity = z > -radius / 2 ? 1 : 0.3;
 
     return {
@@ -290,7 +314,7 @@ export function ProjectCarousel() {
       <div className="space-y-6">
         <div
           ref={carouselRef}
-          className="relative w-full h-[700px] flex items-center justify-center overflow-visible select-none"
+          className="relative w-full h-[380px] sm:h-[500px] md:h-[650px] lg:h-[700px] flex items-center justify-center overflow-visible select-none"
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -304,7 +328,7 @@ export function ProjectCarousel() {
           <div
             className="relative w-full h-full"
             style={{
-              perspective: "1200px",
+              perspective: isMobile ? "600px" : "1200px",
               perspectiveOrigin: "50% 50%",
             }}
           >
@@ -312,8 +336,11 @@ export function ProjectCarousel() {
               {projects.map((project, index) => (
                 <div
                   key={project.id}
-                  className="absolute w-[350px] h-[450px] transition-all duration-600 ease-out cursor-pointer"
-                  style={getCardStyle(index)}
+                  className="absolute w-[240px] sm:w-[320px] md:w-[350px] h-[320px] sm:h-[400px] md:h-[450px] transition-all duration-600 ease-out cursor-pointer"
+                  style={{
+                    ...getCardStyle(index),
+                    cursor: "url('/cursor/custom-pointer.png'), pointer",
+                  }}
                   onClick={() => {
                     if (
                       (index - currentIndex + projects.length) %
@@ -327,11 +354,14 @@ export function ProjectCarousel() {
                 >
                   <div className="relative w-full h-full rounded-xl overflow-hidden bg-[#f3e8ff]/60 dark:bg-white/5 backdrop-blur-sm border border-[#f3e8ff]/60 dark:border-white/10 shadow-2xl hover:shadow-white/20 dark:hover:shadow-white/20 transition-all group">
                     {/* Project Image */}
-                    <div className="relative h-[60%] overflow-hidden">
-                      <img
+                    <div className="relative h-[55%] sm:h-[60%] overflow-hidden">
+                      <Image
                         src={project.image || "/placeholder.svg"}
                         alt={project.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        width={500}
+                        height={500}
+                        className="w-full h-full object-contain  group-hover:scale-110 transition-transform duration-500"
+                        priority={index === currentIndex}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 dark:from-slate-950/90 to-transparent" />
                     </div>
@@ -341,24 +371,26 @@ export function ProjectCarousel() {
                       <Badge className="bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border-white/20 dark:border-white/20">
                         {project.category}
                       </Badge>
-                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-slate-700 dark:group-hover:text-white/90 transition-colors">
+                      <h3 className="text-base sm:text-xl md:text-2xl font-bold text-slate-900 dark:text-white group-hover:text-slate-700 dark:group-hover:text-white/90 transition-colors line-clamp-2">
                         {project.title}
                       </h3>
-                      <p className="text-sm text-slate-700 dark:text-slate-300 line-clamp-2">
+                      <p className="text-[11px] sm:text-sm text-slate-700 dark:text-slate-300 line-clamp-2">
                         {project.shortDescription}
                       </p>
-                      <div className="flex flex-wrap gap-2">
-                        {project.technologies.slice(0, 3).map((tech) => (
-                          <span
-                            key={tech}
-                            className="text-xs px-2 py-1 rounded-full bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border border-white/20 dark:border-white/20"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                        {project.technologies.length > 3 && (
-                          <span className="text-xs px-2 py-1 rounded-full bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border border-white/20 dark:border-white/20">
-                            +{project.technologies.length - 3}
+                      <div className="flex flex-wrap gap-1 sm:gap-1.5 md:gap-2">
+                        {project.technologies
+                          .slice(0, isMobile ? 2 : 3)
+                          .map((tech) => (
+                            <span
+                              key={tech}
+                              className="text-[9px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border border-white/20 dark:border-white/20"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        {project.technologies.length > (isMobile ? 2 : 3) && (
+                          <span className="text-[9px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border border-white/20 dark:border-white/20">
+                            +{project.technologies.length - (isMobile ? 2 : 3)}
                           </span>
                         )}
                       </div>
@@ -377,7 +409,8 @@ export function ProjectCarousel() {
           {/* Navigation Buttons */}
           <Button
             variant="outline"
-            className="absolute left-8 top-1/2 -translate-y-1/2 z-50 
+            size={isMobile ? "sm" : "default"}
+            className="absolute left-2 sm:left-4 md:left-8 top-1/2 -translate-y-1/2 z-50 
              bg-yellow-50/30 dark:bg-white/10 backdrop-blur-sm 
              border-yellow-200/30 dark:border-white/20 
              hover:bg-yellow-50/50 dark:hover:bg-white/20 
@@ -385,12 +418,13 @@ export function ProjectCarousel() {
             onClick={() => rotateCarousel("prev")}
             disabled={isRotating}
           >
-            <ChevronLeft className="h-6 w-6" />
+            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
           </Button>
 
           <Button
             variant="outline"
-            className="absolute right-8 top-1/2 -translate-y-1/2 z-50 
+            size={isMobile ? "sm" : "default"}
+            className="absolute right-2 sm:right-4 md:right-8 top-1/2 -translate-y-1/2 z-50 
              bg-yellow-50/30 dark:bg-white/10 backdrop-blur-sm 
              border-yellow-200/30 dark:border-white/20 
              hover:bg-yellow-50/50 dark:hover:bg-white/20 
@@ -398,7 +432,7 @@ export function ProjectCarousel() {
             onClick={() => rotateCarousel("next")}
             disabled={isRotating}
           >
-            <ChevronRight className="h-6 w-6" />
+            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
           </Button>
 
           {/* Drag Hint */}
@@ -406,23 +440,24 @@ export function ProjectCarousel() {
 
         {/* Carousel Indicators */}
         <div className="flex flex-col gap-2 items-center justify-center">
-          <div className="text-gray-900 dark:text-white/50 text-sm pointer-events-none">
-            Drag to rotate
+          <div className="text-gray-900 dark:text-white/50 text-xs sm:text-sm pointer-events-none">
+            {isMobile ? "Swipe to rotate" : "Drag to rotate"}
           </div>
-          <div className="flex gap-2 justify-center">
+          <div className="flex gap-1.5 sm:gap-2 justify-center">
             {projects.map((_, index) => (
               <button
                 key={index}
-                className={`w-2 h-2 rounded-full transition-all ${
+                className={`h-2 rounded-full transition-all ${
                   index === currentIndex
-                    ? "bg-gray-900 dark:bg-white w-8"
-                    : "bg-gray-900/30 dark:bg-white/30 hover:bg-gray-900/50 dark:hover:bg-white/50"
+                    ? "bg-gray-900 dark:bg-white w-6 sm:w-8"
+                    : "bg-gray-900/30 dark:bg-white/30 hover:bg-gray-900/50 dark:hover:bg-white/50 w-2"
                 }`}
                 onClick={() => {
                   if (!isRotating) {
                     setCurrentIndex(index);
                   }
                 }}
+                aria-label={`Go to project ${index + 1}`}
               />
             ))}
           </div>
@@ -436,55 +471,49 @@ export function ProjectCarousel() {
             onClick={() => setSelectedProject(null)}
           >
             <div
-              className="relative w-full max-w-7xl max-h-[95vh]  bg-slate-50 dark:bg-slate-950 rounded-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300"
+              className="relative w-full max-w-7xl max-h-[98vh] sm:max-h-[95vh] bg-slate-50 dark:bg-slate-950 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close Button */}
               <button
-                className="absolute top-4 right-4 z-50 p-2 rounded-full bg-white/10 dark:bg-white/10 backdrop-blur-sm border border-white/20 dark:border-white/20 hover:bg-white/20 dark:hover:bg-white/20 text-white transition-all"
+                className="absolute top-2 right-2 sm:top-4 sm:right-4 z-50 p-1.5 sm:p-2 rounded-full bg-gray-200 dark:bg-white/10 backdrop-blur-sm border border-gray-300 dark:border-white/20 hover:bg-gray-300 dark:hover:bg-white/20 text-black dark:text-white transition-all"
                 onClick={() => setSelectedProject(null)}
               >
-                <X className="h-6 w-6" />
+               <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
 
-              <div
-                className="flex flex-col h-full max-h-[95vh] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100
-        [&::-webkit-scrollbar-thumb]:rounded-full
-        [&::-webkit-scrollbar-thumb]:bg-gray-300
-        dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-        dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 "
-              >
-                <div className="p-6 md:p-8 lg:p-10 space-y-6 bg-slate-50 dark:bg-slate-950">
+              <div className="flex flex-col h-full max-h-[98vh] sm:max-h-[95vh] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
+                <div className="p-4 sm:p-6 md:p-8 lg:p-10 space-y-4 sm:space-y-6 bg-slate-50 dark:bg-slate-950">
                   <div>
-                    <Badge className="bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white border-slate-300 dark:border-slate-700 mb-4">
+                    <Badge className="bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white border-slate-300 dark:border-slate-700 mb-3 sm:mb-4 text-xs sm:text-sm">
                       {selectedProject.category}
                     </Badge>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-4">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-3 sm:mb-4 pr-8">
                       {selectedProject.title}
                     </h2>
-                    <p className="text-base md:text-lg text-slate-600 dark:text-slate-400">
+                    <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
                       {selectedProject.shortDescription}
                     </p>
                   </div>
 
                   <div>
-                    <h3 className="text-xl md:text-2xl font-semibold mb-3 text-slate-900 dark:text-white">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-2 sm:mb-3 text-slate-900 dark:text-white">
                       About This Project
                     </h3>
-                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+                    <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed">
                       {selectedProject.fullDescription}
                     </p>
                   </div>
 
                   <div>
-                    <h3 className="text-xl md:text-2xl font-semibold mb-4 text-slate-900 dark:text-white">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-3 sm:mb-4 text-slate-900 dark:text-white">
                       Technologies Used
                     </h3>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {selectedProject.technologies.map((tech) => (
                         <span
                           key={tech}
-                          className="px-4 py-2 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 text-sm font-medium"
+                          className="px-2.5 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 text-xs sm:text-sm font-medium"
                         >
                           {tech}
                         </span>
@@ -492,152 +521,135 @@ export function ProjectCarousel() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                  <div className="flex flex-col gap-2 sm:gap-3 md:gap-4 pt-2 sm:pt-4">
                     {selectedProject.liveUrl && (
                       <Button
-                        className="flex-1 bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 h-12 text-base"
-                        onClick={() =>
-                          window.open(selectedProject.liveUrl, "_blank")
-                        }
+                        className="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 h-10 sm:h-11 md:h-12 text-sm sm:text-base"
+                        onClick={() => window.open(selectedProject.liveUrl, "_blank")}
                       >
-                        <ExternalLink className="mr-2 h-5 w-5" />
+                        <ExternalLink className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                         View Live Demo
                       </Button>
                     )}
-                    {selectedProject.githubUrl && (
-                      <Button
-                        variant="outline"
-                        className="flex-1 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 bg-transparent h-12 text-base"
-                        onClick={() =>
-                          window.open(selectedProject.githubUrl, "_blank")
-                        }
-                      >
-                        <Github className="mr-2 h-5 w-5" />
-                        View Source Code
-                      </Button>
-                    )}
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4">
+                      {selectedProject.frontendGithubUrl && (
+                        <Button
+                          variant="outline"
+                          className="flex-1 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 bg-transparent h-10 sm:h-11 md:h-12 text-sm sm:text-base"
+                          onClick={() => window.open(selectedProject.frontendGithubUrl, "_blank")}
+                        >
+                          <Github className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                          <span className="hidden sm:inline">View Frontend Source</span>
+                          <span className="sm:hidden">Frontend Code</span>
+                        </Button>
+                      )}
+
+                      {selectedProject.backendGithubUrl && (
+                        <Button
+                          variant="outline"
+                          className="flex-1 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 bg-transparent h-10 sm:h-11 md:h-12 text-sm sm:text-base"
+                          onClick={() => window.open(selectedProject.backendGithubUrl, "_blank")}
+                        >
+                          <Github className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                          <span className="hidden sm:inline">View Backend Source</span>
+                          <span className="sm:hidden">Backend Code</span>
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
+
                 {/* Bottom Section - Image Gallery */}
                 {(selectedProject.gallery.length > 0 ||
-                  (selectedProject.video &&
-                    selectedProject.video.length > 0)) && (
-                  <div className="relative bg-slate-50 dark:bg-slate-950 p-8 flex flex-col gap-4">
+                  (selectedProject.video && selectedProject.video.length > 0)) && (
+                  <div className="relative bg-slate-50 dark:bg-slate-950 p-4 sm:p-6 md:p-8 flex flex-col gap-3 sm:gap-4">
                     {/* Main Image/Video */}
-                    <div className="relative h-[400px] md:h-[500px] rounded-lg overflow-hidden ">
+                    <div className="relative h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px] rounded-lg overflow-hidden">
                       {galleryIndex >= selectedProject.gallery.length &&
-                      selectedProject.video[
-                        galleryIndex - selectedProject.gallery.length
-                      ] ? (
+                      selectedProject.video[galleryIndex - selectedProject.gallery.length] ? (
                         <div className="w-full h-full flex items-center justify-center">
                           <video
-                            src={
-                              selectedProject.video[
-                                galleryIndex - selectedProject.gallery.length
-                              ]
-                            }
+                            src={selectedProject.video[galleryIndex - selectedProject.gallery.length]}
                             controls
                             className="w-full h-full object-contain"
-                            autoPlay
-                            loop
+                            preload="metadata"
                           />
                         </div>
                       ) : (
-                        <img
-                          src={
-                            selectedProject.gallery[galleryIndex] ||
-                            "/placeholder.svg"
-                          }
-                          alt={`${selectedProject.title} - Image ${
-                            galleryIndex + 1
-                          }`}
+                        <Image
+                          src={selectedProject.gallery[galleryIndex] || "/placeholder.svg" || "/placeholder.svg"}
+                          alt={`${selectedProject.title} - Image ${galleryIndex + 1}`}
+                          width={1200}
+                          height={800}
                           className="w-full h-full object-contain"
                         />
                       )}
 
                       {/* Gallery Navigation */}
-                      {selectedProject.gallery.length +
-                        selectedProject.video.length >
-                        1 && (
+                      {selectedProject.gallery.length + selectedProject.video.length > 1 && (
                         <>
                           <button
-                            className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/10 dark:bg-white/10 backdrop-blur-sm border border-white/20 dark:border-white/20 hover:bg-white/20 dark:hover:bg-white/20 text-white transition-all"
+                            className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 p-1.5 sm:p-2 rounded-full bg-gray-200 dark:bg-white/10 backdrop-blur-sm border border-gray-300 dark:border-white/20 hover:bg-gray-300 dark:hover:bg-white/20 text-black dark:text-white transition-all"
                             onClick={() =>
                               setGalleryIndex(
                                 (prev) =>
-                                  (prev -
-                                    1 +
-                                    selectedProject.gallery.length +
-                                    selectedProject.video.length) %
-                                  (selectedProject.gallery.length +
-                                    selectedProject.video.length)
+                                  (prev - 1 + selectedProject.gallery.length + selectedProject.video.length) %
+                                  (selectedProject.gallery.length + selectedProject.video.length),
                               )
                             }
+                            aria-label="Previous image"
                           >
-                            <ChevronLeft className="h-5 w-5" />
+                            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
                           </button>
                           <button
-                            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/10 dark:bg-white/10 backdrop-blur-sm border border-white/20 dark:border-white/20 hover:bg-white/20 dark:hover:bg-white/20 text-white transition-all"
+                            className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 p-1.5 sm:p-2 rounded-full bg-gray-200 dark:bg-white/10 backdrop-blur-sm border border-gray-300 dark:border-white/20 hover:bg-gray-300 dark:hover:bg-white/20 text-black dark:text-white transition-all"
                             onClick={() =>
                               setGalleryIndex(
-                                (prev) =>
-                                  (prev + 1) %
-                                  (selectedProject.gallery.length +
-                                    selectedProject.video.length)
+                                (prev) => (prev + 1) % (selectedProject.gallery.length + selectedProject.video.length),
                               )
                             }
+                            aria-label="Next image"
                           >
-                            <ChevronRight className="h-5 w-5" />
+                            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
                           </button>
                         </>
                       )}
                     </div>
 
                     {/* Thumbnail Gallery */}
-                    <div
-                      className="flex gap-2 overflow-x-auto [&::-webkit-scrollbar]:h-2
-  [&::-webkit-scrollbar-track]:rounded-full
-  [&::-webkit-scrollbar-track]:bg-gray-100
-  [&::-webkit-scrollbar-thumb]:rounded-full
-  [&::-webkit-scrollbar-thumb]:bg-gray-300
-  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 p-2"
-                    >
+                    <div className="flex gap-1.5 sm:gap-2 overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 p-1 sm:p-2">
                       {selectedProject.gallery.map((img, idx) => (
                         <button
                           key={`image-${idx}`}
-                          className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-1 transition-all ${
+                          className={`relative flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-all ${
                             galleryIndex === idx
                               ? "border-gray-600 scale-105"
-                              : "border-gray-200 dark:border-white/20 hover:border-white/50 dark:hover:border-white/50"
+                              : "border-gray-200 dark:border-white/20 hover:border-gray-400 dark:hover:border-white/50"
                           }`}
                           onClick={() => setGalleryIndex(idx)}
+                          aria-label={`View image ${idx + 1}`}
                         >
-                          <img
+                          <Image
                             src={img || "/placeholder.svg"}
                             alt={`Thumbnail ${idx + 1}`}
                             className="w-full h-full object-cover"
+                            width={500}
+                            height={500}
                           />
                         </button>
                       ))}
                       {selectedProject.video.map((vid, idx) => (
                         <button
                           key={`video-${idx}`}
-                          className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all bg-slate-800 dark:bg-slate-800 flex items-center justify-center ${
-                            galleryIndex ===
-                            selectedProject.gallery.length + idx
+                          className={`relative flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-all bg-slate-800 dark:bg-slate-800 flex items-center justify-center ${
+                            galleryIndex === selectedProject.gallery.length + idx
                               ? "border-gray-600 scale-105"
-                              : "border-gray-200 dark:border-white/20 hover:border-white/50 dark:hover:border-white/50"
+                              : "border-gray-200 dark:border-white/20 hover:border-gray-400 dark:hover:border-white/50"
                           }`}
-                          onClick={() =>
-                            setGalleryIndex(
-                              selectedProject.gallery.length + idx
-                            )
-                          }
+                          onClick={() => setGalleryIndex(selectedProject.gallery.length + idx)}
+                          aria-label={`View video ${idx + 1}`}
                         >
-                          <span className="text-white text-xs">
-                            Video {idx + 1}
-                          </span>
+                          <span className="text-white text-[10px] sm:text-xs">Video {idx + 1}</span>
                         </button>
                       ))}
                     </div>

@@ -218,7 +218,7 @@ export function Skills() {
       ref={ref}
       id="skills"
       className="
-        relative min-h-screen w-full py-12 md:py-20 px-4 overflow-hidden transition-all duration-1000
+        relative min-h-screen w-full py-12 md:py-10 px-4 overflow-hidden transition-all duration-1000
         bg-white dark:bg-[#030f18]"
     >
       <div
@@ -273,16 +273,15 @@ export function Skills() {
             </button>
           ))}
         </div>
-<div
-  className="flex flex-col lg:flex-row gap-4 md:gap-6 items-start
+        <div
+          className="flex flex-col lg:flex-row gap-4 md:gap-6 items-start
              dark:bg-transparent p-4 rounded-xl border border-gray-300 dark:border-transparent"
-  style={{
-    background: isDarkMode
-      ? "transparent"
-      : "radial-gradient(circle, #001f3f 0%, #0077b6 70%, #00b4d8 100%)",
-  }}
->
-
+          style={{
+            background: isDarkMode
+              ? "transparent"
+              : "radial-gradient(circle, #001f3f 0%, #0077b6 70%, #00b4d8 100%)",
+          }}
+        >
           <div className="relative w-full lg:flex-1 h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
             <svg
               className="absolute inset-0 w-full h-full transition-all duration-700 ease-out"
@@ -359,6 +358,7 @@ export function Skills() {
                     transform: "translate(-50%, -50%)",
                     opacity: opacity,
                     pointerEvents: opacity === 0 ? "none" : "auto",
+                    cursor: "url('/cursor/custom-pointer.png'), pointer",
                   }}
                   onMouseEnter={() => setHoveredSkill(skill.name)}
                   onMouseLeave={() => setHoveredSkill(null)}
@@ -507,7 +507,7 @@ export function Skills() {
         </div>
 
         {/* Bottom decorative text */}
-        <div className="mt-8 md:mt-16 text-center">
+        <div className="mt-4 md:mt-6 text-center">
           <p className="text-sm font-mono text-gray-600 dark:text-gray-600 ">
             Always learning, always growing
           </p>

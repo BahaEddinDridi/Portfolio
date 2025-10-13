@@ -30,13 +30,13 @@ export default function ThemeSwitch() {
   };
 
   return (
-    <div className="relative w-16 h-16 flex items-center justify-center">
+    <div className="relative w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
       <AnimatePresence mode="wait">
         {theme === "dark" ? (
           <motion.button
             key="moon"
             onClick={toggleTheme}
-            className="absolute w-16 h-16 rounded-full cursor-pointer flex items-center justify-center overflow-hidden"
+            className="absolute w-12 h-12 md:w-16 md:h-16 rounded-full cursor-pointer flex items-center justify-center overflow-hidden"
             initial={{ opacity: 0, x: 40, y: -40, scale: 0.8, rotate: -15 }} // Moon enters from top-right corner
             animate={{ opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 }}
             exit={{ opacity: 0, x: 40, y: 40, scale: 0.8, rotate: 15 }} // Moon exits to bottom-right corner
@@ -52,14 +52,14 @@ export default function ThemeSwitch() {
             <img
               src="/svgs/moon2.svg"
               alt="moon"
-              className="w-10 h-10"
+              className="w-8 h-8 md:w-10 md:h-10"
             />
           </motion.button>
         ) : (
           <motion.button
             key="sun"
             onClick={toggleTheme}
-            className="absolute w-16 h-16 rounded-full cursor-pointer flex items-center justify-center overflow-hidden"
+            className="absolute w-12 h-12 md:w-16 md:h-16 rounded-full cursor-pointer flex items-center justify-center overflow-hidden"
             initial={{ opacity: 0, x: 40, y: -40, scale: 0.8, rotate: -15 }} // Sun enters from top-right corner
             animate={{ opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 }}
             exit={{ opacity: 0, x: 40, y: 40, scale: 0.8, rotate: 15 }} // Sun exits to bottom-right corner
@@ -72,7 +72,7 @@ export default function ThemeSwitch() {
             whileTap={{ scale: 0.95 }} // Slight scale down on click
             style={{ backgroundColor: "#FACC15", boxShadow: "0 0 8px #FFD700" }}
           >
-            <div className="w-10 h-10 rounded-full bg-yellow-400" />
+            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-yellow-400" />
           </motion.button>
         )}
       </AnimatePresence>

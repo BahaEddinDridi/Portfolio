@@ -112,9 +112,9 @@ export function Experience() {
 
   return (
     <section
-      id="experience"
       ref={ref}
-      className="relative min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden bg-white dark:bg-[#030f18] transition-all duration-1000"
+      id="experience"
+      className="relative min-h-screen flex items-center justify-center px-4 py-10 bg-white dark:bg-[#030f18] transition-all duration-1000"
     >
       <div
         className="absolute inset-0 z-0"

@@ -11,39 +11,39 @@ export function ContactMe() {
   const contactInfo = [
     {
       label: "Email",
-      value: "hello@example.com",
+      value: "BahaEddine.Dridi@esprit.tn",
       icon: "📧",
-      link: "mailto:hello@example.com",
+      link: "mailto:BahaEddine.Dridi@esprit.tn",
     },
     {
       label: "Phone",
-      value: "+1 (555) 123-4567",
+      value: "+216 51 255 758",
       icon: "📱",
-      link: "tel:+15551234567",
+      link: "tel:+21651255758",
     },
     {
       label: "LinkedIn",
-      value: "linkedin.com/in/yourname",
+      value: "linkedin.com/in/baha-eddine-dridi-88b039203",
       icon: "💼",
-      link: "https://linkedin.com/in/yourname",
+      link: "https://linkedin.com/in/baha-eddine-dridi-88b039203",
     },
     {
       label: "GitHub",
-      value: "github.com/yourname",
+      value: "github.com/BahaEddinDridi",
       icon: "💻",
-      link: "https://github.com/yourname",
+      link: "https://github.com/BahaEddinDridi",
     },
     {
       label: "Discord",
-      value: "username#1234",
+      value: "geodaddy1591",
       icon: <SiDiscord className="text-blue-400 dark:text-white w-10 h-10" />,
-      link: "https://discord.com/users/youruserid",
+      link: "https://discord.com/users/geodaddy1591",
     },
   ];
   return (
     <section
       id="contact"
-      className="relative min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden bg-white dark:bg-[#030f18] transition-all duration-1000"
+      className="relative min-h-screen flex items-center justify-center px-4 py-10 overflow-hidden bg-white dark:bg-[#030f18] transition-all duration-1000"
     >
       <div
         className="absolute inset-0 z-0"
@@ -68,19 +68,19 @@ export function ContactMe() {
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 z-20">
-  <Image
-  src="/svgs/hero-dark.svg"
-  alt="Background trees"
-  width={1920}
-  height={200}
-  className={`
+        <Image
+          src="/svgs/hero-dark.svg"
+          alt="Background trees"
+          width={1920}
+          height={200}
+          className={`
     w-full h-auto object-cover object-bottom
     transition-all duration-500
     filter brightness-100 dark:brightness-0 dark:invert
   `}
-  priority
-/>
-</div>
+          priority
+        />
+      </div>
       <div className="max-w-7xl mx-auto w-full relative z-10 mb-60">
         <div className="mb-16 text-center transition-all duration-1000 delay-200">
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">

@@ -5,7 +5,9 @@ import { useRef } from "react";
 import Image from "next/image";
 const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
 const Particles = dynamic(() => import("../Particles"), { ssr: false });
+import Lottie from "lottie-react";
 
+import coffeeAnimation from "@/../public/lotties/coffee.json";
 export function AboutMe() {
   const ref = useRef(null);
 
@@ -13,7 +15,7 @@ export function AboutMe() {
     <section
       ref={ref}
       id="about"
-      className="relative min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden bg-white dark:bg-[#030f18] transition-all duration-1000"
+      className="relative min-h-screen flex items-center justify-center px-4 py-10 overflow-hidden bg-white dark:bg-[#030f18] transition-all duration-1000"
     >
       <div
         className="absolute inset-0 z-0"
@@ -21,7 +23,7 @@ export function AboutMe() {
       >
         <Particles
           particleColors={["#4b5563", "#a5b4fc", "#10B981"]}
-          darkParticleColors={["#ffffff", "#a5b4fc"]} 
+          darkParticleColors={["#ffffff", "#a5b4fc"]}
           particleCount={1000}
           particleSpread={20}
           speed={0.5}
@@ -112,8 +114,9 @@ export function AboutMe() {
 
             <div className="relative group">
               <div className="absolute -inset-1 bg-gray-200/10 dark:bg-white/10 rounded-2xl blur-xl opacity-50 group-hover:opacity-100 transition duration-500" />
-              <div className="relative backdrop-blur-sm bg-gray-100/50 dark:bg-white/5 p-8 rounded-2xl border border-gray-200/50 dark:border-white/20 hover:border-indigo-500 dark:hover:border-white/30 transition-all duration-300">
-                <div className="flex items-start gap-4">
+
+              <div className="relative backdrop-blur-sm bg-gray-100/50 dark:bg-white/5 p-8 rounded-2xl border border-gray-200/50 dark:border-white/20 hover:border-indigo-500 dark:hover:border-white/30 transition-all duration-300 overflow-hidden">
+                <div className="flex items-start gap-4 relative z-10">
                   <svg
                     width="32"
                     height="32"
@@ -123,22 +126,28 @@ export function AboutMe() {
                   >
                     <path
                       d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z"
-                      fill="#4b5563" // Gray-600 for light mode
+                      fill="#4b5563"
                       className="dark:fill-white"
                     />
                   </svg>
-                  <div className="text-left">
+                  <div className="text-left max-w-[80%]">
                     <h3 className="font-semibold text-xl mb-3 text-gray-900 dark:text-white">
                       Coffee &amp; Code
                     </h3>
                     <p className="text-gray-800 dark:text-white/90 leading-relaxed">
-                      I&apos;ve calculated that approximately 60% of my code is
-                      powered by coffee. The other 40%? Also coffee, but iced.
-                      My debugging skills are directly proportional to my
-                      caffeine levels!
+                      My secret recipe? A cup of coffee, a dash of curiosity,
+                      and a sprinkle of chaos. Together, they turn ideas into
+                      pixels and bugs into happy little features ✨.
                     </p>
                   </div>
                 </div>
+
+                {/* Floating animation — doesn't stretch the card */}
+                <Lottie
+                  animationData={coffeeAnimation}
+                  loop
+                  className="absolute -right-10 bottom-0 w-48 h-48 md:w-56 md:h-56 opacity-90 brightness-100 dark:brightness-75 hidden md:block pointer-events-none select-none"
+                />
               </div>
             </div>
           </div>

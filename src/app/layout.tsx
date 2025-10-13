@@ -5,6 +5,7 @@ import "./globals.css";
 import Footer from "@/components/layout/footer/Footer";
 import ClickSpark from "@/components/ClickSpark";
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
 const Ribbons = dynamic(() => import("@/components/Ribbons"), { ssr: false });
 const Navbar = dynamic(() => import("@/components/layout/Navbar/Navbar"), { ssr: false });
@@ -27,9 +28,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+<html lang="en" className="overflow-x-hidden">
+        <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
         style={{ position: "relative", minHeight: "100vh" }}
       >
         <ClickSpark
@@ -40,7 +41,7 @@ export default function RootLayout({
           duration={400}
         >
           <Navbar />
-          {children}
+          <Suspense fallback={null}>{children}</Suspense>
           <Footer />
           <div
             id="modal-root"
