@@ -59,7 +59,7 @@ export default function RootLayout({
             }}
           >
             <Ribbons
-              baseThickness={18}
+              baseThickness={8}
               colors={["#191970", "#303F9F", "#3F51B5"]}
               speedMultiplier={0.5}
               maxAge={500}

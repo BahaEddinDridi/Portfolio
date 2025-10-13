@@ -1,12 +1,11 @@
-"use client"
+"use client";
 
-import { Code, Briefcase, Users } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
-import { ProfessionalTimeline } from "../professional-timeline"
+import { Code, Briefcase, Users } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ProfessionalTimeline } from "../professional-timeline";
 import dynamic from "next/dynamic";
 const Particles = dynamic(() => import("../Particles"), { ssr: false });
 const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
-
 
 const experienceData = [
   {
@@ -20,7 +19,11 @@ const experienceData = [
       "Building custom web applications and solutions",
       "Managing projects from conception to deployment",
     ],
-    skills: ["Full-Stack Development", "Project Management", "Client Relations"],
+    skills: [
+      "Full-Stack Development",
+      "Project Management",
+      "Client Relations",
+    ],
   },
   {
     id: "exp-2",
@@ -60,7 +63,15 @@ const experienceData = [
       "Introduced team challenges feature, requiring users to create and manage teams",
       "Enhanced UI elements and optimized platform performance using React Hooks",
     ],
-    skills: ["MongoDB", "Express.js", "React", "Node.js", "Redux.js", "React Hooks", "Tailwind CSS"],
+    skills: [
+      "MongoDB",
+      "Express.js",
+      "React",
+      "Node.js",
+      "Redux.js",
+      "React Hooks",
+      "Tailwind CSS",
+    ],
   },
   {
     id: "exp-4",
@@ -87,52 +98,37 @@ const experienceData = [
       "Maintained a precise database of all production activities, including schedules, inventory levels, and shipment details",
       "Compiled, analyzed, and interpreted production data to generate comprehensive reports",
     ],
-    skills: ["Microsoft Excel", "Planning", "Data Analysis", "Manufacturing Coordination"],
+    skills: [
+      "Microsoft Excel",
+      "Planning",
+      "Data Analysis",
+      "Manufacturing Coordination",
+    ],
   },
-]
+];
 
 export function Experience() {
-  const [isVisible, setIsVisible] = useState(false)
-  const sectionRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.1 },
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [])
+  const ref = useRef(null);
 
   return (
     <section
       id="experience"
-      ref={sectionRef}
-      className={`min-h-screen bg-slate-50 dark:bg-[#030f18] relative py-20 transition-opacity duration-1000 ${
-        isVisible ? "opacity-100" : "opacity-0"
-      }`}
+      ref={ref}
+      className="relative min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden bg-white dark:bg-[#030f18] transition-all duration-1000"
     >
-     <div
+      <div
         className="absolute inset-0 z-0"
         style={{ width: "100%", height: "100%", zIndex: 0 }}
       >
         <Particles
           particleColors={["#ffffff", "#a5b4fc"]}
-           particleCount={1000}
-            particleSpread={20}
-            speed={0.5}
-            particleBaseSize={160}
-            moveParticlesOnHover={false}
-            alphaParticles={true}
-            disableRotation={true}
+          particleCount={1000}
+          particleSpread={20}
+          speed={0.5}
+          particleBaseSize={160}
+          moveParticlesOnHover={false}
+          alphaParticles={true}
+          disableRotation={true}
         />
       </div>
       <div
@@ -144,28 +140,21 @@ export function Experience() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div
-          className={`mb-16 text-center transition-all duration-1000 delay-200 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-          }`}
-        >
+        <div className="mb-16 text-center transition-all duration-1000 delay-200">
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
             Professional Experience
           </h2>
           <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto">
-            A journey through my professional career, showcasing the projects and roles that shaped my expertise
+            A journey through my professional career, showcasing the projects
+            and roles that shaped my expertise
           </p>
         </div>
 
         {/* Timeline */}
-        <div
-          className={`transition-all duration-1000 delay-400 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-          }`}
-        >
+        <div className="transition-all duration-1000 delay-400">
           <ProfessionalTimeline data={experienceData} expandMode="multi" />
         </div>
       </div>
     </section>
-  )
+  );
 }

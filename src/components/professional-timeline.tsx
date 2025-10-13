@@ -149,7 +149,7 @@ const TimelineItem = memo(function TimelineItem({ item, expanded, onToggle }: Ti
       <div className="ml-12 mb-8">
         <div
           className={`
-          bg-white/80 dark:bg-white/5 backdrop-blur-md
+          bg-gray-100/50 dark:bg-white/5 backdrop-blur-md
           rounded-lg border border-slate-200 dark:border-white/10
           transition-all duration-200
           ${expanded ? "shadow-lg dark:shadow-[0_0_20px_rgba(255,255,255,0.1)]" : "shadow-md hover:shadow-lg dark:shadow-none dark:hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]"}
@@ -158,7 +158,7 @@ const TimelineItem = memo(function TimelineItem({ item, expanded, onToggle }: Ti
           {/* Header */}
           <button
             id={headerId}
-            className="w-full text-left p-4 sm:p-6 group/button cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5 transition-colors duration-200 rounded-t-lg"
+            className="w-full text-left p-4 sm:p-6 group/button cursor-pointer hover:bg-slate-100 dark:hover:bg-white/5 transition-colors duration-200 rounded-t-lg"
             onClick={() => onToggle(item.id)}
             aria-expanded={expanded}
             aria-controls={contentId}

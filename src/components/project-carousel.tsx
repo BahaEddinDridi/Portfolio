@@ -290,7 +290,7 @@ export function ProjectCarousel() {
       <div className="space-y-6">
         <div
           ref={carouselRef}
-          className="relative w-full h-[700px] flex items-center justify-center overflow-hidden select-none"
+          className="relative w-full h-[700px] flex items-center justify-center overflow-visible select-none"
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -325,7 +325,7 @@ export function ProjectCarousel() {
                     }
                   }}
                 >
-                  <div className="relative w-full h-full rounded-xl overflow-hidden bg-white/5 dark:bg-white/5 backdrop-blur-sm border border-white/10 dark:border-white/10 shadow-2xl hover:shadow-white/20 dark:hover:shadow-white/20 transition-all group">
+                  <div className="relative w-full h-full rounded-xl overflow-hidden bg-[#f3e8ff]/60 dark:bg-white/5 backdrop-blur-sm border border-[#f3e8ff]/60 dark:border-white/10 shadow-2xl hover:shadow-white/20 dark:hover:shadow-white/20 transition-all group">
                     {/* Project Image */}
                     <div className="relative h-[60%] overflow-hidden">
                       <img
@@ -338,26 +338,26 @@ export function ProjectCarousel() {
 
                     {/* Project Info */}
                     <div className="absolute bottom-0 left-0 right-0 p-6 space-y-3">
-                      <Badge className="bg-white/10 dark:bg-white/10 text-white border-white/20 dark:border-white/20">
+                      <Badge className="bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border-white/20 dark:border-white/20">
                         {project.category}
                       </Badge>
-                      <h3 className="text-2xl font-bold text-white group-hover:text-white/90 transition-colors">
+                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-slate-700 dark:group-hover:text-white/90 transition-colors">
                         {project.title}
                       </h3>
-                      <p className="text-sm text-slate-300 dark:text-slate-300 line-clamp-2">
+                      <p className="text-sm text-slate-700 dark:text-slate-300 line-clamp-2">
                         {project.shortDescription}
                       </p>
                       <div className="flex flex-wrap gap-2">
                         {project.technologies.slice(0, 3).map((tech) => (
                           <span
                             key={tech}
-                            className="text-xs px-2 py-1 rounded-full bg-white/10 dark:bg-white/10 text-white border border-white/20 dark:border-white/20"
+                            className="text-xs px-2 py-1 rounded-full bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border border-white/20 dark:border-white/20"
                           >
                             {tech}
                           </span>
                         ))}
                         {project.technologies.length > 3 && (
-                          <span className="text-xs px-2 py-1 rounded-full bg-white/10 dark:bg-white/10 text-white border border-white/20 dark:border-white/20">
+                          <span className="text-xs px-2 py-1 rounded-full bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border border-white/20 dark:border-white/20">
                             +{project.technologies.length - 3}
                           </span>
                         )}
@@ -377,15 +377,24 @@ export function ProjectCarousel() {
           {/* Navigation Buttons */}
           <Button
             variant="outline"
-            className="absolute left-8 top-1/2 -translate-y-1/2 z-50 bg-white/10 dark:bg-white/10 backdrop-blur-sm border-white/20 dark:border-white/20 hover:bg-white/20 dark:hover:bg-white/20 text-white"
+            className="absolute left-8 top-1/2 -translate-y-1/2 z-50 
+             bg-yellow-50/30 dark:bg-white/10 backdrop-blur-sm 
+             border-yellow-200/30 dark:border-white/20 
+             hover:bg-yellow-50/50 dark:hover:bg-white/20 
+             text-gray-800 dark:text-white"
             onClick={() => rotateCarousel("prev")}
             disabled={isRotating}
           >
             <ChevronLeft className="h-6 w-6" />
           </Button>
+
           <Button
             variant="outline"
-            className="absolute right-8 top-1/2 -translate-y-1/2 z-50 bg-white/10 dark:bg-white/10 backdrop-blur-sm border-white/20 dark:border-white/20 hover:bg-white/20 dark:hover:bg-white/20 text-white"
+            className="absolute right-8 top-1/2 -translate-y-1/2 z-50 
+             bg-yellow-50/30 dark:bg-white/10 backdrop-blur-sm 
+             border-yellow-200/30 dark:border-white/20 
+             hover:bg-yellow-50/50 dark:hover:bg-white/20 
+             text-gray-800 dark:text-white"
             onClick={() => rotateCarousel("next")}
             disabled={isRotating}
           >
@@ -397,7 +406,7 @@ export function ProjectCarousel() {
 
         {/* Carousel Indicators */}
         <div className="flex flex-col gap-2 items-center justify-center">
-          <div className="text-white/50 dark:text-white/50 text-sm pointer-events-none">
+          <div className="text-gray-900 dark:text-white/50 text-sm pointer-events-none">
             Drag to rotate
           </div>
           <div className="flex gap-2 justify-center">
@@ -406,8 +415,8 @@ export function ProjectCarousel() {
                 key={index}
                 className={`w-2 h-2 rounded-full transition-all ${
                   index === currentIndex
-                    ? "bg-white w-8"
-                    : "bg-white/30 dark:bg-white/30 hover:bg-white/50 dark:hover:bg-white/50"
+                    ? "bg-gray-900 dark:bg-white w-8"
+                    : "bg-gray-900/30 dark:bg-white/30 hover:bg-gray-900/50 dark:hover:bg-white/50"
                 }`}
                 onClick={() => {
                   if (!isRotating) {

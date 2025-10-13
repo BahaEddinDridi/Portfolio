@@ -1,14 +1,20 @@
 "use client";
-import React from "react";
+
+import { useMotionValue, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
 
 export default function Footer() {
+  const [activeSection, setActiveSection] = useState("hero");
+  const scrollY = useMotionValue(0);
+
   const navLinks = [
-    { name: "Features", href: "#" },
-    { name: "Solution", href: "#" },
-    { name: "Customers", href: "#" },
-    { name: "Pricing", href: "#" },
-    { name: "Help", href: "#" },
-    { name: "About", href: "#" },
+    { name: "Home", href: "#hero", id: "hero" },
+    { name: "About", href: "#about", id: "about" },
+    { name: "Skills", href: "#skills", id: "skills" },
+    { name: "Experience", href: "#experience", id: "experience" },
+    { name: "Projects", href: "#projects", id: "projects" },
+    { name: "Contact", href: "#contact", id: "contact" },
   ];
 
   const socialIcons = [
@@ -126,146 +132,72 @@ export default function Footer() {
     },
   ];
 
+  useEffect(() => {
+    const handleScroll = () => scrollY.set(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [scrollY]);
+
+  useEffect(() => {
+    const sections = navLinks
+      .map((link) => document.getElementById(link.id))
+      .filter(Boolean);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
+        });
+      },
+      { threshold: 0.6 }
+    );
+    sections.forEach((el) => observer.observe(el!));
+    return () => observer.disconnect();
+  }, []);
+
+  // Interpolate morph values based on scrollY
+  const width = useTransform(scrollY, [0, 300], ["85%", "100%"]);
+  const borderRadius = useTransform(scrollY, [0, 300], ["24px", "0px"]);
+  const padding = useTransform(scrollY, [0, 300], ["1rem 2rem", "1rem 3rem"]);
+  const marginTop = useTransform(scrollY, [0, 300], ["20px", "0px"]);
+  const boxShadow = useTransform(
+    scrollY,
+    [0, 300],
+    ["0 5px 15px rgba(0,0,0,0.2)", "0 10px 20px rgba(0,0,0,0.3)"]
+  );
+
+  const scrollToSection = (id: string) => {
+    const section = document.getElementById(id);
+    if (!section) return;
+    section.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <footer className="py-10 px-4 sm:px-6 lg:px-8 font-inter relative overflow-hidden ">
+    <motion.footer
+      style={{ width, borderRadius, padding, marginTop, boxShadow }}
+      className="py-10 px-4 sm:px-6 lg:px-8 font-inter relative overflow-hidden bg-[#030f18] dark:bg-white "
+    >
       <div className="max-w-7xl mx-auto flex flex-col items-center relative z-10">
         <div className="mb-6 flex items-center justify-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 200 200"
-            width="48"
-            height="48"
-            className="coolshapes flower-3 mr-3 drop-shadow-lg"
-          >
-            <g clipPath="url(#cs_clip_1_flower-3)">
-              <mask
-                id="cs_mask_1_flower-3"
-                style={{ maskType: "alpha" }}
-                width="200"
-                height="200"
-                x="0"
-                y="0"
-                maskUnits="userSpaceOnUse"
-              >
-                <path
-                  fill="#fff"
-                  d="M200 50c0-27.614-22.386-50-50-50s-50 22.386-50 50c0-27.614-22.386-50-50-50S0 22.386 0 50s22.386 50 50 50c-27.614 0-50 22.386-50 50s22.386 50 50 50 50-22.386 50-50c0 27.614 22.386 50 50 50s50-22.386 50-50c0-27.608-22.375-49.989-49.98-50C177.625 99.99 200 77.608 200 50z"
-                ></path>
-              </mask>
-              <g mask="url(#cs_mask_1_flower-3)">
-                <path fill="#fff" d="M200 0H0v200h200V0z"></path>
-                <path
-                  fill="url(#paint0_linear_748_4691)"
-                  fillOpacity="0.55"
-                  d="M200 0H0v200h200V0z"
-                ></path>
-                <g filter="url(#filter0_f_748_4691)">
-                  <path fill="#18A0FB" d="M131 3H-12v108h143V3z"></path>
-                  <path fill="#FF58E4" d="M190 109H0v116h190V109z"></path>
-                  <ellipse
-                    cx="153.682"
-                    cy="64.587"
-                    fill="#FFD749"
-                    rx="83"
-                    ry="57"
-                    transform="rotate(-33.875 153.682 64.587)"
-                  ></ellipse>
-                </g>
-              </g>
-            </g>
-            <defs>
-              <filter
-                id="filter0_f_748_4691"
-                width="361.583"
-                height="346.593"
-                x="-72"
-                y="-61.593"
-                colorInterpolationFilters="sRGB"
-                filterUnits="userSpaceOnUse"
-              >
-                <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-                <feBlend
-                  in="SourceGraphic"
-                  in2="BackgroundImageFix"
-                  result="shape"
-                ></feBlend>
-                <feGaussianBlur
-                  result="effect1_foregroundBlur_748_4691"
-                  stdDeviation="30"
-                ></feGaussianBlur>
-              </filter>
-              <linearGradient
-                id="paint0_linear_748_4691"
-                x1="200"
-                x2="0"
-                y1="0"
-                y2="200"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor="#FF1F00"></stop>
-                <stop offset="1" stopColor="#FFD600"></stop>
-              </linearGradient>
-              <clipPath id="cs_clip_1_flower-3">
-                <path fill="#fff" d="M0 0H200V200H0z"></path>
-              </clipPath>
-            </defs>
-            <g
-              style={{ mixBlendMode: "overlay" }}
-              mask="url(#cs_mask_1_flower-3)"
-            >
-              <path
-                fill="gray"
-                stroke="transparent"
-                d="M200 0H0v200h200V0z"
-                filter="url(#cs_noise_1_flower-3)"
-              ></path>
-            </g>
-            <defs>
-              <filter
-                id="cs_noise_1_flower-3"
-                width="100%"
-                height="100%"
-                x="0%"
-                y="0%"
-                filterUnits="objectBoundingBox"
-              >
-                <feTurbulence
-                  baseFrequency="0.6"
-                  numOctaves="5"
-                  result="out1"
-                  seed="4"
-                ></feTurbulence>
-                <feComposite
-                  in="out1"
-                  in2="SourceGraphic"
-                  operator="in"
-                  result="out2"
-                ></feComposite>
-                <feBlend
-                  in="SourceGraphic"
-                  in2="out2"
-                  mode="overlay"
-                  result="out3"
-                ></feBlend>
-              </filter>
-            </defs>
-          </svg>
-          <span className="text-gray-900 dark:text-white text-3xl font-extrabold tracking-wide">
-            Sera UI
+          <span className="text-white dark:text-gray-900 text-3xl font-extrabold tracking-wide">
+            Baha Eddine Dridi
           </span>
         </div>
 
         <nav className="mb-6 w-full">
           <ul className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-base font-medium">
             {navLinks.map((link) => (
-              <li key={link.name}>
-                <a
-                  href={link.href}
-                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-300 relative after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-0 after:bg-gray-900 dark:after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+              <li key={link.id}>
+                <button
+                  onClick={() => scrollToSection(link.id)}
+                  className={`text-gray-400 dark:text-gray-600 hover:text-white dark:hover:text-gray-900 transition-all duration-300 relative ${
+                    activeSection === link.id
+                      ? "text-white dark:text-gray-900 after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-full after:bg-white dark:after:bg-gray-900 after:transition-all after:duration-300"
+                      : "after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-0 after:bg-white dark:after:bg-gray-900 after:transition-all after:duration-300 hover:after:w-full"
+                  }`}
                 >
                   {link.name}
-                </a>
+                </button>
               </li>
             ))}
           </ul>
@@ -278,7 +210,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={icon.name}
-              className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-300"
+              className="text-gray-400 dark:text-gray-600 hover:text-white dark:hover:text-gray-900 transition-colors duration-300"
               href={icon.href}
             >
               {icon.svg}
@@ -286,12 +218,10 @@ export default function Footer() {
           ))}
         </div>
 
-        <p className="text-center text-xs text-gray-500 dark:text-gray-500 mt-4">
-          &copy; {new Date().getFullYear()} seraui. All rights reserved.
+        <p className="text-center text-xs text-gray-500 dark:text-gray-900 mt-4">
+          &copy; {new Date().getFullYear()} Baha Eddine Dridi. All rights reserved.
         </p>
       </div>
-    </footer>
+    </motion.footer>
   );
 }
-
-

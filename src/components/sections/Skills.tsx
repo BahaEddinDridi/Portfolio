@@ -15,13 +15,11 @@ interface Skill {
 }
 
 const skills: Skill[] = [
-  // Frontend Constellation - Orion pattern (spread out more)
   { name: "React", category: "Frontend", level: 3, x: 20, y: 20 },
   { name: "Next.js", category: "Frontend", level: 3, x: 30, y: 35 },
   { name: "Angular", category: "Frontend", level: 2, x: 40, y: 25 },
   { name: "Nuxt3", category: "Frontend", level: 2, x: 50, y: 40 },
 
-  // Backend Constellation - Cassiopeia W-shape (spread out more)
   { name: "Spring", category: "Backend", level: 2, x: 55, y: 20 },
   { name: "Express", category: "Backend", level: 3, x: 65, y: 30 },
   { name: "Nest", category: "Backend", level: 2, x: 75, y: 20 },
@@ -71,19 +69,19 @@ const connections: Record<string, Array<[string, string]>> = {
 const categories = ["All", "Frontend", "Backend", "Tools"];
 
 const scatteredPositions: Record<string, { x: number; y: number }> = {
-  // Frontend - top left area (bigger spread)
+  // Frontend - top left area
   React: { x: 15, y: 18 },
   "Next.js": { x: 28, y: 30 },
   Angular: { x: 20, y: 42 },
   Nuxt3: { x: 33, y: 54 },
-  // Backend - top right area (bigger spread)
+  // Backend - top right area
   Spring: { x: 65, y: 15 },
   Express: { x: 78, y: 25 },
   Nest: { x: 73, y: 35 },
   ".NET": { x: 86, y: 45 },
   Django: { x: 68, y: 52 },
   Laravel: { x: 81, y: 64 },
-  // Tools - bottom center area (bigger spread)
+  // Tools - bottom center area
   Jenkins: { x: 38, y: 78 },
   Docker: { x: 50, y: 82 },
   Github: { x: 62, y: 78 },
@@ -160,7 +158,20 @@ export function Skills() {
 
   const ref = useRef(null);
 
-  
+  const [isDarkMode, setIsDarkMode] = useState(
+    document.documentElement.classList.contains("dark")
+  );
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     setPreviousCategory(activeCategory);
@@ -215,14 +226,15 @@ export function Skills() {
         style={{ width: "100%", height: "100%", zIndex: 0 }}
       >
         <Particles
-          particleColors={["#ffffff", "#a5b4fc"]}
-           particleCount={1000}
-            particleSpread={20}
-            speed={0.5}
-            particleBaseSize={160}
-            moveParticlesOnHover={false}
-            alphaParticles={true}
-            disableRotation={true}
+          particleColors={["#4b5563", "#a5b4fc", "#10B981"]}
+          darkParticleColors={["#ffffff", "#a5b4fc"]}
+          particleCount={1000}
+          particleSpread={20}
+          speed={0.5}
+          particleBaseSize={160}
+          moveParticlesOnHover={false}
+          alphaParticles={true}
+          disableRotation={true}
         />
       </div>
       <div
@@ -231,7 +243,6 @@ export function Skills() {
       >
         <ShootingStars />
       </div>
-
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Section Header */}
@@ -244,8 +255,6 @@ export function Skills() {
             digital experiences
           </p>
         </div>
-
-        {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8 md:mb-12">
           {categories.map((category) => (
             <button
@@ -253,19 +262,27 @@ export function Skills() {
               onClick={() => setActiveCategory(category)}
               className={cn(
                 "px-4 md:px-6 py-2 rounded-full text-sm font-medium transition-all duration-300",
-                "border hover:border-white/50",
+                "border hover:border-gray-600",
                 "dark:border-gray-700 border-gray-300",
                 activeCategory === category
-                  ? "bg-white/10  shadow-[0_0_15px_rgba(255,255,255,0.3)]  dark:bg-white/10 dark:text-white dark:border-white  text-white border-gray-900"
-                  : "  dark:bg-gray-900/50 dark:text-gray-400 bg-white text-gray-600 hover:text-gray-900"
+                  ? "bg-white text-gray-900 border-gray-500 dark:shadow-[0_0_15px_rgba(255,255,255,0.3)] shadow-[0_0_15px_rgba(0,0,0,0.3)] dark:bg-white/10 dark:text-white dark:border-white"
+                  : "bg-gray-100 text-gray-700 hover:text-gray-900 dark:bg-gray-900/50 dark:text-gray-400"
               )}
             >
               {category}
             </button>
           ))}
         </div>
+<div
+  className="flex flex-col lg:flex-row gap-4 md:gap-6 items-start
+             dark:bg-transparent p-4 rounded-xl border border-gray-300 dark:border-transparent"
+  style={{
+    background: isDarkMode
+      ? "transparent"
+      : "radial-gradient(circle, #001f3f 0%, #0077b6 70%, #00b4d8 100%)",
+  }}
+>
 
-        <div className="flex flex-col lg:flex-row gap-4 md:gap-6 items-start">
           <div className="relative w-full lg:flex-1 h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
             <svg
               className="absolute inset-0 w-full h-full transition-all duration-700 ease-out"
@@ -299,17 +316,21 @@ export function Skills() {
                     className="transition-all duration-700"
                     stroke={
                       isHighlighted
-                        ? "rgba(255, 255, 255, 0.9)"
-                        : document.documentElement.classList.contains("light")
-                        ? "rgba(0, 0, 0, 0.3)"
-                        : "rgba(255, 255, 255, 0.3)"
+                        ? isDarkMode
+                          ? "rgba(255, 255, 255, 0.9)" // White in dark mode
+                          : "rgba(255, 215, 140, 0.9)" // Soft golden in light mode
+                        : isDarkMode
+                        ? "rgba(255, 255, 255, 0.3)" // Normal dark mode
+                        : "rgba(255, 215, 140, 0.5)" // Normal soft golden in light mode
                     }
                     style={{
                       filter: isHighlighted
-                        ? "drop-shadow(0 0 4px rgba(255, 255, 255, 0.8))"
-                        : document.documentElement.classList.contains("light")
-                        ? "drop-shadow(0 0 2px rgba(0, 0, 0, 0.2))"
-                        : "none",
+                        ? isDarkMode
+                          ? "drop-shadow(0 0 4px rgba(255,255,255,0.8))"
+                          : "drop-shadow(0 0 4px rgba(255,215,140,0.5))"
+                        : isDarkMode
+                        ? "none"
+                        : "drop-shadow(0 0 2px rgba(255,215,140,0.2))",
                       opacity: opacity,
                     }}
                   />
@@ -348,12 +369,12 @@ export function Skills() {
                     <div
                       className={cn(
                         "absolute w-12 h-12 transition-all duration-300 blur-xl rounded-full",
-                        "bg-white/20 dark:bg-white/20 ",
+                        "bg-yellow-200/20 dark:bg-white/20",
                         isHovered &&
-                          "w-20 h-20 bg-white/40 dark:bg-white/40 ",
+                          "w-20 h-20 bg-yellow-200/40 dark:bg-white/40",
                         isConnected &&
                           !isHovered &&
-                          "w-16 h-16 bg-white/30 dark:bg-white/30 "
+                          "w-16 h-16 bg-yellow-200/30 dark:bg-white/30"
                       )}
                     />
 
@@ -361,12 +382,12 @@ export function Skills() {
                     <div
                       className={cn(
                         "absolute w-8 h-8 transition-all duration-300 blur-md rounded-full",
-                        "bg-white/40 dark:bg-white/40 ",
+                        "bg-yellow-200/40 dark:bg-white/40",
                         isHovered &&
-                          "w-12 h-12 bg-white/60 dark:bg-white/60 ",
+                          "w-12 h-12 bg-yellow-200/60 dark:bg-white/60",
                         isConnected &&
                           !isHovered &&
-                          "w-10 h-10 bg-white/50 dark:bg-white/50 "
+                          "w-10 h-10 bg-yellow-200/50 dark:bg-white/50"
                       )}
                     />
 
@@ -379,22 +400,18 @@ export function Skills() {
                       viewBox="0 0 24 24"
                       fill="currentColor"
                       style={{
-                        color: document.documentElement.classList.contains(
-                          "light"
-                        )
-                          ? "#1f2937"
-                          : "white",
+                        color: isDarkMode ? "white" : "rgba(255,215,140,0.9)", // Soft golden in light
                         filter: isHovered
-                          ? document.documentElement.classList.contains("light")
-                            ? "drop-shadow(0 0 8px rgba(31, 41, 55, 1))"
-                            : "drop-shadow(0 0 8px rgba(255, 255, 255, 1))"
+                          ? isDarkMode
+                            ? "drop-shadow(0 0 8px rgba(255, 255, 255, 1))"
+                            : "drop-shadow(0 0 8px rgba(255,215,140,0.8))"
                           : isConnected
-                          ? document.documentElement.classList.contains("light")
-                            ? "drop-shadow(0 0 6px rgba(31, 41, 55, 0.8))"
-                            : "drop-shadow(0 0 6px rgba(255, 255, 255, 0.8))"
-                          : document.documentElement.classList.contains("light")
-                          ? "drop-shadow(0 0 4px rgba(31, 41, 55, 0.6))"
-                          : "drop-shadow(0 0 4px rgba(255, 255, 255, 0.6))",
+                          ? isDarkMode
+                            ? "drop-shadow(0 0 6px rgba(255, 255, 255, 0.8))"
+                            : "drop-shadow(0 0 6px rgba(255,215,140,0.6))"
+                          : isDarkMode
+                          ? "drop-shadow(0 0 4px rgba(255, 255, 255, 0.6))"
+                          : "drop-shadow(0 0 4px rgba(255,215,140,0.4))",
                       }}
                     >
                       <path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" />
@@ -426,8 +443,8 @@ export function Skills() {
                               className={cn(
                                 "w-1.5 h-1.5 rounded-full",
                                 i < skill.level
-                                  ? "bg-white shadow-[0_0_5px_rgba(255,255,255,0.8)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] "
-                                  : " dark:bg-gray-700 bg-gray-300"
+                                  ? "bg-gray-700 shadow-[0_0_15px_rgba(0,0,0,0.3)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] "
+                                  : " bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 "
                               )}
                             />
                           ))}
@@ -442,7 +459,7 @@ export function Skills() {
             })}
           </div>
 
-          <div className="w-full lg:w-40 rounded-xl border backdrop-blur-sm p-3 bg-gradient-to-br from-gray-900/80 to-gray-900/40 border-gray-800 dark:from-gray-900/80 dark:to-gray-900/40 dark:border-gray-800 ">
+          <div className="w-full lg:w-40 rounded-xl border backdrop-blur-sm p-3 bg-gradient-to-br from-gray-100/80 to-gray-100/40 border-gray-300 dark:from-gray-900/80 dark:to-gray-900/40 dark:border-gray-800 ">
             <h3 className="font-semibold text-xs mb-2 flex items-center gap-1.5  dark:text-white text-gray-900">
               <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" />
@@ -452,37 +469,37 @@ export function Skills() {
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <div className="flex gap-0.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_5px_rgba(255,255,255,0.8)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] " />
-                  <div className="w-1.5 h-1.5 rounded-full bg-gray-700 dark:bg-gray-700 " />
-                  <div className="w-1.5 h-1.5 rounded-full bg-gray-700 dark:bg-gray-700 " />
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-700 shadow-[0_0_15px_rgba(0,0,0,0.3)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] " />
+                  <div className="w-1.5 h-1.5 rounded-full bg-white dark:bg-gray-700 " />
+                  <div className="w-1.5 h-1.5 rounded-full bg-white dark:bg-gray-700 " />
                 </div>
-                <span className="text-[10px] text-gray-300 dark:text-gray-300 ">
+                <span className="text-[10px] dark:text-white text-gray-900">
                   Fine
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex gap-0.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_5px_rgba(255,255,255,0.8)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] " />
-                  <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_5px_rgba(255,255,255,0.8)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] " />
-                  <div className="w-1.5 h-1.5 rounded-full bg-gray-700 dark:bg-gray-700 " />
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-700 shadow-[0_0_15px_rgba(0,0,0,0.3)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] " />
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-700 shadow-[0_0_15px_rgba(0,0,0,0.3)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] " />
+                  <div className="w-1.5 h-1.5 rounded-full bg-white dark:bg-gray-700 " />
                 </div>
-                <span className="text-[10px] text-gray-300 dark:text-gray-300 ">
+                <span className="text-[10px] dark:text-white text-gray-900">
                   Intermediate
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex gap-0.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_5px_rgba(255,255,255,0.8)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] " />
-                  <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_5px_rgba(255,255,255,0.8)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] " />
-                  <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_5px_rgba(255,255,255,0.8)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] " />
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-700 shadow-[0_0_15px_rgba(0,0,0,0.3)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] " />
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-700 shadow-[0_0_15px_rgba(0,0,0,0.3)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] " />
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-700 shadow-[0_0_15px_rgba(0,0,0,0.3)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] " />
                 </div>
-                <span className="text-[10px] text-gray-300 dark:text-gray-300 ">
+                <span className="text-[10px] dark:text-white text-gray-900">
                   Advanced
                 </span>
               </div>
             </div>
             <div className="mt-3 pt-3 border-t border-gray-700 dark:border-gray-700 ">
-              <p className="text-[9px] leading-relaxed text-gray-400 dark:text-gray-400 ">
+              <p className="text-[9px] leading-relaxed text-gray-800 dark:text-gray-400 ">
                 Hover over stars to see details
               </p>
             </div>

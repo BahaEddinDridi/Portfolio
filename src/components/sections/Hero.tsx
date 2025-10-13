@@ -2,12 +2,14 @@
 import Lottie from "lottie-react";
 import RotatingText from "../RotatingText";
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import SparklesText from "../SparklyText";
 import dynamic from "next/dynamic";
 const Particles = dynamic(() => import("../Particles"), { ssr: false });
 const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
 import magicAnimation from "@/../public/lotties/magic.json";
+import { MagicSparkles } from "../MagicSparkles";
+import { motion } from "framer-motion";
 
 export default function Hero() {
   const roles = ["Developer", "Engineer", "Wizard", "Creator"];
@@ -16,76 +18,71 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-start px-4 sm:px-8 md:px-16 lg:px-32 bg-gradient-to-b from-blue-100 to-gray-200 dark:from-[#00041f] dark:to-[#09232e] text-gray-900 dark:text-white overflow-hidden"
+      className="relative min-h-screen flex items-center justify-start px-4 sm:px-8 md:px-16 lg:px-32 bg-gradient-to-b from-[#E0F2FF] to-[#D9CBFF] dark:from-[#00041f] dark:to-[#09232e] text-gray-900 dark:text-white overflow-hidden"
     >
       <div
         className="absolute inset-0 z-0"
         style={{ width: "100%", height: "100%", zIndex: 0 }}
       >
         <Particles
-          particleColors={["#ffffff", "#a5b4fc"]}
-           particleCount={1000}
-            particleSpread={20}
-            speed={0.5}
-            particleBaseSize={160}
-            moveParticlesOnHover={false}
-            alphaParticles={true}
-            disableRotation={true}
+          particleColors={["#4b5563", "#a5b4fc", "#10B981"]}
+          darkParticleColors={["#ffffff", "#a5b4fc"]} 
+          particleCount={1000}
+          particleSpread={20}
+          speed={0.5}
+          particleBaseSize={160}
+          moveParticlesOnHover={false}
+          alphaParticles={true}
+          disableRotation={true}
         />
       </div>
       <div
-        className="absolute inset-0 z-25"
+        className="absolute inset-0 z-[5]"
         style={{ width: "100%", height: "100%", zIndex: 5 }}
       >
         <ShootingStars />
       </div>
-      <div className="absolute bottom-0 left-[825px] -translate-x-1/2 w-20 sm:w-30 lg:w-36 h-[40%] bg-gradient-to-t from-gray-600 to-stone-500 dark:from-indigo-900 dark:to-slate-800 rounded-t-lg shadow-2xl z-15 overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-4 bg-gradient-to-b from-gray-500 to-gray-600 dark:from-slate-800 dark:to-indigo-900 flex justify-between px-2">
-          <div className="w-1/6 h-full bg-gray-600 dark:bg-[#1a3176]"></div>
-          <div className="w-1/6 h-full bg-gray-600 dark:bg-[#1a3176]"></div>
-          <div className="w-1/6 h-full bg-gray-600 dark:bg-[#1a3176]"></div>
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-transparent to-gray-700/20 dark:to-indigo-900/20 opacity-50"></div>
-      </div>
 
       <div className="absolute bottom-0 left-0 right-0 z-20">
-        <Image
-          src="/svgs/hero-dark.svg"
-          alt="Background trees"
-          width={1920}
-          height={200}
-          className="w-full h-auto object-cover object-bottom"
-          priority
-        />
-      </div>
+  <Image
+    src="/svgs/hero-dark.svg"
+    alt="Background trees"
+    width={1920}
+    height={200}
+    className="w-full h-auto object-cover object-bottom
+               filter brightness-0 invert transition-all duration-500
+               dark:filter-none"
+    priority
+  />
+</div>
 
       <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-12 w-full max-w-7xl mx-auto">
         <div className="flex-none max-w-lg flex flex-col justify-center items-start text-left gap-4 sm:gap-6">
-          <span className="text-3xl sm:text-4xl lg:text-5xl font-bold text-blue-900 dark:text-white">
+          <span className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white">
             Hi, I’m{" "}
             <SparklesText
               as="h1"
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-blue-900 dark:text-white tracking-tight dark:[--sparkle-first:#f0abfc] dark:[--sparkle-second:#a78bfa]"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white tracking-tight dark:[--sparkle-first:#f0abfc] dark:[--sparkle-second:#a78bfa]"
               sparkleCount={15}
               sparkleSize={18}
               colors={{
-                first: "var(--sparkle-first, #d946ef)",
-                second: "var(--sparkle-second, #8b5cf6)",
+                first: "var(--sparkle-first, #5b21b6)", // Indigo-800 for light mode
+                second: "var(--sparkle-second, #14b8a6)", // Teal-500 for light mode
               }}
             >
               Baha Eddine
             </SparklesText>
           </span>
 
-          <h2 className="text-2xl sm:text-3xl lg:text-5xl text-rose-600 dark:text-white font-semibold whitespace-nowrap">
+          <h2 className="text-2xl sm:text-3xl lg:text-5xl text-gray-900 dark:text-white font-semibold whitespace-nowrap">
             I’m an inspiring{" "}
             <RotatingText
               texts={roles}
-              mainClassName="inline-block text-violet-600 dark:text-violet-300"
+              mainClassName="inline-block text-teal-600 dark:text-purple-400 font-bold"
               staggerFrom="last"
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "-120%" }}
+              initial={{ x: "100%", y: "100%", opacity: 0 }}
+              animate={{ x: 0, y: 0, opacity: 1 }}
+              exit={{ x: "-100%", y: "-100%", opacity: 0 }}
               staggerDuration={0.03}
               splitLevelClassName="overflow-hidden inline-block"
               transition={{ type: "spring", damping: 30, stiffness: 400 }}
@@ -99,11 +96,36 @@ export default function Hero() {
         </div>
 
         {/* Wizard animation */}
-        <div className="relative flex-none w-40 h-40 sm:w-48 sm:h-48 lg:w-72 lg:h-72 z-10">
+        <div className="relative flex-none w-40 h-40 sm:w-48 sm:h-48 lg:w-72 lg:h-72 z-10 hidden sm:block">
+          <div className="absolute -left-28 top-24 -translate-y-1/2 w-32 h-32 z-20">
+            <MagicSparkles />
+          </div>
+          <motion.div
+            className="absolute inset-0 flex items-center justify-center z-0"
+            animate={{
+              scale: [1, 1.15, 1],
+              opacity: [0.3, 0.7, 0.3],
+            }}
+            transition={{
+              duration: 2,
+              ease: "easeInOut",
+              repeat: Infinity,
+            }}
+          >
+            <div className="absolute inset-0 rounded-full bg-blue-100/20 dark:bg-white/10 blur-3xl hover:bg-blue-100/30 dark:hover:bg-white/20 transition-all duration-700" />
+          </motion.div>
           <Lottie
             animationData={magicAnimation}
             loop
-            className="w-full h-full relative z-10"
+            className="w-full h-full relative z-10 brightness-100 dark:brightness-70"
+          />
+          <Image
+            src="/svgs/tower.svg"
+            alt="Wizard tower"
+            width={300}
+            height={300}
+            className="absolute -bottom-39 left-35 -translate-x-1/2 w-full h-auto z-20 brightness-100 saturate-120 dark:brightness-50"
+            priority
           />
         </div>
       </div>
