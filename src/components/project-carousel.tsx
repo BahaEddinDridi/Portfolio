@@ -37,7 +37,7 @@ const projects: Project[] = [
     fullDescription:
       "Developed during my internship at Innoway Solutions, this ERP platform synchronizes marketing operations across Microsoft, LinkedIn, Meta, and Google Ads. It enables real-time campaign management, lead extraction, and automated outreach workflows with centralized dashboards for performance insights. The system integrates OAuth authentication, API orchestration, and background job scheduling for data sync.",
     image: "/images/projects/project_1/1.png",
-    video: ["https://www.youtube.com/watch?v=rya6Ll5n_iU"],
+    video: [],
     gallery: [
       "/images/projects/project_1/1.png",
       "/images/projects/project_1/2.png",

@@ -1,14 +1,12 @@
-"use client";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/layout/footer/Footer";
 import ClickSpark from "@/components/ClickSpark";
-import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
-const Ribbons = dynamic(() => import("@/components/Ribbons"), { ssr: false });
-const Navbar = dynamic(() => import("@/components/layout/Navbar/Navbar"), { ssr: false });
+import NavbarWrapper from "./NavbarWrapper"; // Adjust path if needed
+import RibbonsWrapper from "./RibbonsWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,7 +18,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-
+export const metadata: Metadata = {
+  title: "Baha Eddine Dridi | Developer Portfolio",
+  icons: {
+    icon: "/smoke.ico",
+  },
+};
 
 export default function RootLayout({
   children,
@@ -40,7 +43,7 @@ export default function RootLayout({
           sparkCount={8}
           duration={400}
         >
-          <Navbar />
+          <NavbarWrapper />
           <Suspense fallback={null}>{children}</Suspense>
           <Footer />
           <div
@@ -59,14 +62,7 @@ export default function RootLayout({
               pointerEvents: "none",
             }}
           >
-            <Ribbons
-              baseThickness={8}
-              colors={["#191970", "#303F9F", "#3F51B5"]}
-              speedMultiplier={0.5}
-              maxAge={500}
-              enableFade={false}
-              enableShaderEffect={true}
-            />
+            <RibbonsWrapper />
           </div>
         </ClickSpark>
       </body>
