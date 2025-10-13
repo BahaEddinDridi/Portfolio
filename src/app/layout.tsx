@@ -20,8 +20,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Baha Eddine Dridi | Developer Portfolio",
+  description: "Full-stack web developer portfolio showcasing projects, skills, and creativity.",
   icons: {
-    icon: "/smoke.ico",
+    icon: "/smoke-v2.ico",
   },
 };
 
@@ -31,8 +32,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-<html lang="en" className="overflow-x-hidden">
-        <body
+    <html lang="en" className="overflow-x-hidden">
+      <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
         style={{ position: "relative", minHeight: "100vh" }}
       >
