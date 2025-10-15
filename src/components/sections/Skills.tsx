@@ -3,7 +3,11 @@
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
-const Particles = dynamic(() => import("../Particles"), { ssr: false });
+import { motion } from "framer-motion";
+import React from "react";
+const Particles = dynamic(() => import("../Particles").then(mod => React.memo(mod.default)), {
+  ssr: false
+});
 const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
 
 interface Skill {
@@ -155,7 +159,7 @@ export function Skills() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [previousCategory, setPreviousCategory] = useState("All");
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
-
+  const [hasAnimated, setHasAnimated] = useState(false);
   const ref = useRef(null);
 
   const [isDarkMode, setIsDarkMode] = useState(
@@ -214,12 +218,18 @@ export function Skills() {
   };
 
   return (
-    <section
+    
+    <motion.section
+      initial={{ opacity: 0, y: 100 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 1, ease: "easeOut" }}
+      onViewportEnter={() => setHasAnimated(true)}
       ref={ref}
       id="skills"
       className="
         relative min-h-screen w-full py-12 md:py-10 px-4 overflow-hidden transition-all duration-1000
-        bg-white dark:bg-[#030f18]"
+        "
     >
       <div
         className="absolute inset-0 z-0"
@@ -228,7 +238,7 @@ export function Skills() {
         <Particles
           particleColors={["#4b5563", "#a5b4fc", "#10B981"]}
           darkParticleColors={["#ffffff", "#a5b4fc"]}
-          particleCount={1000}
+          particleCount={200}
           particleSpread={20}
           speed={0.5}
           particleBaseSize={160}
@@ -246,7 +256,13 @@ export function Skills() {
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-8 md:mb-16">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="text-center mb-8 md:mb-16"
+        >
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight  dark:text-white text-gray-900">
             Skills & Technologies
           </h2>
@@ -254,11 +270,39 @@ export function Skills() {
             A constellation of tools and technologies I use to craft exceptional
             digital experiences
           </p>
-        </div>
-        <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8 md:mb-12">
+        </motion.div>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.5,
+                delayChildren: 0.8, // each button animates 0.5s after the previous
+              },
+            },
+          }}
+          className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8 md:mb-12"
+        >
           {categories.map((category) => (
-            <button
+            <motion.button
               key={category}
+              variants={{
+                hidden: { opacity: 0, y: -50, rotateX: -90 }, // Start higher with 3D rotation
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  rotateX: 0,
+                  transition: {
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 15,
+                    duration: 0.6,
+                  },
+                },
+              }}
               onClick={() => setActiveCategory(category)}
               className={cn(
                 "px-4 md:px-6 py-2 rounded-full text-sm font-medium transition-all duration-300",
@@ -270,9 +314,9 @@ export function Skills() {
               )}
             >
               {category}
-            </button>
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
         <div
           className="flex flex-col lg:flex-row gap-4 md:gap-6 items-start
              dark:bg-transparent p-4 rounded-xl border border-gray-300 dark:border-transparent"
@@ -304,8 +348,12 @@ export function Skills() {
                 const isHighlighted =
                   hoveredSkill === from || hoveredSkill === to;
 
+                const dx = toPos.x - fromPos.x;
+                const dy = toPos.y - fromPos.y;
+                const length = Math.sqrt(dx * dx + dy * dy);
+
                 return (
-                  <line
+                  <motion.line
                     key={`${from}-${to}-${index}`}
                     x1={`${fromPos.x}%`}
                     y1={`${fromPos.y}%`}
@@ -332,12 +380,35 @@ export function Skills() {
                         : "drop-shadow(0 0 2px rgba(255,215,140,0.2))",
                       opacity: opacity,
                     }}
+                    initial={{
+                      pathLength: 0,
+                      opacity: 0,
+                    }}
+                    animate={
+                      hasAnimated
+                        ? {
+                            pathLength: opacity,
+                            opacity: opacity,
+                          }
+                        : {}
+                    }
+                    transition={{
+                      pathLength: {
+                        delay: 0.6 + index * 0.05, // Start after buttons, stagger each line
+                        duration: 0.5,
+                        ease: "easeInOut",
+                      },
+                      opacity: {
+                        delay: 1.8 + index * 0.05,
+                        duration: 0.3,
+                      },
+                    }}
                   />
                 );
               })}
             </svg>
 
-            {skills.map((skill) => {
+            {skills.map((skill, skillIndex) => {
               const isHovered = hoveredSkill === skill.name;
               const isConnected = getActiveConnections().some(
                 ([from, to]) =>
@@ -349,112 +420,174 @@ export function Skills() {
               const opacity = getSkillOpacity(skill);
 
               return (
-                <div
+                <motion.div
                   key={skill.name}
-                  className="absolute group cursor-pointer transition-all duration-700 ease-out"
+                  className="absolute"
                   style={{
                     left: `${position.x}%`,
                     top: `${position.y}%`,
                     transform: "translate(-50%, -50%)",
-                    opacity: opacity,
                     pointerEvents: opacity === 0 ? "none" : "auto",
-                    cursor: "url('/cursor/custom-pointer.png'), pointer",
                   }}
-                  onMouseEnter={() => setHoveredSkill(skill.name)}
-                  onMouseLeave={() => setHoveredSkill(null)}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: opacity }}
+                  transition={{ duration: 0.3 }}
                 >
-                  {/* 4-point star node */}
-                  <div className="relative flex items-center justify-center">
-                    {/* Outer glow ring */}
-                    <div
-                      className={cn(
-                        "absolute w-12 h-12 transition-all duration-300 blur-xl rounded-full",
-                        "bg-yellow-200/20 dark:bg-white/20",
-                        isHovered &&
-                          "w-20 h-20 bg-yellow-200/40 dark:bg-white/40",
-                        isConnected &&
-                          !isHovered &&
-                          "w-16 h-16 bg-yellow-200/30 dark:bg-white/30"
-                      )}
-                    />
-
-                    {/* Middle glow */}
-                    <div
-                      className={cn(
-                        "absolute w-8 h-8 transition-all duration-300 blur-md rounded-full",
-                        "bg-yellow-200/40 dark:bg-white/40",
-                        isHovered &&
-                          "w-12 h-12 bg-yellow-200/60 dark:bg-white/60",
-                        isConnected &&
-                          !isHovered &&
-                          "w-10 h-10 bg-yellow-200/50 dark:bg-white/50"
-                      )}
-                    />
-
-                    <svg
-                      className={cn(
-                        "relative transition-all duration-300",
-                        isHovered ? "w-5 h-5" : "w-3 h-3",
-                        isConnected && !isHovered && "w-4 h-4"
-                      )}
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
+                  {/* Fixed container wrapper */}
+                  <div className="relative w-12 h-12 flex items-center justify-center">
+                    {/* Inner star motion div with all your effects */}
+                    <motion.div
+                      className="group cursor-pointer transition-all duration-700 ease-out"
                       style={{
-                        color: isDarkMode ? "white" : "rgba(255,215,140,0.9)", // Soft golden in light
-                        filter: isHovered
-                          ? isDarkMode
-                            ? "drop-shadow(0 0 8px rgba(255, 255, 255, 1))"
-                            : "drop-shadow(0 0 8px rgba(255,215,140,0.8))"
-                          : isConnected
-                          ? isDarkMode
-                            ? "drop-shadow(0 0 6px rgba(255, 255, 255, 0.8))"
-                            : "drop-shadow(0 0 6px rgba(255,215,140,0.6))"
-                          : isDarkMode
-                          ? "drop-shadow(0 0 4px rgba(255, 255, 255, 0.6))"
-                          : "drop-shadow(0 0 4px rgba(255,215,140,0.4))",
+                        cursor: "url('/cursor/custom-pointer.png'), pointer",
                       }}
+                      initial={{
+                        scale: 0,
+                        rotate: -180,
+                      }}
+                      animate={
+                        hasAnimated
+                          ? {
+                              scale: opacity,
+                              rotate: 0,
+                            }
+                          : {}
+                      }
+                      transition={{
+                        delay: 1.5 + skillIndex * 0.08,
+                        duration: 0.6,
+                        ease: "easeOut",
+                        scale: { type: "spring", stiffness: 200, damping: 20 },
+                      }}
+                      onMouseEnter={() => setHoveredSkill(skill.name)}
+                      onMouseLeave={() => setHoveredSkill(null)}
                     >
-                      <path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" />
-                    </svg>
+                      {/* 4-point star node */}
+                      <div className="relative flex items-center justify-center">
+                        {/* Outer glow ring */}
+                        <motion.div
+                          className={cn(
+                            "absolute w-12 h-12 rounded-full blur-xl",
+                            "bg-yellow-200/20 dark:bg-white/20",
+                            isHovered &&
+                              "w-20 h-20 bg-yellow-200/40 dark:bg-white/40",
+                            isConnected &&
+                              !isHovered &&
+                              "w-16 h-16 bg-yellow-200/30 dark:bg-white/30"
+                          )}
+                          animate={{
+                            scale: [1, 1.2, 1], // pulse scale
+                            opacity: [0.7, 1, 0.7], // optional subtle opacity pulse
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          }}
+                        />
 
-                    {/* Tooltip on hover */}
-                    <div
-                      className={cn(
-                        "absolute top-full mt-4 px-4 py-2 rounded-lg transition-all duration-300 pointer-events-none whitespace-nowrap z-50",
-                        "border backdrop-blur-sm",
-                        " dark:bg-gray-900/95 dark:border-white/50 bg-white/95 border-gray-300",
-                        "shadow-[0_0_20px_rgba(255,255,255,0.3)] dark:shadow-[0_0_20px_rgba(255,255,255,0.3)] ",
-                        isHovered
-                          ? "opacity-100 translate-y-0"
-                          : "opacity-0 translate-y-2"
-                      )}
-                    >
-                      <div className="text-center">
-                        <p className="font-semibold text-sm  dark:text-white text-gray-900">
-                          {skill.name}
-                        </p>
-                        <p className="text-xs mt-1  dark:text-gray-400 text-gray-600">
-                          {skill.category}
-                        </p>
-                        <div className="flex justify-center gap-1 mt-2">
-                          {[...Array(3)].map((_, i) => (
-                            <div
-                              key={i}
-                              className={cn(
-                                "w-1.5 h-1.5 rounded-full",
-                                i < skill.level
-                                  ? "bg-gray-700 shadow-[0_0_15px_rgba(0,0,0,0.3)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] "
-                                  : " bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 "
-                              )}
-                            />
-                          ))}
+                        {/* Middle glow */}
+                        <motion.div
+                          className={cn(
+                            "absolute w-8 h-8 rounded-full blur-md",
+                            "bg-yellow-200/40 dark:bg-white/40",
+                            isHovered &&
+                              "w-12 h-12 bg-yellow-200/60 dark:bg-white/60",
+                            isConnected &&
+                              !isHovered &&
+                              "w-10 h-10 bg-yellow-200/50 dark:bg-white/50"
+                          )}
+                          animate={{
+                            scale: [1, 1.1, 1],
+                            opacity: [0.7, 1, 0.7],
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: Math.random(), // randomize start to make them pulse asynchronously
+                          }}
+                        />
+
+                        {/* Inner SVG */}
+                        <motion.svg
+                          className={cn(
+                            "relative transition-all duration-300",
+                            isHovered ? "w-5 h-5" : "w-3 h-3",
+                            isConnected && !isHovered && "w-4 h-4"
+                          )}
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          style={{
+                            color: isDarkMode
+                              ? "white"
+                              : "rgba(255,215,140,0.9)",
+                            filter: isHovered
+                              ? isDarkMode
+                                ? "drop-shadow(0 0 8px rgba(255, 255, 255, 1))"
+                                : "drop-shadow(0 0 8px rgba(255,215,140,0.8))"
+                              : isConnected
+                              ? isDarkMode
+                                ? "drop-shadow(0 0 6px rgba(255, 255, 255, 0.8))"
+                                : "drop-shadow(0 0 6px rgba(255,215,140,0.6))"
+                              : isDarkMode
+                              ? "drop-shadow(0 0 4px rgba(255, 255, 255, 0.6))"
+                              : "drop-shadow(0 0 4px rgba(255,215,140,0.4))",
+                          }}
+                          animate={{
+                            scale: [1, 1.5, 1], // pulsate
+                            opacity: [1, 0.85, 1], // subtle opacity pulse
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: Math.random(), // asynchronous pulse for natural look
+                          }}
+                        >
+                          <path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" />
+                        </motion.svg>
+
+                        {/* Tooltip */}
+                        <div
+                          className={cn(
+                            "absolute top-full mt-4 px-4 py-2 rounded-lg transition-all duration-300 pointer-events-none whitespace-nowrap z-50",
+                            "border backdrop-blur-sm",
+                            " dark:bg-gray-900/95 dark:border-white/50 bg-white/95 border-gray-300",
+                            "shadow-[0_0_20px_rgba(255,255,255,0.3)] dark:shadow-[0_0_20px_rgba(255,255,255,0.3)] ",
+                            isHovered
+                              ? "opacity-100 translate-y-0"
+                              : "opacity-0 translate-y-2"
+                          )}
+                          
+                        >
+                          <div className="text-center">
+                            <p className="font-semibold text-sm  dark:text-white text-gray-900">
+                              {skill.name}
+                            </p>
+                            <p className="text-xs mt-1  dark:text-gray-400 text-gray-600">
+                              {skill.category}
+                            </p>
+                            <div className="flex justify-center gap-1 mt-2">
+                              {[...Array(3)].map((_, i) => (
+                                <div
+                                  key={i}
+                                  className={cn(
+                                    "w-1.5 h-1.5 rounded-full",
+                                    i < skill.level
+                                      ? "bg-gray-700 shadow-[0_0_15px_rgba(0,0,0,0.3)] dark:bg-white dark:shadow-[0_0_5px_rgba(255,255,255,0.8)] "
+                                      : " bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 "
+                                  )}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-white/50 dark:border-b-white/50 " />
                         </div>
                       </div>
-                      {/* Tooltip arrow */}
-                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-white/50 dark:border-b-white/50 " />
-                    </div>
+                    </motion.div>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
@@ -513,6 +646,6 @@ export function Skills() {
           </p>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

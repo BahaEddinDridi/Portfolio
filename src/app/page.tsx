@@ -59,33 +59,16 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative">
+    <div className="relative bg-[linear-gradient(to_top,#f5e6d3,#faf5f0,#ffffff,#fefefe,#f8f9fa,#f0f4f8,#e8f0f7,#dfe9f3)] dark:bg-[linear-gradient(to_top,#09232e,#0a1f3d,#0d1b4c,#1a1a4e,#2d1b4e,#1f0a3b,#0f0820,#000000)]  min-h-screen">
       <AnimatePresence>{isLoading && <LoadingScreen />}</AnimatePresence>
       {!isLoading && (
-        <motion.main
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className=""
-        >
-          <motion.div initial="hidden" animate="visible" exit="exit">
+        <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
             <Hero />
-          </motion.div>
-          <motion.div initial="hidden" animate="visible" exit="exit">
             <AboutMe />
-          </motion.div>
-          <motion.div initial="hidden" animate="visible" exit="exit">
             <Skills />
-          </motion.div>
-          <motion.div initial="hidden" animate="visible" exit="exit">
             <Experience />
-          </motion.div>
-          <motion.div initial="hidden" animate="visible" exit="exit">
             <Projects />
-          </motion.div>
-          <motion.div initial="hidden" animate="visible" exit="exit">
             <ContactMe />
-          </motion.div>
         </motion.main>
       )}
     </div>

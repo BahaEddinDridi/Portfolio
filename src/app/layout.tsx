@@ -7,6 +7,7 @@ import { Suspense } from "react";
 
 import NavbarWrapper from "./NavbarWrapper"; // Adjust path if needed
 import RibbonsWrapper from "./RibbonsWrapper";
+import { ThemeProvider } from "@/hooks/useTheme";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,9 +35,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-x-hidden">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden overflow-y-hidden`}
         style={{ position: "relative", minHeight: "100vh" }}
       >
+        <ThemeProvider>
         <ClickSpark
           sparkColor="#fff"
           sparkSize={10}
@@ -66,6 +68,7 @@ export default function RootLayout({
             <RibbonsWrapper />
           </div>
         </ClickSpark>
+        </ThemeProvider>
       </body>
     </html>
   );

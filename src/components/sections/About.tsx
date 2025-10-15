@@ -8,14 +8,28 @@ const Particles = dynamic(() => import("../Particles"), { ssr: false });
 import Lottie from "lottie-react";
 
 import coffeeAnimation from "@/../public/lotties/coffee.json";
+import { motion } from "framer-motion";
 export function AboutMe() {
   const ref = useRef(null);
 
+  const fadeUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
+  };
+
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0, y: 100 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 1, ease: "easeOut" }}
       ref={ref}
       id="about"
-      className="relative min-h-screen flex items-center justify-center px-4 py-10 overflow-hidden bg-white dark:bg-[#030f18] transition-all duration-1000"
+      className="relative min-h-screen flex items-center justify-center px-4 py-10 overflow-hidden  transition-all duration-1000"
     >
       <div
         className="absolute inset-0 z-0"
@@ -24,7 +38,7 @@ export function AboutMe() {
         <Particles
           particleColors={["#4b5563", "#a5b4fc", "#10B981"]}
           darkParticleColors={["#ffffff", "#a5b4fc"]}
-          particleCount={1000}
+          particleCount={400}
           particleSpread={20}
           speed={0.5}
           particleBaseSize={160}
@@ -41,9 +55,31 @@ export function AboutMe() {
       </div>
 
       <div className="relative z-10 max-w-5xl w-full">
-        <div className="text-center space-y-12">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="text-center mb-8 md:mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight  dark:text-white text-gray-900">
+            About Me
+          </h2>
+        </motion.div>
+        <div className="text-center space-y-10">
           {/* Profile image with constellation-style glow */}
-          <div className="flex justify-center mb-8">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5, y: 50 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{
+              type: "spring",
+              stiffness: 120,
+              damping: 20,
+              duration: 0.8,
+            }}
+            className="flex justify-center mb-8 relative group"
+          >
             <div className="relative group">
               <div className="absolute inset-0 rounded-full border border-gray-200/20 dark:border-white/20 scale-110 animate-pulse" />
               <div
@@ -90,23 +126,21 @@ export function AboutMe() {
                 </div>
               ))}
             </div>
-          </div>
-
-          <div className="space-y-4">
-            <h2 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white tracking-tight">
-              About Me
-            </h2>
-            <div className="h-0.5 w-32 bg-gradient-to-r from-transparent via-gray-400 dark:via-white to-transparent mx-auto" />
-          </div>
-
-          <div className="max-w-3xl mx-auto space-y-6 text-lg leading-relaxed">
-            <p className="text-gray-800 dark:text-white/90 backdrop-blur-sm bg-gray-100/50 dark:bg-white/5 p-6 rounded-2xl border border-gray-200/50 dark:border-white/10 hover:border-indigo-500 dark:hover:border-white/20 hover:bg-indigo-50/50 dark:hover:bg-white/10 transition-all duration-300">
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="max-w-3xl mx-auto space-y-6 text-lg leading-relaxed"
+          >
+            <p className="text-gray-800 dark:text-white/90 backdrop-blur-sm bg-gray-300/50 dark:bg-white/5 p-6 rounded-2xl border border-gray-400/50 dark:border-white/10 hover:border-indigo-500 dark:hover:border-white/20 hover:bg-indigo-50/50 dark:hover:bg-white/10 transition-all duration-300">
               Hey there! I&apos;m a passionate developer who loves crafting
               beautiful and functional web experiences. I believe in writing
               clean code and creating interfaces that feel magical to use.
             </p>
 
-            <p className="text-gray-800 dark:text-white/90 backdrop-blur-sm bg-gray-100/50 dark:bg-white/5 p-6 rounded-2xl border border-gray-200/50 dark:border-white/10 hover:border-indigo-500 dark:hover:border-white/20 hover:bg-indigo-50/50 dark:hover:bg-white/10 transition-all duration-300">
+            <p className="text-gray-800 dark:text-white/90 backdrop-blur-sm bg-gray-300/50 dark:bg-white/5 p-6 rounded-2xl border border-gray-400/50 dark:border-white/10 hover:border-indigo-500 dark:hover:border-white/20 hover:bg-indigo-50/50 dark:hover:bg-white/10 transition-all duration-300">
               When I&apos;m not coding, you&apos;ll find me exploring new
               technologies, contributing to open source, or diving deep into the
               latest web development trends.
@@ -115,7 +149,7 @@ export function AboutMe() {
             <div className="relative group">
               <div className="absolute -inset-1 bg-gray-200/10 dark:bg-white/10 rounded-2xl blur-xl opacity-50 group-hover:opacity-100 transition duration-500" />
 
-              <div className="relative backdrop-blur-sm bg-gray-100/50 dark:bg-white/5 p-8 rounded-2xl border border-gray-200/50 dark:border-white/20 hover:border-indigo-500 dark:hover:border-white/30 transition-all duration-300 overflow-hidden">
+              <div className="relative backdrop-blur-sm bg-gray-300/50 dark:bg-white/5 p-8 rounded-2xl border border-gray-400/50 dark:border-white/20 hover:border-indigo-500 dark:hover:border-white/30 transition-all duration-300 overflow-hidden">
                 <div className="flex items-start gap-4 relative z-10">
                   <svg
                     width="32"
@@ -143,14 +177,23 @@ export function AboutMe() {
                 </div>
 
                 {/* Floating animation — doesn't stretch the card */}
-                <Lottie
-                  animationData={coffeeAnimation}
-                  loop
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5, y: 50 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 20,
+                    duration: 0.8,
+                  }}
                   className="absolute -right-10 bottom-0 w-48 h-48 md:w-56 md:h-56 opacity-90 brightness-100 dark:brightness-75 hidden md:block pointer-events-none select-none"
-                />
+                >
+                  <Lottie animationData={coffeeAnimation} loop />
+                </motion.div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
@@ -166,6 +209,6 @@ export function AboutMe() {
           }
         }
       `}</style>
-    </section>
+    </motion.section>
   );
 }

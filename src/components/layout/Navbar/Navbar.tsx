@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import NavLink from "./NavLink";
 import dynamic from "next/dynamic";
@@ -24,7 +24,6 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const scrollY = useMotionValue(0);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
-
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "light" | "dark";
     const systemPrefersDark = window.matchMedia(
@@ -43,25 +42,71 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [scrollY]);
 
-  useEffect(() => {
-  const sections = links
-    .map((id) => document.getElementById(id))
-    .filter(Boolean);
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
+useEffect(() => {
+  let scrollHandler: (() => void) | null = null;
+  
+  const initScrollDetection = () => {
+    const sections = links
+      .map((id) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
+
+    if (sections.length === 0) return false;
+
+    const handleScroll = () => {
+      const scrollPos = window.scrollY + window.innerHeight * 0.3;
+      let activeSection = 'hero';
+      
+      for (const section of sections) {
+        const sectionTop = section.offsetTop;
+        const nextSection = sections[sections.indexOf(section) + 1];
+        const nextSectionTop = nextSection ? nextSection.offsetTop : Infinity;
+        
+        if (scrollPos >= sectionTop && scrollPos < nextSectionTop) {
+          activeSection = section.id;
+          break;
         }
-      });
-    },
-    {
-      threshold: [0.1, 0.3, 0.6], // Use multiple thresholds
-      rootMargin: "-10% 0px -10% 0px", // Adjust margin to account for navbar
+      }
+      
+      setActiveSection(activeSection);
+    };
+
+    if (scrollHandler) {
+      window.removeEventListener('scroll', scrollHandler);
     }
-  );
-  sections.forEach((el) => observer.observe(el!));
-  return () => observer.disconnect();
+    
+    scrollHandler = handleScroll;
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); 
+    
+    return true;
+  };
+
+  if (initScrollDetection()) return;
+
+  const observer = new MutationObserver(() => {
+    if (initScrollDetection()) {
+      observer.disconnect();
+    }
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+  const timeout = setTimeout(() => {
+    if (initScrollDetection()) {
+      observer.disconnect();
+    }
+  }, 500);
+
+  return () => {
+    observer.disconnect();
+    if (scrollHandler) {
+      window.removeEventListener('scroll', scrollHandler);
+    }
+    clearTimeout(timeout);
+  };
 }, []);
 
   // interpolate morph values based on scrollY
@@ -86,6 +131,7 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 w-full z-50">
       <motion.div
+      
         style={{ width, borderRadius, padding, marginTop, boxShadow }}
         className="relative mx-auto flex items-center justify-between
           bg-gradient-to-r from-[#9ec0f3] via-[#b7d4f5] to-[#dce8f9] text-black

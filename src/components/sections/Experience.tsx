@@ -4,6 +4,7 @@ import { Code, Briefcase, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ProfessionalTimeline } from "../professional-timeline";
 import dynamic from "next/dynamic";
+import { motion } from "framer-motion";
 const Particles = dynamic(() => import("../Particles"), { ssr: false });
 const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
 
@@ -111,10 +112,14 @@ export function Experience() {
   const ref = useRef(null);
 
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 1, ease: "easeOut" }}
       ref={ref}
       id="experience"
-      className="relative min-h-screen flex items-center justify-center px-4 py-10 bg-white dark:bg-[#030f18] transition-all duration-1000"
+      className="relative min-h-screen flex items-center justify-center px-4 py-10  transition-all duration-1000"
     >
       <div
         className="absolute inset-0 z-0"
@@ -122,7 +127,7 @@ export function Experience() {
       >
         <Particles
           particleColors={["#ffffff", "#a5b4fc"]}
-          particleCount={1000}
+          particleCount={400}
           particleSpread={20}
           speed={0.5}
           particleBaseSize={160}
@@ -140,7 +145,13 @@ export function Experience() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="mb-16 text-center transition-all duration-1000 delay-200">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.6 }}
+          className="mb-16 text-center transition-all duration-1000 delay-200"
+        >
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
             Professional Experience
           </h2>
@@ -148,13 +159,19 @@ export function Experience() {
             A journey through my professional career, showcasing the projects
             and roles that shaped my expertise
           </p>
-        </div>
+        </motion.div>
 
         {/* Timeline */}
-        <div className="transition-all duration-1000 delay-400">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="transition-all duration-1000 delay-400"
+        >
           <ProfessionalTimeline data={experienceData} expandMode="multi" />
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }

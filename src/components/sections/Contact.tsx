@@ -6,8 +6,11 @@ const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
 import messageSentAnimation from "@/../public/lotties/mail-sent.json";
 import { SiDiscord } from "react-icons/si";
 import Image from "next/image";
+import { useRef } from "react";
+import { motion } from "framer-motion";
 
 export function ContactMe() {
+  const ref = useRef(null);
   const contactInfo = [
     {
       label: "Email",
@@ -40,10 +43,29 @@ export function ContactMe() {
       link: "https://discord.com/users/geodaddy1591",
     },
   ];
+
+  const container = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  };
   return (
-    <section
+    <motion.section
+      ref={ref}
       id="contact"
-      className="relative min-h-screen flex items-center justify-center px-4 py-10 overflow-hidden bg-white dark:bg-[#030f18] transition-all duration-1000"
+      className="relative min-h-screen flex items-center justify-center px-4 py-10 overflow-hidden  transition-all duration-1000"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
     >
       <div
         className="absolute inset-0 z-0"
@@ -73,27 +95,36 @@ export function ContactMe() {
           alt="Background trees"
           width={1920}
           height={200}
-          className={`
-    w-full h-auto object-cover object-bottom
-    transition-all duration-500
-    filter brightness-100 dark:brightness-0 dark:invert
-  `}
+          className="w-full h-auto object-cover object-bottom transition-all duration-500 filter brightness-100 dark:brightness-0 dark:invert"
           priority
         />
       </div>
       <div className="max-w-7xl mx-auto w-full relative z-10 mb-60">
-        <div className="mb-16 text-center transition-all duration-1000 delay-200">
+        <motion.div className="mb-16 text-center"
+        initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8 }}
+          >
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
             Get In Touch
           </h2>
           <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto">
             Feel free to reach out through any of these channels
           </p>
-        </div>
+        </motion.div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side: Lottie animation */}
-          <div className="flex justify-center">
-            <div className="w-full m-4 aspect-square rounded-3xl bg-gradient-to-br from-blue-500 to-blue-300 dark:from-purple-500/10 dark:to-blue-500/10 backdrop-blur-sm border border-blue-300 dark:border-purple-400/20 flex items-center justify-center">
+          <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+             className="flex justify-center">
+            <motion.div 
+            animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="w-full m-4 aspect-square rounded-3xl bg-gradient-to-br from-blue-500 to-blue-300 dark:from-purple-500/10 dark:to-blue-500/10 backdrop-blur-sm border border-blue-300 dark:border-purple-400/20 flex items-center justify-center">
               <div className="w-full h-full flex items-center justify-center">
                 <Lottie
                   animationData={messageSentAnimation}
@@ -101,9 +132,10 @@ export function ContactMe() {
                   className="mx-auto dark:brightness-80 brightness-100"
                 />
               </div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-4">
+            </motion.div>
+          </motion.div>
+          <div
+            className="flex flex-col gap-4">
             {contactInfo.map((contact, index) => (
               <a
                 key={index}
@@ -128,6 +160,6 @@ export function ContactMe() {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
