@@ -218,7 +218,6 @@ export function Skills() {
   };
 
   return (
-    
     <motion.section
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -231,29 +230,6 @@ export function Skills() {
         relative min-h-screen w-full py-12 md:py-10 px-4 overflow-hidden transition-all duration-1000
         "
     >
-      <div
-        className="absolute inset-0 z-0"
-        style={{ width: "100%", height: "100%", zIndex: 0 }}
-      >
-        <Particles
-          particleColors={["#4b5563", "#a5b4fc", "#10B981"]}
-          darkParticleColors={["#ffffff", "#a5b4fc"]}
-          particleCount={200}
-          particleSpread={20}
-          speed={0.5}
-          particleBaseSize={160}
-          moveParticlesOnHover={false}
-          alphaParticles={true}
-          disableRotation={true}
-        />
-      </div>
-      <div
-        className="absolute inset-0 z-25"
-        style={{ width: "100%", height: "100%", zIndex: 5 }}
-      >
-        <ShootingStars />
-      </div>
-
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div

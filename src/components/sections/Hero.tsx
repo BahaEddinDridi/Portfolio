@@ -23,28 +23,7 @@ export default function Hero() {
       id="hero"
       className="relative min-h-screen flex justify-center items-center pt-40 px-4 sm:px-8 md:px-16 lg:px-32 text-gray-900 dark:text-white overflow-hidden"
     >
-      <div
-        className="absolute inset-0 z-0"
-        style={{ width: "100%", height: "100%", zIndex: 0 }}
-      >
-        <Particles
-          particleColors={["#4b5563", "#a5b4fc", "#10B981"]}
-          darkParticleColors={["#ffffff", "#a5b4fc"]}
-          particleCount={1000}
-          particleSpread={20}
-          speed={0.5}
-          particleBaseSize={160}
-          moveParticlesOnHover={false}
-          alphaParticles={true}
-          disableRotation={true}
-        />
-      </div>
-      <div
-        className="absolute inset-0 z-[5]"
-        style={{ width: "100%", height: "100%", zIndex: 5 }}
-      >
-        <ShootingStars />
-      </div>
+      
       <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-12 w-full max-w-7xl mx-auto">
         <div className="flex-none max-w-lg flex flex-col justify-center items-start text-left gap-4 sm:gap-6">
           <motion.span

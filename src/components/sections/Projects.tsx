@@ -24,27 +24,7 @@ export function Projects() {
       id="projects"
       className="relative min-h-screen py-10 px-4  transition-all duration-1000"
     >
-      <div
-        className="absolute inset-0 z-0"
-        style={{ width: "100%", height: "100%", zIndex: 0 }}
-      >
-        <Particles
-          particleColors={["#ffffff", "#a5b4fc"]}
-          particleCount={1000}
-          particleSpread={20}
-          speed={0.5}
-          particleBaseSize={160}
-          moveParticlesOnHover={false}
-          alphaParticles={true}
-          disableRotation={true}
-        />
-      </div>
-      <div
-        className="absolute inset-0 z-25"
-        style={{ width: "100%", height: "100%", zIndex: 5 }}
-      >
-        <ShootingStars />
-      </div>
+      
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Section Header */}

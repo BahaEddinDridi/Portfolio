@@ -5,7 +5,12 @@ import { motion, useMotionValue, useTransform } from "framer-motion";
 import NavLink from "./NavLink";
 import dynamic from "next/dynamic";
 import { SmallCloud } from "./Clouds";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import Button from "@/components/ui/button";
 import { Menu } from "lucide-react";
 const ThemeSwitch = dynamic(
@@ -21,7 +26,9 @@ const labels = ["Home", "About", "Skills", "Experience", "Projects", "Contact"];
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState("hero");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(true);
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const scrollY = useMotionValue(0);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   useEffect(() => {
@@ -34,7 +41,13 @@ export default function Navbar() {
     else if (systemPrefersDark) setTheme("dark");
     else setTheme("light");
   }, []);
-
+  useEffect(() => {
+    // Determine if desktop
+    const checkScreen = () => setIsDesktop(window.innerWidth > 768);
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
   useEffect(() => {
     const handleScroll = () => scrollY.set(window.scrollY);
     window.addEventListener("scroll", handleScroll);
@@ -42,72 +55,72 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [scrollY]);
 
-useEffect(() => {
-  let scrollHandler: (() => void) | null = null;
-  
-  const initScrollDetection = () => {
-    const sections = links
-      .map((id) => document.getElementById(id))
-      .filter(Boolean) as HTMLElement[];
+  useEffect(() => {
+    let scrollHandler: (() => void) | null = null;
 
-    if (sections.length === 0) return false;
+    const initScrollDetection = () => {
+      const sections = links
+        .map((id) => document.getElementById(id))
+        .filter(Boolean) as HTMLElement[];
 
-    const handleScroll = () => {
-      const scrollPos = window.scrollY + window.innerHeight * 0.3;
-      let activeSection = 'hero';
-      
-      for (const section of sections) {
-        const sectionTop = section.offsetTop;
-        const nextSection = sections[sections.indexOf(section) + 1];
-        const nextSectionTop = nextSection ? nextSection.offsetTop : Infinity;
-        
-        if (scrollPos >= sectionTop && scrollPos < nextSectionTop) {
-          activeSection = section.id;
-          break;
+      if (sections.length === 0) return false;
+
+      const handleScroll = () => {
+        const scrollPos = window.scrollY + window.innerHeight * 0.3;
+        let activeSection = "hero";
+
+        for (const section of sections) {
+          const sectionTop = section.offsetTop;
+          const nextSection = sections[sections.indexOf(section) + 1];
+          const nextSectionTop = nextSection ? nextSection.offsetTop : Infinity;
+
+          if (scrollPos >= sectionTop && scrollPos < nextSectionTop) {
+            activeSection = section.id;
+            break;
+          }
         }
+
+        setActiveSection(activeSection);
+      };
+
+      if (scrollHandler) {
+        window.removeEventListener("scroll", scrollHandler);
       }
-      
-      setActiveSection(activeSection);
+
+      scrollHandler = handleScroll;
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      handleScroll();
+
+      return true;
     };
 
-    if (scrollHandler) {
-      window.removeEventListener('scroll', scrollHandler);
-    }
-    
-    scrollHandler = handleScroll;
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); 
-    
-    return true;
-  };
+    if (initScrollDetection()) return;
 
-  if (initScrollDetection()) return;
+    const observer = new MutationObserver(() => {
+      if (initScrollDetection()) {
+        observer.disconnect();
+      }
+    });
 
-  const observer = new MutationObserver(() => {
-    if (initScrollDetection()) {
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    const timeout = setTimeout(() => {
+      if (initScrollDetection()) {
+        observer.disconnect();
+      }
+    }, 500);
+
+    return () => {
       observer.disconnect();
-    }
-  });
-
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
-
-  const timeout = setTimeout(() => {
-    if (initScrollDetection()) {
-      observer.disconnect();
-    }
-  }, 500);
-
-  return () => {
-    observer.disconnect();
-    if (scrollHandler) {
-      window.removeEventListener('scroll', scrollHandler);
-    }
-    clearTimeout(timeout);
-  };
-}, []);
+      if (scrollHandler) {
+        window.removeEventListener("scroll", scrollHandler);
+      }
+      clearTimeout(timeout);
+    };
+  }, []);
 
   // interpolate morph values based on scrollY
   const width = useTransform(scrollY, [0, 300], ["85%", "100%"]);
@@ -121,39 +134,41 @@ useEffect(() => {
   );
 
   const scrollToSection = (id: string) => {
-  const section = document.getElementById(id);
-  if (!section) return;
-  setActiveSection(id);
-  setMobileMenuOpen(false)
-  section.scrollIntoView({ behavior: "smooth" });
-};
+    const section = document.getElementById(id);
+    if (!section) return;
+    setActiveSection(id);
+    setMobileMenuOpen(false);
+    section.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50">
       <motion.div
-      
         style={{ width, borderRadius, padding, marginTop, boxShadow }}
         className="relative mx-auto flex items-center justify-between
           bg-gradient-to-r from-[#9ec0f3] via-[#b7d4f5] to-[#dce8f9] text-black
           dark:from-[#030f18] dark:via-[#030f18] dark:to-[#1a1f3a] dark:text-white
           overflow-hidden"
       >
-        <div
-          className="absolute inset-0 z-0"
-          style={{ width: "100%", height: "100%" }}
-        >
-          <Particles
-            particleColors={["#ffffff", "#ffffff", "#ffffff"]}
-            darkParticleColors={["#ffffff", "#a5b4fc"]}
-            particleCount={5000}
-            particleSpread={120}
-            speed={0.5}
-            particleBaseSize={200}
-            moveParticlesOnHover={false}
-            alphaParticles={true}
-            disableRotation={true}  
-          />
-        </div>
+        {isDesktop && (
+          <div
+            className="absolute inset-0 z-0"
+            style={{ width: "100%", height: "100%" }}
+          >
+            <Particles
+              particleColors={["#ffffff", "#ffffff", "#ffffff"]}
+              darkParticleColors={["#ffffff", "#a5b4fc"]}
+              particleCount={2000}
+              particleSpread={70}
+              speed={0.5}
+              particleBaseSize={200}
+              moveParticlesOnHover={false}
+              alphaParticles={true}
+              disableRotation={true}
+            />
+          </div>
+        )}
+
         <div className="hidden md:flex gap-4 lg:gap-8 relative z-10">
           {links.map((id, i) => (
             <NavLink
@@ -166,10 +181,10 @@ useEffect(() => {
           ))}
         </div>
 
-<div className="md:hidden relative z-10">
+        <div className="md:hidden relative z-10">
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost"  className="text-black dark:text-white">
+              <Button variant="ghost" className="text-black dark:text-white">
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>

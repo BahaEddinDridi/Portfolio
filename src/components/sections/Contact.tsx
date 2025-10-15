@@ -67,27 +67,7 @@ export function ContactMe() {
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <div
-        className="absolute inset-0 z-0"
-        style={{ width: "100%", height: "100%", zIndex: 0 }}
-      >
-        <Particles
-          particleColors={["#ffffff", "#a5b4fc"]}
-          particleCount={1000}
-          particleSpread={20}
-          speed={0.5}
-          particleBaseSize={160}
-          moveParticlesOnHover={false}
-          alphaParticles={true}
-          disableRotation={true}
-        />
-      </div>
-      <div
-        className="absolute inset-0 z-25"
-        style={{ width: "100%", height: "100%", zIndex: 5 }}
-      >
-        <ShootingStars />
-      </div>
+      
 
       <div className="absolute bottom-0 left-0 right-0 z-20">
         <Image

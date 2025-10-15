@@ -197,7 +197,6 @@ export function ProjectCarousel() {
   const [isSnapping, setIsSnapping] = useState(false)
   const [snapStartIndex, setSnapStartIndex] = useState(0)
   const [snapTargetIndex, setSnapTargetIndex] = useState(0)
-  const [snapProgress, setSnapProgress] = useState(0)
   const animationFrameRef = useRef<number | null>(null)
 
   const carouselRef = useRef<HTMLDivElement>(null)
@@ -222,7 +221,6 @@ export function ProjectCarousel() {
               const targetIdx = Math.round(currentIdx)
               setSnapStartIndex(currentIdx)
               setSnapTargetIndex(targetIdx)
-              setSnapProgress(0)
               setIsSnapping(true)
               return currentIdx
             })
@@ -255,7 +253,7 @@ export function ProjectCarousel() {
 
   useEffect(() => {
     if (isSnapping) {
-      const duration = 300 // ms
+      const duration = 300
       const startTime = Date.now()
 
       const animate = () => {
@@ -263,8 +261,6 @@ export function ProjectCarousel() {
         const progress = Math.min(elapsed / duration, 1)
 
         const easeProgress = 1 - Math.pow(1 - progress, 3)
-
-        setSnapProgress(easeProgress)
 
         const newIndex = snapStartIndex + (snapTargetIndex - snapStartIndex) * easeProgress
         setCurrentIndex(newIndex)
@@ -297,10 +293,12 @@ export function ProjectCarousel() {
       setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length)
     }
 
-    setTimeout(() => setIsRotating(false), 400)
+    setTimeout(() => setIsRotating(false), 600)
   }
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    if (isMobile) return // Disable drag on mobile
+
     setIsSnapping(false)
     setIsDragging(true)
     setStartX(e.clientX)
@@ -317,7 +315,7 @@ export function ProjectCarousel() {
   }
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return
+    if (!isDragging || isMobile) return // Disable drag on mobile
 
     const now = Date.now()
     const timeDelta = now - lastMoveTime
@@ -338,7 +336,7 @@ export function ProjectCarousel() {
   }
 
   const handleMouseUp = () => {
-    if (!isDragging) return
+    if (!isDragging || isMobile) return // Disable drag on mobile
     setIsDragging(false)
 
     const diff = currentX - startX
@@ -348,6 +346,8 @@ export function ProjectCarousel() {
   }
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (isMobile) return // Disable drag on mobile
+
     setIsSnapping(false)
     setIsDragging(true)
     setStartX(e.touches[0].clientX)
@@ -364,7 +364,7 @@ export function ProjectCarousel() {
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return
+    if (!isDragging || isMobile) return // Disable drag on mobile
 
     const now = Date.now()
     const timeDelta = now - lastMoveTime
@@ -385,7 +385,7 @@ export function ProjectCarousel() {
   }
 
   const handleTouchEnd = () => {
-    if (!isDragging) return
+    if (!isDragging || isMobile) return // Disable drag on mobile
     setIsDragging(false)
 
     const diff = currentX - startX
@@ -400,7 +400,7 @@ export function ProjectCarousel() {
     const angle = (360 / totalCards) * position
 
     const radius = isMobile ? 130 : 320
-    const dragOffset = isDragging ? (currentX - startX) * 0.1 : 0
+    const dragOffset = isDragging && !isMobile ? (currentX - startX) * 0.1 : 0
 
     const x = Math.sin(((angle + dragOffset) * Math.PI) / 180) * radius
     const z = Math.cos(((angle + dragOffset) * Math.PI) / 180) * radius
@@ -417,20 +417,24 @@ export function ProjectCarousel() {
     }
   }
 
+  const handleCardClick = (project: Project, index: number) => {
+    setSelectedProject(project)
+  }
+
   return (
     <>
       <div className="space-y-6">
         <div
           ref={carouselRef}
           className="relative w-full h-[380px] sm:h-[500px] md:h-[650px] lg:h-[700px] flex items-center justify-center overflow-visible select-none"
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          style={{ cursor: isDragging ? "grabbing" : "grab" }}
+          onMouseDown={!isMobile ? handleMouseDown : undefined}
+          onMouseMove={!isMobile ? handleMouseMove : undefined}
+          onMouseUp={!isMobile ? handleMouseUp : undefined}
+          onMouseLeave={!isMobile ? handleMouseUp : undefined}
+          onTouchStart={!isMobile ? handleTouchStart : undefined}
+          onTouchMove={!isMobile ? handleTouchMove : undefined}
+          onTouchEnd={!isMobile ? handleTouchEnd : undefined}
+          style={{ cursor: !isMobile ? (isDragging ? "grabbing" : "grab") : "default" }}
         >
           {/* 3D Carousel Container */}
           <div
@@ -441,75 +445,83 @@ export function ProjectCarousel() {
             }}
           >
             <div className="absolute inset-0 flex items-center justify-center">
-              {projects.map((project, index) => (
-                <div
-                  key={project.id}
-                  className="absolute w-[240px] sm:w-[320px] md:w-[350px] h-[320px] sm:h-[400px] md:h-[450px] transition-all duration-400 ease-out cursor-pointer"
-                  style={{
-                    ...getCardStyle(index),
-                    cursor: "url('/cursor/custom-pointer.png'), pointer",
-                  }}
-                  onClick={() => {
-                    if (hasDragged) return
+              {projects.map((project, index) => {
+                const position = (index - currentIndex + projects.length * 2) % projects.length
+                const isNearViewport = isMobile
+                  ? position < 2 || position > projects.length - 2
+                  : position < 3 || position > projects.length - 3
 
-                    const roundedIndex = Math.round(currentIndex)
-                    const normalizedIndex = ((roundedIndex % projects.length) + projects.length) % projects.length
+                if (isMobile && !isNearViewport) {
+                  return null
+                }
 
-                    if (index === normalizedIndex) {
-                      setSelectedProject(project)
-                      setGalleryIndex(0)
-                    }
-                  }}
-                >
-                  <div className="relative w-full h-full rounded-xl overflow-hidden bg-[#f3e8ff]/60 dark:bg-white/5 backdrop-blur-sm border border-[#f3e8ff]/60 dark:border-white/10 shadow-2xl hover:shadow-white/20 dark:hover:shadow-white/20 transition-all group">
-                    {/* Project Image */}
-                    <div className="relative h-[55%] sm:h-[60%] overflow-hidden">
-                      <Image
-                        src={project.image || "/placeholder.svg"}
-                        alt={project.title}
-                        width={500}
-                        height={500}
-                        className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
-                        priority={index === Math.round(currentIndex)}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 dark:from-slate-950/90 to-transparent" />
-                    </div>
-
-                    {/* Project Info */}
-                    <div className="absolute bottom-0 left-0 right-0 p-6 space-y-3">
-                      <Badge className="bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border-white/20 dark:border-white/20">
-                        {project.category}
-                      </Badge>
-                      <h3 className="text-base sm:text-xl md:text-2xl font-bold text-slate-900 dark:text-white group-hover:text-slate-700 dark:group-hover:text-white/90 transition-colors line-clamp-2">
-                        {project.title}
-                      </h3>
-                      <p className="text-[11px] sm:text-sm text-slate-700 dark:text-slate-300 line-clamp-2">
-                        {project.shortDescription}
-                      </p>
-                      <div className="flex flex-wrap gap-1 sm:gap-1.5 md:gap-2">
-                        {project.technologies.slice(0, isMobile ? 2 : 3).map((tech) => (
-                          <span
-                            key={tech}
-                            className="text-[9px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border border-white/20 dark:border-white/20"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                        {project.technologies.length > (isMobile ? 2 : 3) && (
-                          <span className="text-[9px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border border-white/20 dark:border-white/20">
-                            +{project.technologies.length - (isMobile ? 2 : 3)}
-                          </span>
+                return (
+                  <div
+                    key={project.id}
+                    className="absolute w-[240px] sm:w-[320px] md:w-[350px] h-[320px] sm:h-[400px] md:h-[450px] transition-all duration-600 ease-out cursor-pointer"
+                    style={{
+                      ...getCardStyle(index),
+                      cursor: "url('/cursor/custom-pointer.png'), pointer",
+                      contain: "layout style paint",
+                    }}
+                    onClick={() => handleCardClick(project, index)}
+                  >
+                    <div className="relative w-full h-full rounded-xl overflow-hidden bg-[#f3e8ff]/60 dark:bg-white/5 backdrop-blur-sm border border-[#f3e8ff]/60 dark:border-white/10 shadow-2xl hover:shadow-white/20 dark:hover:shadow-white/20 transition-all group">
+                      {/* Project Image */}
+                      <div className="relative h-[55%] sm:h-[60%] overflow-hidden">
+                        {isNearViewport ? (
+                          <Image
+                            src={project.image || "/placeholder.svg"}
+                            alt={project.title}
+                            width={500}
+                            height={500}
+                            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+                            priority={index === Math.round(currentIndex)}
+                            loading={index === Math.round(currentIndex) ? "eager" : "lazy"}
+                            quality={isMobile ? 75 : 90}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-slate-200 dark:bg-slate-800" />
                         )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 dark:from-slate-950/90 to-transparent" />
+                      </div>
+
+                      {/* Project Info */}
+                      <div className="absolute bottom-0 left-0 right-0 p-6 space-y-3">
+                        <Badge className="bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border-white/20 dark:border-white/20">
+                          {project.category}
+                        </Badge>
+                        <h3 className="text-base sm:text-xl md:text-2xl font-bold text-slate-900 dark:text-white group-hover:text-slate-700 dark:group-hover:text-white/90 transition-colors line-clamp-2">
+                          {project.title}
+                        </h3>
+                        <p className="text-[11px] sm:text-sm text-slate-700 dark:text-slate-300 line-clamp-2">
+                          {project.shortDescription}
+                        </p>
+                        <div className="flex flex-wrap gap-1 sm:gap-1.5 md:gap-2">
+                          {project.technologies.slice(0, isMobile ? 2 : 3).map((tech) => (
+                            <span
+                              key={tech}
+                              className="text-[9px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border border-white/20 dark:border-white/20"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                          {project.technologies.length > (isMobile ? 2 : 3) && (
+                            <span className="text-[9px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border border-white/20 dark:border-white/20">
+                              +{project.technologies.length - (isMobile ? 2 : 3)}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Hover Glow Effect */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <div className="absolute inset-0 bg-gradient-to-t from-white/5 dark:from-white/5 to-transparent" />
                       </div>
                     </div>
-
-                    {/* Hover Glow Effect */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                      <div className="absolute inset-0 bg-gradient-to-t from-white/5 dark:from-white/5 to-transparent" />
-                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
 
@@ -546,7 +558,7 @@ export function ProjectCarousel() {
         {/* Carousel Indicators */}
         <div className="flex flex-col gap-2 items-center justify-center">
           <div className="text-gray-900 dark:text-white/50 text-xs sm:text-sm pointer-events-none">
-            {isMobile ? "Swipe to rotate" : "Drag to rotate"}
+            {isMobile ? "Use arrows to navigate" : "Drag to rotate"}
           </div>
           <div className="flex gap-1.5 sm:gap-2 justify-center">
             {projects.map((_, index) => (
@@ -684,6 +696,9 @@ export function ProjectCarousel() {
                         <Image
                           src={
                             selectedProject.gallery[galleryIndex] ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg" ||
                             "/placeholder.svg" ||
                             "/placeholder.svg" ||
                             "/placeholder.svg" ||

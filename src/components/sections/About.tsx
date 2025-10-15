@@ -3,23 +3,13 @@
 import dynamic from "next/dynamic";
 import { useRef } from "react";
 import Image from "next/image";
-const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
-const Particles = dynamic(() => import("../Particles"), { ssr: false });
+
 import Lottie from "lottie-react";
 
 import coffeeAnimation from "@/../public/lotties/coffee.json";
 import { motion } from "framer-motion";
 export function AboutMe() {
   const ref = useRef(null);
-
-  const fadeUp = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut" },
-    },
-  };
 
   return (
     <motion.section
@@ -31,28 +21,7 @@ export function AboutMe() {
       id="about"
       className="relative min-h-screen flex items-center justify-center px-4 py-10 overflow-hidden  transition-all duration-1000"
     >
-      <div
-        className="absolute inset-0 z-0"
-        style={{ width: "100%", height: "100%", zIndex: 0 }}
-      >
-        <Particles
-          particleColors={["#4b5563", "#a5b4fc", "#10B981"]}
-          darkParticleColors={["#ffffff", "#a5b4fc"]}
-          particleCount={400}
-          particleSpread={20}
-          speed={0.5}
-          particleBaseSize={160}
-          moveParticlesOnHover={false}
-          alphaParticles={true}
-          disableRotation={true}
-        />
-      </div>
-      <div
-        className="absolute inset-0 z-[5]"
-        style={{ width: "100%", height: "100%", zIndex: 5 }}
-      >
-        <ShootingStars />
-      </div>
+      
 
       <div className="relative z-10 max-w-5xl w-full">
         <motion.div
@@ -94,9 +63,10 @@ export function AboutMe() {
                 <Image
                   src="/images/user.jpg"
                   alt="Profile"
-                  fill
+                  width={500}
+                  height={500}
                   className="object-cover"
-                />
+                  />
               </div>
 
               {[0, 1, 2, 3].map((i) => (
