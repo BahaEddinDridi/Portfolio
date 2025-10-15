@@ -1,32 +1,26 @@
-"use client";
+"use client"
 
-import type React from "react";
-import { createPortal } from "react-dom";
-import { useState, useRef, useEffect } from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ExternalLink,
-  Github,
-  X,
-} from "lucide-react";
-import Button from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
+import type React from "react"
+import { createPortal } from "react-dom"
+import { useState, useRef, useEffect } from "react"
+import { ChevronLeft, ChevronRight, ExternalLink, Github, X } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import Image from "next/image"
+import Button from "./ui/button"
 
 interface Project {
-  id: number;
-  title: string;
-  shortDescription: string;
-  fullDescription: string;
-  image: string;
-  gallery: string[];
-  video: string[];
-  technologies: string[];
-  liveUrl?: string;
-  frontendGithubUrl?: string;
-  backendGithubUrl?: string;
-  category: string;
+  id: number
+  title: string
+  shortDescription: string
+  fullDescription: string
+  image: string
+  gallery: string[]
+  video: string[]
+  technologies: string[]
+  liveUrl?: string
+  frontendGithubUrl?: string
+  backendGithubUrl?: string
+  category: string
 }
 
 const projects: Project[] = [
@@ -61,8 +55,7 @@ const projects: Project[] = [
       "Meta Ads API",
     ],
     liveUrl: "",
-    frontendGithubUrl:
-      "https://github.com/BahaEddinDridi/Marketing-Platform-Frontend",
+    frontendGithubUrl: "https://github.com/BahaEddinDridi/Marketing-Platform-Frontend",
     backendGithubUrl: "https://github.com/BahaEddinDridi/Marketing-Platform",
     category: "Full-Stack",
   },
@@ -77,10 +70,8 @@ const projects: Project[] = [
     gallery: [],
     technologies: ["MongoDB", "Express", "React", "Node.js", "Tailwind CSS"],
     liveUrl: "",
-    frontendGithubUrl:
-      "https://github.com/BahaEddinDridi/Horizon-Formation/tree/main/Frontend",
-    backendGithubUrl:
-      "https://github.com/BahaEddinDridi/Horizon-Formation/tree/main/Backend",
+    frontendGithubUrl: "https://github.com/BahaEddinDridi/Horizon-Formation/tree/main/Frontend",
+    backendGithubUrl: "https://github.com/BahaEddinDridi/Horizon-Formation/tree/main/Backend",
     category: "Full-Stack",
   },
   {
@@ -101,8 +92,7 @@ const projects: Project[] = [
     ],
     technologies: ["Nuxt 3", "Vue.js", "Node.js", "MongoDB", "Tailwind CSS"],
     liveUrl: "https://chaletsissi-www.vercel.app",
-    frontendGithubUrl:
-      "https://github.com/fairplay-digital-admin/chaletsissi-www",
+    frontendGithubUrl: "https://github.com/fairplay-digital-admin/chaletsissi-www",
     backendGithubUrl: "",
     category: "Frontend",
   },
@@ -113,11 +103,7 @@ const projects: Project[] = [
     fullDescription:
       "During my internship at Yopex Hub, I worked on improving both the backend performance and user experience of their existing platform. I added a role-based access system that allows seamless transitions between personal and team workspaces, and optimized data queries to boost responsiveness across the app.",
     image: "/images/projects/project_4/1.png",
-    video: [
-      "/images/projects/project_4/1.mp4",
-      "/images/projects/project_4/2.mp4",
-      "/images/projects/project_4/3.mp4",
-    ],
+    video: ["/images/projects/project_4/1.mp4", "/images/projects/project_4/2.mp4", "/images/projects/project_4/3.mp4"],
     gallery: [],
     technologies: ["React", "Node.js", "MongoDB", "Redux", "Tailwind CSS"],
     liveUrl: "",
@@ -173,8 +159,7 @@ const projects: Project[] = [
     ],
     technologies: ["MongoDB", "Express", "React", "Node.js"],
     liveUrl: "",
-    frontendGithubUrl:
-      "https://github.com/BahaEddinDridi/Hestia_PIDEV_Frontend",
+    frontendGithubUrl: "https://github.com/BahaEddinDridi/Hestia_PIDEV_Frontend",
     backendGithubUrl: "https://github.com/BahaEddinDridi/Hestia_PIDEV_Backend",
     category: "Full-Stack",
   },
@@ -186,128 +171,251 @@ const projects: Project[] = [
       "A Laravel-based platform connecting restaurants with organizations to redistribute surplus food and minimize waste. Includes donation management, pickup scheduling, and reporting tools for sustainability impact tracking.",
     image: "/images/projects/project_8/1.png",
     video: [],
-    gallery: [
-      "/images/projects/project_8/1.png",
-      "/images/projects/project_8/2.png",
-    ],
+    gallery: ["/images/projects/project_8/1.png", "/images/projects/project_8/2.png"],
     technologies: ["Laravel", "PHP", "MySQL", "Bootstrap"],
     liveUrl: "",
     frontendGithubUrl: "",
     backendGithubUrl: "https://github.com/BahaEddinDridi/RescueFood",
     category: "Backend",
   },
-];
+]
 
 export function ProjectCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isRotating, setIsRotating] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [currentX, setCurrentX] = useState(0);
-  const [galleryIndex, setGalleryIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [isRotating, setIsRotating] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
+  const [startX, setStartX] = useState(0)
+  const [currentX, setCurrentX] = useState(0)
+  const [galleryIndex, setGalleryIndex] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
+  const [velocity, setVelocity] = useState(0)
+  const [lastMoveTime, setLastMoveTime] = useState(0)
+  const [lastMoveX, setLastMoveX] = useState(0)
+  const [momentum, setMomentum] = useState(0)
+  const [hasDragged, setHasDragged] = useState(false)
+  const [isSnapping, setIsSnapping] = useState(false)
+  const [snapStartIndex, setSnapStartIndex] = useState(0)
+  const [snapTargetIndex, setSnapTargetIndex] = useState(0)
+  const [snapProgress, setSnapProgress] = useState(0)
+  const animationFrameRef = useRef<number | null>(null)
 
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
+
+  useEffect(() => {
+    if (!isDragging && Math.abs(momentum) > 0.1) {
+      const animate = () => {
+        setMomentum((prev) => {
+          const newMomentum = prev * 0.85
+
+          if (Math.abs(newMomentum) < 0.1) {
+            setCurrentIndex((currentIdx) => {
+              const targetIdx = Math.round(currentIdx)
+              setSnapStartIndex(currentIdx)
+              setSnapTargetIndex(targetIdx)
+              setSnapProgress(0)
+              setIsSnapping(true)
+              return currentIdx
+            })
+            return 0
+          }
+
+          const rotationAmount = newMomentum / 400
+
+          setCurrentIndex((prevIndex) => {
+            const newIndex = prevIndex - rotationAmount
+            const wrappedIndex = ((newIndex % projects.length) + projects.length) % projects.length
+            return wrappedIndex
+          })
+
+          return newMomentum
+        })
+
+        animationFrameRef.current = requestAnimationFrame(animate)
+      }
+
+      animationFrameRef.current = requestAnimationFrame(animate)
+
+      return () => {
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current)
+        }
+      }
+    }
+  }, [isDragging, momentum, projects.length])
+
+  useEffect(() => {
+    if (isSnapping) {
+      const duration = 300 // ms
+      const startTime = Date.now()
+
+      const animate = () => {
+        const elapsed = Date.now() - startTime
+        const progress = Math.min(elapsed / duration, 1)
+
+        const easeProgress = 1 - Math.pow(1 - progress, 3)
+
+        setSnapProgress(easeProgress)
+
+        const newIndex = snapStartIndex + (snapTargetIndex - snapStartIndex) * easeProgress
+        setCurrentIndex(newIndex)
+
+        if (progress < 1) {
+          animationFrameRef.current = requestAnimationFrame(animate)
+        } else {
+          setIsSnapping(false)
+          setCurrentIndex(snapTargetIndex)
+        }
+      }
+
+      animationFrameRef.current = requestAnimationFrame(animate)
+
+      return () => {
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current)
+        }
+      }
+    }
+  }, [isSnapping, snapStartIndex, snapTargetIndex])
 
   const rotateCarousel = (direction: "next" | "prev") => {
-    if (isRotating) return;
-    setIsRotating(true);
+    if (isRotating) return
+    setIsRotating(true)
 
     if (direction === "next") {
-      setCurrentIndex((prev) => (prev + 1) % projects.length);
+      setCurrentIndex((prev) => (prev + 1) % projects.length)
     } else {
-      setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
+      setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length)
     }
 
-    setTimeout(() => setIsRotating(false), 600);
-  };
+    setTimeout(() => setIsRotating(false), 400)
+  }
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    setStartX(e.clientX);
-    setCurrentX(e.clientX);
-  };
+    setIsSnapping(false)
+    setIsDragging(true)
+    setStartX(e.clientX)
+    setCurrentX(e.clientX)
+    setLastMoveX(e.clientX)
+    setLastMoveTime(Date.now())
+    setMomentum(0)
+    setVelocity(0)
+    setHasDragged(false)
+
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current)
+    }
+  }
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    setCurrentX(e.clientX);
-  };
+    if (!isDragging) return
+
+    const now = Date.now()
+    const timeDelta = now - lastMoveTime
+    const xDelta = e.clientX - lastMoveX
+
+    if (timeDelta > 0) {
+      const currentVelocity = xDelta / timeDelta
+      setVelocity(currentVelocity)
+    }
+
+    setCurrentX(e.clientX)
+    setLastMoveX(e.clientX)
+    setLastMoveTime(now)
+
+    if (Math.abs(e.clientX - startX) > 10) {
+      setHasDragged(true)
+    }
+  }
 
   const handleMouseUp = () => {
-    if (!isDragging) return;
-    setIsDragging(false);
+    if (!isDragging) return
+    setIsDragging(false)
 
-    const diff = currentX - startX;
-    const threshold = 50;
+    const diff = currentX - startX
 
-    if (Math.abs(diff) > threshold) {
-      if (diff > 0) {
-        rotateCarousel("prev");
-      } else {
-        rotateCarousel("next");
-      }
-    }
-  };
+    const momentumValue = velocity * 35 + diff * 0.05
+    setMomentum(momentumValue)
+  }
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    setIsDragging(true);
-    setStartX(e.touches[0].clientX);
-    setCurrentX(e.touches[0].clientX);
-  };
+    setIsSnapping(false)
+    setIsDragging(true)
+    setStartX(e.touches[0].clientX)
+    setCurrentX(e.touches[0].clientX)
+    setLastMoveX(e.touches[0].clientX)
+    setLastMoveTime(Date.now())
+    setMomentum(0)
+    setVelocity(0)
+    setHasDragged(false)
+
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current)
+    }
+  }
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return;
-    setCurrentX(e.touches[0].clientX);
-  };
+    if (!isDragging) return
+
+    const now = Date.now()
+    const timeDelta = now - lastMoveTime
+    const xDelta = e.touches[0].clientX - lastMoveX
+
+    if (timeDelta > 0) {
+      const currentVelocity = xDelta / timeDelta
+      setVelocity(currentVelocity)
+    }
+
+    setCurrentX(e.touches[0].clientX)
+    setLastMoveX(e.touches[0].clientX)
+    setLastMoveTime(now)
+
+    if (Math.abs(e.touches[0].clientX - startX) > 10) {
+      setHasDragged(true)
+    }
+  }
 
   const handleTouchEnd = () => {
-    if (!isDragging) return;
-    setIsDragging(false);
+    if (!isDragging) return
+    setIsDragging(false)
 
-    const diff = currentX - startX;
-    const threshold = 50;
+    const diff = currentX - startX
 
-    if (Math.abs(diff) > threshold) {
-      if (diff > 0) {
-        rotateCarousel("prev");
-      } else {
-        rotateCarousel("next");
-      }
-    }
-  };
+    const momentumValue = velocity * 35 + diff * 0.05
+    setMomentum(momentumValue)
+  }
 
   const getCardStyle = (index: number) => {
-    const position = (index - currentIndex + projects.length) % projects.length;
-    const totalCards = projects.length;
-    const angle = (360 / totalCards) * position;
+    const position = (index - currentIndex + projects.length * 2) % projects.length
+    const totalCards = projects.length
+    const angle = (360 / totalCards) * position
 
-    const radius = isMobile ? 130 : 320;
-    const dragOffset = isDragging ? (currentX - startX) * 0.2 : 0;
+    const radius = isMobile ? 130 : 320
+    const dragOffset = isDragging ? (currentX - startX) * 0.1 : 0
 
-    const x = Math.sin(((angle + dragOffset) * Math.PI) / 180) * radius;
-    const z = Math.cos(((angle + dragOffset) * Math.PI) / 180) * radius;
-    const scale = isMobile
-      ? 0.5 + (z + radius) / (radius * 4)
-      : 0.7 + (z + radius) / (radius * 3);
-    const opacity = z > -radius / 2 ? 1 : 0.3;
+    const x = Math.sin(((angle + dragOffset) * Math.PI) / 180) * radius
+    const z = Math.cos(((angle + dragOffset) * Math.PI) / 180) * radius
+    const scale = isMobile ? 0.5 + (z + radius) / (radius * 4) : 0.7 + (z + radius) / (radius * 3)
+    const opacity = z > -radius / 2 ? 1 : 0.3
+
+    const isFront = Math.abs(position) < 0.5 || Math.abs(position - projects.length) < 0.5
 
     return {
       transform: `translateX(${x}px) translateZ(${z}px) scale(${scale})`,
       opacity,
       zIndex: Math.round(z),
-      pointerEvents: position === 0 ? ("auto" as const) : ("none" as const),
-    };
-  };
+      pointerEvents: isFront ? ("auto" as const) : ("none" as const),
+    }
+  }
 
   return (
     <>
@@ -336,19 +444,20 @@ export function ProjectCarousel() {
               {projects.map((project, index) => (
                 <div
                   key={project.id}
-                  className="absolute w-[240px] sm:w-[320px] md:w-[350px] h-[320px] sm:h-[400px] md:h-[450px] transition-all duration-600 ease-out cursor-pointer"
+                  className="absolute w-[240px] sm:w-[320px] md:w-[350px] h-[320px] sm:h-[400px] md:h-[450px] transition-all duration-400 ease-out cursor-pointer"
                   style={{
                     ...getCardStyle(index),
                     cursor: "url('/cursor/custom-pointer.png'), pointer",
                   }}
                   onClick={() => {
-                    if (
-                      (index - currentIndex + projects.length) %
-                        projects.length ===
-                      0
-                    ) {
-                      setSelectedProject(project);
-                      setGalleryIndex(0);
+                    if (hasDragged) return
+
+                    const roundedIndex = Math.round(currentIndex)
+                    const normalizedIndex = ((roundedIndex % projects.length) + projects.length) % projects.length
+
+                    if (index === normalizedIndex) {
+                      setSelectedProject(project)
+                      setGalleryIndex(0)
                     }
                   }}
                 >
@@ -360,8 +469,8 @@ export function ProjectCarousel() {
                         alt={project.title}
                         width={500}
                         height={500}
-                        className="w-full h-full object-contain  group-hover:scale-110 transition-transform duration-500"
-                        priority={index === currentIndex}
+                        className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+                        priority={index === Math.round(currentIndex)}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 dark:from-slate-950/90 to-transparent" />
                     </div>
@@ -378,16 +487,14 @@ export function ProjectCarousel() {
                         {project.shortDescription}
                       </p>
                       <div className="flex flex-wrap gap-1 sm:gap-1.5 md:gap-2">
-                        {project.technologies
-                          .slice(0, isMobile ? 2 : 3)
-                          .map((tech) => (
-                            <span
-                              key={tech}
-                              className="text-[9px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border border-white/20 dark:border-white/20"
-                            >
-                              {tech}
-                            </span>
-                          ))}
+                        {project.technologies.slice(0, isMobile ? 2 : 3).map((tech) => (
+                          <span
+                            key={tech}
+                            className="text-[9px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border border-white/20 dark:border-white/20"
+                          >
+                            {tech}
+                          </span>
+                        ))}
                         {project.technologies.length > (isMobile ? 2 : 3) && (
                           <span className="text-[9px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-white/90 dark:bg-white/10 text-slate-900 dark:text-white border border-white/20 dark:border-white/20">
                             +{project.technologies.length - (isMobile ? 2 : 3)}
@@ -434,8 +541,6 @@ export function ProjectCarousel() {
           >
             <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
           </Button>
-
-          {/* Drag Hint */}
         </div>
 
         {/* Carousel Indicators */}
@@ -448,13 +553,13 @@ export function ProjectCarousel() {
               <button
                 key={index}
                 className={`h-2 rounded-full transition-all ${
-                  index === currentIndex
+                  Math.round(currentIndex) === index
                     ? "bg-gray-900 dark:bg-white w-6 sm:w-8"
                     : "bg-gray-900/30 dark:bg-white/30 hover:bg-gray-900/50 dark:hover:bg-white/50 w-2"
                 }`}
                 onClick={() => {
                   if (!isRotating) {
-                    setCurrentIndex(index);
+                    setCurrentIndex(index)
                   }
                 }}
                 aria-label={`Go to project ${index + 1}`}
@@ -479,7 +584,7 @@ export function ProjectCarousel() {
                 className="absolute top-2 right-2 sm:top-4 sm:right-4 z-50 p-1.5 sm:p-2 rounded-full bg-gray-200 dark:bg-white/10 backdrop-blur-sm border border-gray-300 dark:border-white/20 hover:bg-gray-300 dark:hover:bg-white/20 text-black dark:text-white transition-all"
                 onClick={() => setSelectedProject(null)}
               >
-               <X className="h-5 w-5 sm:h-6 sm:w-6" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
 
               <div className="flex flex-col h-full max-h-[98vh] sm:max-h-[95vh] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
@@ -577,7 +682,17 @@ export function ProjectCarousel() {
                         </div>
                       ) : (
                         <Image
-                          src={selectedProject.gallery[galleryIndex] || "/placeholder.svg" || "/placeholder.svg"}
+                          src={
+                            selectedProject.gallery[galleryIndex] ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg"
+                          }
                           alt={`${selectedProject.title} - Image ${galleryIndex + 1}`}
                           width={1200}
                           height={800}
@@ -658,8 +773,8 @@ export function ProjectCarousel() {
               </div>
             </div>
           </div>,
-          document.getElementById("modal-root") || document.body
+          document.getElementById("modal-root") || document.body,
         )}
     </>
-  );
+  )
 }
