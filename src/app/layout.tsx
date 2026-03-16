@@ -6,7 +6,6 @@ import ClickSpark from "@/components/ClickSpark";
 import { Suspense } from "react";
 
 import NavbarWrapper from "./NavbarWrapper"; // Adjust path if needed
-import RibbonsWrapper from "./RibbonsWrapper";
 import { ThemeProvider } from "@/hooks/useTheme";
 
 const geistSans = Geist({
@@ -53,20 +52,6 @@ export default function RootLayout({
             id="modal-root"
             style={{ position: "relative", zIndex: 100 }}
           ></div>
-          <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              overflow: "hidden",
-              zIndex: 50,
-              pointerEvents: "none",
-            }}
-          >
-            <RibbonsWrapper />
-          </div>
         </ClickSpark>
         </ThemeProvider>
       </body>

@@ -116,7 +116,6 @@ interface TimelineItemProps {
   item: TimelineItemData
   expanded: boolean
   onToggle: (id: string) => void
-  index: number
 }
 
 const TimelineItem = memo(function TimelineItem({ item, expanded, onToggle }: TimelineItemProps) {
@@ -126,7 +125,11 @@ const TimelineItem = memo(function TimelineItem({ item, expanded, onToggle }: Ti
   const [isHovered, setIsHovered] = useState(false)
 
   return (
-    <div className="relative group" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+    <div
+      className="relative group"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
        <div className="absolute left-[16px] top-10 bottom-0 w-[1px] overflow-hidden transform -translate-x-1/2">
         <div className="absolute inset-0 bg-gradient-to-b from-slate-400 via-slate-300 to-slate-200 dark:from-white/80 dark:via-white/40 dark:to-white/20" />
           {isHovered && (
@@ -235,8 +238,8 @@ export function ProfessionalTimeline({ data, defaultExpandedIds, expandMode = "m
 
   return (
     <div className="relative">
-      {data.map((item, index) => (
-        <TimelineItem key={item.id} item={item} expanded={expanded.has(item.id)} onToggle={onToggle} index={index} />
+      {data.map((item) => (
+        <TimelineItem key={item.id} item={item} expanded={expanded.has(item.id)} onToggle={onToggle} />
       ))}
     </div>
   )

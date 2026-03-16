@@ -1,8 +1,5 @@
 "use client";
-import dynamic from "next/dynamic";
 import Lottie from "lottie-react";
-const Particles = dynamic(() => import("../Particles"), { ssr: false });
-const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
 import messageSentAnimation from "@/../public/lotties/mail-sent.json";
 import { SiDiscord } from "react-icons/si";
 import Image from "next/image";
@@ -43,20 +40,6 @@ export function ContactMe() {
       link: "https://discord.com/users/geodaddy1591",
     },
   ];
-
-  const container = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-  };
   return (
     <motion.section
       ref={ref}
@@ -65,7 +48,7 @@ export function ContactMe() {
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
     >
       
 
@@ -80,12 +63,13 @@ export function ContactMe() {
         />
       </div>
       <div className="max-w-7xl mx-auto w-full relative z-10 mb-60">
-        <motion.div className="mb-16 text-center"
-        initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.8 }}
-          >
+        <motion.div
+          className="mb-16 text-center"
+          initial={{ opacity: 0, y: 16, scale: 0.99 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        >
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
             Get In Touch
           </h2>
@@ -96,11 +80,12 @@ export function ContactMe() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side: Lottie animation */}
           <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-             className="flex justify-center">
+            initial={{ opacity: 0, x: -18, y: 10, scale: 0.95, rotate: -1 }}
+            whileInView={{ opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ type: "spring", stiffness: 140, damping: 18, mass: 0.9 }}
+            className="flex justify-center"
+          >
             <motion.div 
             animate={{ y: [0, -10, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -114,14 +99,39 @@ export function ContactMe() {
               </div>
             </motion.div>
           </motion.div>
-          <div
-            className="flex flex-col gap-4">
+          <motion.div
+            className="flex flex-col gap-4"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.25 }}
+            variants={{
+              hidden: {},
+              visible: {
+                transition: {
+                  staggerChildren: 0.08,
+                  delayChildren: 0.05,
+                },
+              },
+            }}
+          >
             {contactInfo.map((contact, index) => (
-              <a
+              <motion.a
                 key={index}
                 href={contact.link}
                 target="_blank"
                 rel="noopener noreferrer"
+                variants={{
+                  hidden: { opacity: 0, y: 14, scale: 0.995 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    transition: {
+                      duration: 0.7,
+                      ease: [0.16, 1, 0.3, 1],
+                    },
+                  },
+                }}
                 className="group relative p-6 rounded-2xl bg-gradient-to-br from-gray-100/50 to-gray-100/70 dark:from-purple-500/10  dark:to-blue-500/10 backdrop-blur-sm border border-gray-200 dark:border-purple-400/20 dark:hover:border-purple-400/40 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
               >
                 <div className="flex items-start gap-4">
@@ -135,9 +145,9 @@ export function ContactMe() {
                     </p>
                   </div>
                 </div>
-              </a>
+              </motion.a>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </motion.section>

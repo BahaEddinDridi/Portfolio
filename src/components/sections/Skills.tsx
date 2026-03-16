@@ -1,14 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
-import dynamic from "next/dynamic";
+import { getIconType, iconComponents } from "@/types/techIcons";
 import { motion } from "framer-motion";
-import React from "react";
-const Particles = dynamic(() => import("../Particles").then(mod => React.memo(mod.default)), {
-  ssr: false
-});
-const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
 
 interface Skill {
   name: string;
@@ -71,6 +66,12 @@ const connections: Record<string, Array<[string, string]>> = {
 };
 
 const categories = ["All", "Frontend", "Backend", "Tools"];
+
+const popupIconAlias: Record<string, string> = {
+  ".NET": ".NETFramework",
+  Adobe: "AdobePhotoshop",
+  Nest: "Nest.js",
+};
 
 const scatteredPositions: Record<string, { x: number; y: number }> = {
   // Frontend - top left area
@@ -154,16 +155,27 @@ const calculateCenteredPositions = () => {
 };
 
 const centeredPositions = calculateCenteredPositions();
+const skillByName = Object.fromEntries(skills.map((skill) => [skill.name, skill]));
+const skillPulseDelays = Object.fromEntries(
+  skills.map((skill, index) => [
+    skill.name,
+    {
+      midGlow: (index % 7) * 0.1,
+      starGlow: ((index * 3) % 10) * 0.07,
+    },
+  ])
+);
 
 export function Skills() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [previousCategory, setPreviousCategory] = useState("All");
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
-  const ref = useRef(null);
 
-  const [isDarkMode, setIsDarkMode] = useState(
-    document.documentElement.classList.contains("dark")
+  const [isDarkMode, setIsDarkMode] = useState(() =>
+    typeof document !== "undefined"
+      ? document.documentElement.classList.contains("dark")
+      : false
   );
 
   useEffect(() => {
@@ -181,19 +193,24 @@ export function Skills() {
     setPreviousCategory(activeCategory);
   }, [activeCategory]);
 
-  const filteredSkills =
-    activeCategory === "All"
-      ? skills
-      : skills.filter((skill) => skill.category === activeCategory);
-
-  const getActiveConnections = () => {
+  const activeConnections = useMemo(() => {
     if (activeCategory === "All") {
       return Object.values(connections).flat();
     }
     return connections[activeCategory] || [];
-  };
+  }, [activeCategory]);
 
-  const findSkill = (name: string) => skills.find((s) => s.name === name);
+  const connectedSkills = useMemo(() => {
+    if (!hoveredSkill) return new Set<string>();
+    const result = new Set<string>();
+    activeConnections.forEach(([from, to]) => {
+      if (hoveredSkill === from || hoveredSkill === to) {
+        result.add(from);
+        result.add(to);
+      }
+    });
+    return result;
+  }, [activeConnections, hoveredSkill]);
 
   const getSkillPosition = (skill: Skill) => {
     if (activeCategory === "All") {
@@ -219,12 +236,11 @@ export function Skills() {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 100 }}
+      initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 1, ease: "easeOut" }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
       onViewportEnter={() => setHasAnimated(true)}
-      ref={ref}
       id="skills"
       className="
         relative min-h-screen w-full py-12 md:py-10 px-4 overflow-hidden transition-all duration-1000
@@ -233,10 +249,10 @@ export function Skills() {
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.6, duration: 0.8 }}
+          initial={{ opacity: 0, y: 16, scale: 0.99 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-8 md:mb-16"
         >
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight  dark:text-white text-gray-900">
@@ -249,14 +265,14 @@ export function Skills() {
         </motion.div>
         <motion.div
           initial="hidden"
-          animate="visible"
-          viewport={{ once: true }}
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.35 }}
           variants={{
             hidden: {},
             visible: {
               transition: {
-                staggerChildren: 0.5,
-                delayChildren: 0.8, // each button animates 0.5s after the previous
+                staggerChildren: 0.08,
+                delayChildren: 0.05,
               },
             },
           }}
@@ -293,7 +309,11 @@ export function Skills() {
             </motion.button>
           ))}
         </motion.div>
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: 18, scale: 0.995 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.04 }}
           className="flex flex-col lg:flex-row gap-4 md:gap-6 items-start
              dark:bg-transparent p-4 rounded-xl border border-gray-300 dark:border-transparent"
           style={{
@@ -309,9 +329,9 @@ export function Skills() {
                 filter: "drop-shadow(0 0 10px rgba(255, 255, 255, 0.3))",
               }}
             >
-              {getActiveConnections().map(([from, to], index) => {
-                const fromSkill = findSkill(from);
-                const toSkill = findSkill(to);
+              {activeConnections.map(([from, to], index) => {
+                const fromSkill = skillByName[from];
+                const toSkill = skillByName[to];
                 if (!fromSkill || !toSkill) return null;
 
                 const fromPos = getSkillPosition(fromSkill);
@@ -323,10 +343,6 @@ export function Skills() {
 
                 const isHighlighted =
                   hoveredSkill === from || hoveredSkill === to;
-
-                const dx = toPos.x - fromPos.x;
-                const dy = toPos.y - fromPos.y;
-                const length = Math.sqrt(dx * dx + dy * dy);
 
                 return (
                   <motion.line
@@ -386,11 +402,16 @@ export function Skills() {
 
             {skills.map((skill, skillIndex) => {
               const isHovered = hoveredSkill === skill.name;
-              const isConnected = getActiveConnections().some(
-                ([from, to]) =>
-                  (from === skill.name || to === skill.name) &&
-                  (hoveredSkill === from || hoveredSkill === to)
+              const isConnected = connectedSkills.has(skill.name);
+              const iconType = getIconType(
+                popupIconAlias[skill.name] ?? skill.name
               );
+              const iconMeta = iconComponents[iconType];
+              const SkillIcon = iconMeta.component;
+              const pulseDelay = skillPulseDelays[skill.name] || {
+                midGlow: 0,
+                starGlow: 0,
+              };
 
               const position = getSkillPosition(skill);
               const opacity = getSkillOpacity(skill);
@@ -481,7 +502,7 @@ export function Skills() {
                             duration: 1.5,
                             repeat: Infinity,
                             ease: "easeInOut",
-                            delay: Math.random(), // randomize start to make them pulse asynchronously
+                            delay: pulseDelay.midGlow,
                           }}
                         />
 
@@ -518,7 +539,7 @@ export function Skills() {
                             duration: 1.5,
                             repeat: Infinity,
                             ease: "easeInOut",
-                            delay: Math.random(), // asynchronous pulse for natural look
+                            delay: pulseDelay.starGlow,
                           }}
                         >
                           <path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" />
@@ -538,9 +559,17 @@ export function Skills() {
                           
                         >
                           <div className="text-center">
-                            <p className="font-semibold text-sm  dark:text-white text-gray-900">
-                              {skill.name}
-                            </p>
+                            <div className="flex items-center justify-center gap-2">
+                              <span
+                                className="inline-flex items-center justify-center w-5 h-5"
+                                style={{ color: iconMeta.color }}
+                              >
+                                <SkillIcon className="w-4 h-4" />
+                              </span>
+                              <p className="font-semibold text-sm dark:text-white text-gray-900">
+                                {skill.name}
+                              </p>
+                            </div>
                             <p className="text-xs mt-1  dark:text-gray-400 text-gray-600">
                               {skill.category}
                             </p>
@@ -613,14 +642,20 @@ export function Skills() {
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Bottom decorative text */}
-        <div className="mt-4 md:mt-6 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
+          className="mt-4 md:mt-6 text-center"
+        >
           <p className="text-sm font-mono text-gray-600 dark:text-gray-600 ">
             Always learning, always growing
           </p>
-        </div>
+        </motion.div>
       </div>
     </motion.section>
   );

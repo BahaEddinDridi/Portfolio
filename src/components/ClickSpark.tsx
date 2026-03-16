@@ -1,8 +1,9 @@
 "use client";
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 
 interface ClickSparkProps {
   sparkColor?: string;
+  sparkColorLight?: string;
   sparkSize?: number;
   sparkRadius?: number;
   sparkCount?: number;
@@ -21,6 +22,7 @@ interface Spark {
 
 const ClickSpark: React.FC<ClickSparkProps> = ({
   sparkColor = '#fff',
+  sparkColorLight = '#111827',
   sparkSize = 10,
   sparkRadius = 15,
   sparkCount = 8,
@@ -31,38 +33,44 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sparksRef = useRef<Spark[]>([]);
-  const startTimeRef = useRef<number | null>(null);
+  const animationIdRef = useRef<number | null>(null);
+  const isAnimatingRef = useRef(false);
+  const [isDarkMode, setIsDarkMode] = useState(() =>
+    typeof document !== 'undefined'
+      ? document.documentElement.classList.contains('dark')
+      : false
+  );
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDarkMode(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const parent = canvas.parentElement;
-    if (!parent) return;
-
-    let resizeTimeout: NodeJS.Timeout;
-
     const resizeCanvas = () => {
-      const { width, height } = parent.getBoundingClientRect();
+      const width = window.innerWidth;
+      const height = window.innerHeight;
       if (canvas.width !== width || canvas.height !== height) {
         canvas.width = width;
         canvas.height = height;
       }
     };
 
-    const handleResize = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(resizeCanvas, 100);
-    };
-
-    const ro = new ResizeObserver(handleResize);
-    ro.observe(parent);
-
     resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
     return () => {
-      ro.disconnect();
-      clearTimeout(resizeTimeout);
+      window.removeEventListener('resize', resizeCanvas);
     };
   }, []);
 
@@ -82,19 +90,21 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     [easing]
   );
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animationId: number;
-
-    const draw = (timestamp: number) => {
-      if (!startTimeRef.current) {
-        startTimeRef.current = timestamp;
+  const draw = useCallback(
+    (timestamp: number) => {
+      const canvas = canvasRef.current;
+      if (!canvas) {
+        isAnimatingRef.current = false;
+        return;
       }
-      ctx?.clearRect(0, 0, canvas.width, canvas.height);
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        isAnimatingRef.current = false;
+        return;
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       sparksRef.current = sparksRef.current.filter((spark: Spark) => {
         const elapsed = timestamp - spark.startTime;
@@ -113,7 +123,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
         const x2 = spark.x + (distance + lineLength) * Math.cos(spark.angle);
         const y2 = spark.y + (distance + lineLength) * Math.sin(spark.angle);
 
-        ctx.strokeStyle = sparkColor;
+        ctx.strokeStyle = isDarkMode ? sparkColor : sparkColorLight;
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
@@ -123,23 +133,31 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
         return true;
       });
 
-      animationId = requestAnimationFrame(draw);
-    };
+      if (sparksRef.current.length > 0) {
+        animationIdRef.current = requestAnimationFrame(draw);
+      } else {
+        isAnimatingRef.current = false;
+        animationIdRef.current = null;
+      }
+    },
+    [duration, easeFunc, extraScale, isDarkMode, sparkColor, sparkColorLight, sparkRadius, sparkSize]
+  );
 
-    animationId = requestAnimationFrame(draw);
+  const startAnimation = useCallback(() => {
+    if (isAnimatingRef.current) return;
+    isAnimatingRef.current = true;
+    animationIdRef.current = requestAnimationFrame(draw);
+  }, [draw]);
 
+  useEffect(() => {
     return () => {
-      cancelAnimationFrame(animationId);
+      if (animationIdRef.current) {
+        cancelAnimationFrame(animationIdRef.current);
+      }
     };
-  }, [sparkColor, sparkSize, sparkRadius, sparkCount, duration, easeFunc, extraScale]);
+  }, []);
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
+  const spawnSpark = useCallback((x: number, y: number) => {
     const now = performance.now();
     const newSparks: Spark[] = Array.from({ length: sparkCount }, (_, i) => ({
       x,
@@ -149,11 +167,30 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     }));
 
     sparksRef.current.push(...newSparks);
-  };
+    startAnimation();
+  }, [sparkCount, startAnimation]);
+
+  useEffect(() => {
+    const handlePointerDown = (e: PointerEvent) => {
+      spawnSpark(e.clientX, e.clientY);
+    };
+
+    const handleMouseDown = (e: MouseEvent) => {
+      spawnSpark(e.clientX, e.clientY);
+    };
+
+    window.addEventListener('pointerdown', handlePointerDown, { capture: true });
+    window.addEventListener('mousedown', handleMouseDown, { capture: true });
+
+    return () => {
+      window.removeEventListener('pointerdown', handlePointerDown, { capture: true });
+      window.removeEventListener('mousedown', handleMouseDown, { capture: true });
+    };
+  }, [spawnSpark]);
 
   return (
-    <div className="relative w-full h-full" onClick={handleClick}>
-      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
+    <div className="relative w-full">
+      <canvas ref={canvasRef} className="fixed inset-0 w-screen h-screen pointer-events-none z-[9999]" />
       {children}
     </div>
   );

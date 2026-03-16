@@ -121,7 +121,11 @@ const Particles: React.FC<ParticlesProps> = ({
     const container = containerRef.current;
     if (!container) return;
 
-    const renderer = new Renderer({ depth: false, alpha: true });
+    const renderer = new Renderer({
+      depth: false,
+      alpha: true,
+      dpr: Math.min(window.devicePixelRatio || 1, 1.5),
+    });
     const gl = renderer.gl;
     container.appendChild(gl.canvas);
     gl.clearColor(0, 0, 0, 0);
@@ -153,6 +157,7 @@ const Particles: React.FC<ParticlesProps> = ({
     const colors = new Float32Array(count * 3);
 
     const isDarkMode = document.documentElement.classList.contains("dark");
+    const isDarkModeRef = { current: isDarkMode };
     const currentColors =
       (isDarkMode
         ? darkParticleColors && darkParticleColors.length
@@ -204,6 +209,7 @@ const Particles: React.FC<ParticlesProps> = ({
     // Observe theme changes
     const observer = new MutationObserver(() => {
       const dark = document.documentElement.classList.contains("dark");
+      isDarkModeRef.current = dark;
       prog.uniforms.uIsDarkMode.value = dark ? 1 : 0;
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
@@ -214,11 +220,21 @@ const Particles: React.FC<ParticlesProps> = ({
 
     const update = (t: number) => {
       animationFrameId = requestAnimationFrame(update);
+
+      if (document.hidden) {
+        return;
+      }
+
       const delta = t - lastTime;
       lastTime = t;
       elapsed += delta * speed;
 
       prog.uniforms.uTime.value = elapsed * 0.001;
+
+      // In light mode particles are intentionally hidden in the shader, so skip rendering work.
+      if (!isDarkModeRef.current) {
+        return;
+      }
 
       if (moveParticlesOnHover) {
         particles.position.x = -mouseRef.current.x * particleHoverFactor;

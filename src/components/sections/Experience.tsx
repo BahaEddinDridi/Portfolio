@@ -1,12 +1,8 @@
 "use client";
 
 import { Code, Briefcase, Users } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import { ProfessionalTimeline } from "../professional-timeline";
-import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-const Particles = dynamic(() => import("../Particles"), { ssr: false });
-const ShootingStars = dynamic(() => import("../ShootingStar"), { ssr: false });
 
 const experienceData = [
   {
@@ -109,27 +105,22 @@ const experienceData = [
 ];
 
 export function Experience() {
-  const ref = useRef(null);
-
   return (
     <motion.section
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 1, ease: "easeOut" }}
-      ref={ref}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
       id="experience"
       className="relative min-h-screen flex items-center justify-center px-4 py-10  transition-all duration-1000"
     >
-     
-
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 16, scale: 0.99 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="mb-16 text-center transition-all duration-1000 delay-200"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
@@ -143,10 +134,10 @@ export function Experience() {
 
         {/* Timeline */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.06 }}
           className="transition-all duration-1000 delay-400"
         >
           <ProfessionalTimeline data={experienceData} expandMode="multi" />

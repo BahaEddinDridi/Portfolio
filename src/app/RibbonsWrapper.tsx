@@ -21,9 +21,9 @@ export default function RibbonsWrapper() {
       <Ribbons
         baseThickness={8}
         colors={["#191970", "#303F9F", "#3F51B5"]}
-        speedMultiplier={0.5}
-        maxAge={500}
-        enableFade={false}
+        speedMultiplier={0.3}
+        maxAge={800}
+        enableFade={true}
         enableShaderEffect={true}
       />
     </div>

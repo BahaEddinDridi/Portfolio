@@ -1,6 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useRef } from "react";
 import Image from "next/image";
 
@@ -13,10 +12,10 @@ export function AboutMe() {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 100 }}
+      initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 1, ease: "easeOut" }}
+      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
       ref={ref}
       id="about"
       className="relative min-h-screen flex items-center justify-center px-4 py-10 overflow-hidden  transition-all duration-1000"
@@ -25,10 +24,10 @@ export function AboutMe() {
 
       <div className="relative z-10 max-w-5xl w-full">
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.6, duration: 0.8 }}
+          initial={{ opacity: 0, y: 16, scale: 0.99 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-8 md:mb-16"
         >
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight  dark:text-white text-gray-900">
@@ -38,15 +37,10 @@ export function AboutMe() {
         <div className="text-center space-y-10">
           {/* Profile image with constellation-style glow */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.5, y: 50 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{
-              type: "spring",
-              stiffness: 120,
-              damping: 20,
-              duration: 0.8,
-            }}
+            initial={{ opacity: 0, y: 24, scale: 0.92 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.45 }}
+            transition={{ type: "spring", stiffness: 140, damping: 18, mass: 0.9, delay: 0.05 }}
             className="flex justify-center mb-8 relative group"
           >
             <div className="relative group">
@@ -98,25 +92,39 @@ export function AboutMe() {
             </div>
           </motion.div>
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4, duration: 0.8 }}
             className="max-w-3xl mx-auto space-y-6 text-lg leading-relaxed"
           >
-            <p className="text-gray-800 dark:text-white/90 backdrop-blur-sm bg-gray-300/50 dark:bg-white/5 p-6 rounded-2xl border border-gray-400/50 dark:border-white/10 hover:border-indigo-500 dark:hover:border-white/20 hover:bg-indigo-50/50 dark:hover:bg-white/10 transition-all duration-300">
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.35 }}
+              transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+              className="text-gray-800 dark:text-white/90 backdrop-blur-sm bg-gray-300/50 dark:bg-white/5 p-6 rounded-2xl border border-gray-400/50 dark:border-white/10 hover:border-indigo-500 dark:hover:border-white/20 hover:bg-indigo-50/50 dark:hover:bg-white/10 transition-all duration-300"
+            >
               Hey there! I&apos;m a passionate developer who loves crafting
               beautiful and functional web experiences. I believe in writing
               clean code and creating interfaces that feel magical to use.
-            </p>
+            </motion.p>
 
-            <p className="text-gray-800 dark:text-white/90 backdrop-blur-sm bg-gray-300/50 dark:bg-white/5 p-6 rounded-2xl border border-gray-400/50 dark:border-white/10 hover:border-indigo-500 dark:hover:border-white/20 hover:bg-indigo-50/50 dark:hover:bg-white/10 transition-all duration-300">
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.35 }}
+              transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
+              className="text-gray-800 dark:text-white/90 backdrop-blur-sm bg-gray-300/50 dark:bg-white/5 p-6 rounded-2xl border border-gray-400/50 dark:border-white/10 hover:border-indigo-500 dark:hover:border-white/20 hover:bg-indigo-50/50 dark:hover:bg-white/10 transition-all duration-300"
+            >
               When I&apos;m not coding, you&apos;ll find me exploring new
               technologies, contributing to open source, or diving deep into the
               latest web development trends.
-            </p>
+            </motion.p>
 
-            <div className="relative group">
+            <motion.div
+              initial={{ opacity: 0, y: 16, scale: 0.995 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.35 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
+              className="relative group"
+            >
               <div className="absolute -inset-1 bg-gray-200/10 dark:bg-white/10 rounded-2xl blur-xl opacity-50 group-hover:opacity-100 transition duration-500" />
 
               <div className="relative backdrop-blur-sm bg-gray-300/50 dark:bg-white/5 p-8 rounded-2xl border border-gray-400/50 dark:border-white/20 hover:border-indigo-500 dark:hover:border-white/30 transition-all duration-300 overflow-hidden">
@@ -148,21 +156,16 @@ export function AboutMe() {
 
                 {/* Floating animation — doesn't stretch the card */}
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.5, y: 50 }}
-                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.5 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 120,
-                    damping: 20,
-                    duration: 0.8,
-                  }}
+                  initial={{ opacity: 0, x: 22, y: 10, scale: 0.92, rotate: 1 }}
+                  whileInView={{ opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 }}
+                  viewport={{ once: true, amount: 0.35 }}
+                  transition={{ type: "spring", stiffness: 130, damping: 18, mass: 0.9, delay: 0.12 }}
                   className="absolute -right-10 bottom-0 w-48 h-48 md:w-56 md:h-56 opacity-90 brightness-100 dark:brightness-75 hidden md:block pointer-events-none select-none"
                 >
                   <Lottie animationData={coffeeAnimation} loop />
                 </motion.div>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>

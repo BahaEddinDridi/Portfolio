@@ -41,37 +41,54 @@ const Particles = dynamic(() => import("../components/Particles"), {
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDesktop, setIsDesktop] = useState(true);
+  const [particleCount, setParticleCount] = useState(1400);
 
   useEffect(() => {
     // Determine if desktop
-    const checkScreen = () => setIsDesktop(window.innerWidth > 768);
+    const checkScreen = () => {
+      const width = window.innerWidth;
+      setIsDesktop(width > 768);
+      setParticleCount(width > 1536 ? 1800 : width > 1200 ? 1400 : 1000);
+    };
     checkScreen();
     window.addEventListener("resize", checkScreen);
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
   useEffect(() => {
-    Promise.all([
-      import("@/components/sections/Hero"),
-      import("@/components/sections/About"),
-      import("@/components/sections/Skills"),
-      import("@/components/sections/Experience"),
-      import("@/components/sections/Projects"),
-      import("@/components/sections/Contact"),
-      import("@/components/Particles"),
-      import("@/components/ShootingStar"),
-      import("@/components/project-carousel"),
-      import("@/components/professional-timeline"),
-    ])
-      .then(() => {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 2000);
-      })
-      .catch((err) => {
-        console.error("Failed to load components:", err);
-        setIsLoading(false);
+    const minLoadingDuration = 700;
+    const startedAt = performance.now();
+
+    const finishLoading = () => {
+      const elapsed = performance.now() - startedAt;
+      const remaining = Math.max(0, minLoadingDuration - elapsed);
+      window.setTimeout(() => setIsLoading(false), remaining);
+    };
+
+    const preloadDeferredComponents = () => {
+      void Promise.all([
+        import("@/components/sections/Skills"),
+        import("@/components/sections/Experience"),
+        import("@/components/sections/Projects"),
+        import("@/components/sections/Contact"),
+        import("@/components/project-carousel"),
+        import("@/components/professional-timeline"),
+      ]).catch(() => {
+        // Keep UI responsive even if deferred preloading fails.
       });
+    };
+
+    finishLoading();
+
+    if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
+      const idleId = window.requestIdleCallback(preloadDeferredComponents, {
+        timeout: 3000,
+      });
+      return () => window.cancelIdleCallback(idleId);
+    }
+
+    const timeoutId = setTimeout(preloadDeferredComponents, 1200);
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (
@@ -81,7 +98,7 @@ export default function Home() {
         <motion.main
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         >
           {isDesktop && (
             <>
@@ -89,10 +106,10 @@ export default function Home() {
                 <Particles
                   particleColors={["#4b5563", "#a5b4fc", "#10B981"]}
                   darkParticleColors={["#ffffff", "#a5b4fc"]}
-                  particleCount={3000}
+                  particleCount={particleCount}
                   particleSpread={10}
                   speed={0.1}
-                  particleBaseSize={160}
+                  particleBaseSize={120}
                   moveParticlesOnHover={false}
                   alphaParticles={true}
                   disableRotation={true}

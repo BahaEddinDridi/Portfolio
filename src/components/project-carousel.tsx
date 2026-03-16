@@ -60,6 +60,28 @@ const projects: Project[] = [
     category: "Full-Stack",
   },
   {
+    id: 9,
+    title: "Sirte Oil Company Official Website",
+    shortDescription: "Official full-stack corporate website for Sirte Oil Company",
+    fullDescription:
+      "Built the official Sirte Oil Company website end-to-end by myself, covering both frontend and backend implementation. I handled architecture, interface development, backend integration, responsiveness, and performance optimization to deliver a complete production-ready corporate platform with a consistent and professional user experience across devices.",
+    image: "/images/projects/project_9/1.jpg",
+    video: [],
+    gallery: [
+      "/images/projects/project_9/1.jpg",
+      "/images/projects/project_9/2.png",
+      "/images/projects/project_9/3.png",
+      "/images/projects/project_9/4.png",
+      "/images/projects/project_9/5.png",
+      "/images/projects/project_9/6.png",
+    ],
+    technologies: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", ".NET ASP Core"],
+    liveUrl: "https://sirteoil.com.ly",
+    frontendGithubUrl: "",
+    backendGithubUrl: "",
+    category: "Full-Stack",
+  },
+  {
     id: 2,
     title: "Horizon Formation",
     shortDescription: "Training center management system",
