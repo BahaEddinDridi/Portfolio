@@ -1,105 +1,106 @@
 "use client";
 
-import { useRef } from "react";
 import Image from "next/image";
-
-import Lottie from "lottie-react";
-
-import coffeeAnimation from "@/../public/lotties/coffee.json";
 import { motion } from "motion/react";
-export function AboutMe() {
-  const ref = useRef(null);
 
+import { LottiePlayer } from "@/components/effects/LottiePlayer";
+import { lotties } from "@/data/lotties";
+import {
+  fadeUpVariants,
+  headingVariants,
+  sectionTransition,
+  springTransition,
+  textTransition,
+} from "@/lib/motion";
+
+const CARD_CLASS =
+  "rounded-2xl border border-gray-400/50 bg-gray-300/50 p-6 text-gray-800 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500 hover:bg-indigo-50/50 dark:border-white/10 dark:bg-white/5 dark:text-white/90 dark:hover:border-white/20 dark:hover:bg-white/10";
+
+/** The four-pointed star used as a decorative accent. */
+function StarGlyph({ size = 12, className }: { size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} aria-hidden>
+      <path
+        d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z"
+        fill="#4b5563"
+        className="dark:fill-white"
+      />
+    </svg>
+  );
+}
+
+function ProfilePortrait() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24, scale: 0.92 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.45 }}
+      transition={{ ...springTransition, delay: 0.05 }}
+      className="group relative mb-8 flex justify-center"
+    >
+      <div className="group relative">
+        <div className="absolute inset-0 scale-110 animate-pulse rounded-full border border-gray-200/20 dark:border-white/20" />
+        <div className="absolute inset-0 scale-125 rounded-full border border-gray-200/30 dark:border-white/30" />
+        <div className="absolute inset-0 rounded-full bg-gray-200/10 blur-3xl transition-all duration-700 group-hover:bg-gray-200/20 dark:bg-white/10 dark:group-hover:bg-white/20" />
+
+        <div className="relative h-48 w-48 overflow-hidden rounded-full border-2 border-gray-200/40 shadow-[0_0_30px_rgba(0,0,0,0.1)] dark:border-white/40 dark:shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+          <Image
+            src="/images/user.jpg"
+            alt="Portrait of Baha Eddine Dridi"
+            fill
+            sizes="192px"
+            className="object-cover"
+            priority
+          />
+        </div>
+
+        {[0, 1, 2, 3].map((index) => (
+          <div
+            key={index}
+            className="absolute left-1/2 top-1/2 animate-[orbit_8s_linear_infinite]"
+            style={{ animationDelay: `${index * 2}s` }}
+          >
+            <StarGlyph className="opacity-60" />
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+export function AboutMe() {
   return (
     <motion.section
       initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-      ref={ref}
+      transition={sectionTransition}
       id="about"
-      className="relative min-h-screen flex items-center justify-center px-4 py-10 overflow-hidden  transition-all duration-1000"
+      className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10"
     >
-      
-
-      <div className="relative z-10 max-w-5xl w-full">
+      <div className="relative z-10 w-full max-w-5xl">
         <motion.div
-          initial={{ opacity: 0, y: 16, scale: 0.99 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          variants={headingVariants}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-8 md:mb-16"
+          className="mb-8 text-center md:mb-16"
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight  dark:text-white text-gray-900">
+          <h2 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
             About Me
           </h2>
         </motion.div>
-        <div className="text-center space-y-10">
-          {/* Profile image with constellation-style glow */}
-          <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.92 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, amount: 0.45 }}
-            transition={{ type: "spring", stiffness: 140, damping: 18, mass: 0.9, delay: 0.05 }}
-            className="flex justify-center mb-8 relative group"
-          >
-            <div className="relative group">
-              <div className="absolute inset-0 rounded-full border border-gray-200/20 dark:border-white/20 scale-110 animate-pulse" />
-              <div
-                className="absolute inset-0 rounded-full border border-gray-200/30 dark:border-white/30 scale-125"
-                style={{ animationDelay: "0.5s" }}
-              />
 
-              <div className="absolute inset-0 rounded-full bg-gray-200/10 dark:bg-white/10 blur-3xl group-hover:bg-gray-200/20 dark:group-hover:bg-white/20 transition-all duration-700" />
+        <div className="space-y-10 text-center">
+          <ProfilePortrait />
 
-              {/* Image */}
-              <div className="relative w-48 h-48 rounded-full overflow-hidden border-2 border-gray-200/40 dark:border-white/40 shadow-[0_0_30px_rgba(0,0,0,0.1)] dark:shadow-[0_0_30px_rgba(255,255,255,0.2)]">
-                <Image
-                  src="/images/user.jpg"
-                  alt="Profile"
-                  width={500}
-                  height={500}
-                  className="object-cover"
-                  />
-              </div>
-
-              {[0, 1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="absolute"
-                  style={{
-                    left: "50%",
-                    top: "50%",
-                    animation: `orbit 8s linear infinite`,
-                    animationDelay: `${i * 2}s`,
-                  }}
-                >
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    className="opacity-60"
-                  >
-                    <path
-                      d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z"
-                      fill="#4b5563" // Gray-600 for light mode
-                      className="dark:fill-white"
-                    />
-                  </svg>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-          <motion.div
-            className="max-w-3xl mx-auto space-y-6 text-lg leading-relaxed"
-          >
+          <div className="mx-auto max-w-3xl space-y-6 text-lg leading-relaxed">
             <motion.p
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              variants={fadeUpVariants}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true, amount: 0.35 }}
-              transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-              className="text-gray-800 dark:text-white/90 backdrop-blur-sm bg-gray-300/50 dark:bg-white/5 p-6 rounded-2xl border border-gray-400/50 dark:border-white/10 hover:border-indigo-500 dark:hover:border-white/20 hover:bg-indigo-50/50 dark:hover:bg-white/10 transition-all duration-300"
+              className={CARD_CLASS}
             >
               Hey there! I&apos;m a passionate developer who loves crafting
               beautiful and functional web experiences. I believe in writing
@@ -110,8 +111,8 @@ export function AboutMe() {
               initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.35 }}
-              transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
-              className="text-gray-800 dark:text-white/90 backdrop-blur-sm bg-gray-300/50 dark:bg-white/5 p-6 rounded-2xl border border-gray-400/50 dark:border-white/10 hover:border-indigo-500 dark:hover:border-white/20 hover:bg-indigo-50/50 dark:hover:bg-white/10 transition-all duration-300"
+              transition={{ ...textTransition, delay: 0.05 }}
+              className={CARD_CLASS}
             >
               When I&apos;m not coding, you&apos;ll find me exploring new
               technologies, contributing to open source, or diving deep into the
@@ -122,31 +123,22 @@ export function AboutMe() {
               initial={{ opacity: 0, y: 16, scale: 0.995 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.35 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
-              className="relative group"
+              transition={{ duration: 0.8, delay: 0.08 }}
+              className="group relative"
             >
-              <div className="absolute -inset-1 bg-gray-200/10 dark:bg-white/10 rounded-2xl blur-xl opacity-50 group-hover:opacity-100 transition duration-500" />
+              <div className="absolute -inset-1 rounded-2xl bg-gray-200/10 opacity-50 blur-xl transition duration-500 group-hover:opacity-100 dark:bg-white/10" />
 
-              <div className="relative backdrop-blur-sm bg-gray-300/50 dark:bg-white/5 p-8 rounded-2xl border border-gray-400/50 dark:border-white/20 hover:border-indigo-500 dark:hover:border-white/30 transition-all duration-300 overflow-hidden">
-                <div className="flex items-start gap-4 relative z-10">
-                  <svg
-                    width="32"
-                    height="32"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    className="flex-shrink-0 mt-1 drop-shadow-[0_0_8px_rgba(0,0,0,0.2)] dark:drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]"
-                  >
-                    <path
-                      d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z"
-                      fill="#4b5563"
-                      className="dark:fill-white"
-                    />
-                  </svg>
-                  <div className="text-left max-w-[80%]">
-                    <h3 className="font-semibold text-xl mb-3 text-gray-900 dark:text-white">
+              <div className="relative overflow-hidden rounded-2xl border border-gray-400/50 bg-gray-300/50 p-8 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500 dark:border-white/20 dark:bg-white/5 dark:hover:border-white/30">
+                <div className="relative z-10 flex items-start gap-4">
+                  <StarGlyph
+                    size={32}
+                    className="mt-1 flex-shrink-0 drop-shadow-[0_0_8px_rgba(0,0,0,0.2)] dark:drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]"
+                  />
+                  <div className="max-w-[80%] text-left">
+                    <h3 className="mb-3 text-xl font-semibold text-gray-900 dark:text-white">
                       Coffee &amp; Code
                     </h3>
-                    <p className="text-gray-800 dark:text-white/90 leading-relaxed">
+                    <p className="leading-relaxed text-gray-800 dark:text-white/90">
                       My secret recipe? A cup of coffee, a dash of curiosity,
                       and a sprinkle of chaos. Together, they turn ideas into
                       pixels and bugs into happy little features ✨.
@@ -154,34 +146,22 @@ export function AboutMe() {
                   </div>
                 </div>
 
-                {/* Floating animation — doesn't stretch the card */}
                 <motion.div
                   initial={{ opacity: 0, x: 22, y: 10, scale: 0.92, rotate: 1 }}
                   whileInView={{ opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 }}
                   viewport={{ once: true, amount: 0.35 }}
-                  transition={{ type: "spring", stiffness: 130, damping: 18, mass: 0.9, delay: 0.12 }}
-                  className="absolute -right-10 bottom-0 w-48 h-48 md:w-56 md:h-56 opacity-90 brightness-100 dark:brightness-75 hidden md:block pointer-events-none select-none"
+                  transition={{ ...springTransition, stiffness: 130, delay: 0.12 }}
+                  className="pointer-events-none absolute -right-10 bottom-0 hidden h-48 w-48 select-none opacity-90 brightness-100 md:block md:h-56 md:w-56 dark:brightness-75"
                 >
-                  <Lottie animationData={coffeeAnimation} loop />
+                  <LottiePlayer src={lotties.coffee} />
                 </motion.div>
               </div>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes orbit {
-          0% {
-            transform: translate(-50%, -50%) rotate(0deg) translateX(120px)
-              rotate(0deg);
-          }
-          100% {
-            transform: translate(-50%, -50%) rotate(360deg) translateX(120px)
-              rotate(-360deg);
-          }
-        }
-      `}</style>
     </motion.section>
   );
 }
+
+export default AboutMe;

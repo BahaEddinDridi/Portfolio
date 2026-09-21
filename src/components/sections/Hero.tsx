@@ -1,46 +1,46 @@
 "use client";
-import Lottie from "lottie-react";
-import RotatingText from "../RotatingText";
-import { useRef } from "react";
-import SparklesText from "../SparklyText";
-import magicAnimation from "@/../public/lotties/magic.json";
-import { MagicSparkles } from "../MagicSparkles";
+
 import { motion } from "motion/react";
 
-export default function Hero() {
-  const roles = ["Developer", "Engineer", "Wizard", "Creator"];
+import { LottiePlayer } from "@/components/effects/LottiePlayer";
+import { MagicSparkles } from "@/components/effects/MagicSparkles";
+import RotatingText from "@/components/effects/RotatingText";
+import SparklesText from "@/components/effects/SparklyText";
+import { lotties } from "@/data/lotties";
+import { site } from "@/data/site";
+import { EASE_OUT_EXPO, sectionTransition, springTransition } from "@/lib/motion";
 
+export function Hero() {
   return (
     <motion.section
       initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.35 }}
-      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+      transition={sectionTransition}
       id="hero"
-      className="relative min-h-screen flex justify-center items-center pt-40 px-4 sm:px-8 md:px-16 lg:px-32 text-gray-900 dark:text-white overflow-hidden"
+      className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 pt-40 text-gray-900 sm:px-8 md:px-16 lg:px-32 dark:text-white"
     >
-      
-      <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-12 w-full max-w-7xl mx-auto">
-        <div className="flex-none max-w-lg flex flex-col justify-center items-start text-left gap-4 sm:gap-6">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center gap-6 lg:flex-row lg:items-start lg:gap-12">
+        <div className="flex max-w-lg flex-none flex-col items-start justify-center gap-4 text-left sm:gap-6">
           <motion.span
             initial={{ opacity: 0, x: -18, y: 6, scale: 0.985 }}
             whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
             viewport={{ once: true, amount: 0.6 }}
-            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white"
+            transition={{ duration: 0.85, ease: EASE_OUT_EXPO }}
+            className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl dark:text-white"
           >
-            Hi, I’m{" "}
+            Hi, I&rsquo;m{" "}
             <SparklesText
               as="h1"
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white tracking-tight dark:[--sparkle-first:#f0abfc] dark:[--sparkle-second:#a78bfa]"
+              className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl dark:text-white dark:[--sparkle-first:#f0abfc] dark:[--sparkle-second:#a78bfa]"
               sparkleCount={15}
               sparkleSize={18}
               colors={{
-                first: "var(--sparkle-first, #5b21b6)", // Indigo-800 for light mode
-                second: "var(--sparkle-second, #14b8a6)", // Teal-500 for light mode
+                first: "var(--sparkle-first, #5b21b6)",
+                second: "var(--sparkle-second, #14b8a6)",
               }}
             >
-              Baha Eddine
+              {site.name.split(" ").slice(0, 2).join(" ")}
             </SparklesText>
           </motion.span>
 
@@ -48,12 +48,12 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16, scale: 0.99 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, amount: 0.6 }}
-            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.06 }}
-            className="text-2xl sm:text-3xl lg:text-5xl text-gray-900 dark:text-white font-semibold whitespace-nowrap"
+            transition={{ duration: 0.85, ease: EASE_OUT_EXPO, delay: 0.06 }}
+            className="text-2xl font-semibold whitespace-nowrap text-gray-900 sm:text-3xl lg:text-5xl dark:text-white"
           >
-            I’m an inspiring{" "}
+            I&rsquo;m an inspiring{" "}
             <RotatingText
-              texts={roles}
+              texts={[...site.roles]}
               mainClassName="inline-block text-teal-600 dark:text-purple-400 font-bold"
               staggerFrom="last"
               initial={{ x: "100%", y: "100%", opacity: 0 }}
@@ -70,31 +70,31 @@ export default function Hero() {
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.6 }}
-            transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
-            className="text-gray-800 dark:text-gray-200 text-lg sm:text-xl lg:text-2xl mt-2 max-w-lg"
+            transition={{ duration: 0.75, ease: EASE_OUT_EXPO, delay: 0.08 }}
+            className="mt-2 max-w-lg text-lg text-gray-800 sm:text-xl lg:text-2xl dark:text-gray-200"
           >
-            Building modern web experiences and bringing ideas to life.
+            {site.tagline}
           </motion.p>
         </div>
 
-        {/* Wizard animation */}
         <motion.div
           initial={{ opacity: 0, x: 24, y: 10, scale: 0.92, rotate: 2 }}
           whileInView={{ opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 }}
           viewport={{ once: true, amount: 0.4 }}
-          transition={{ type: "spring", stiffness: 140, damping: 18, mass: 0.9 }}
-          className="relative flex-none w-1/3 h-1/3 z-10 hidden sm:block"
+          transition={springTransition}
+          className="relative z-10 hidden h-1/3 w-1/3 flex-none sm:block"
         >
-          <div className="absolute -left-24 top-30 -translate-y-1/2 w-32 h-32 z-20">
+          <div className="absolute -left-24 top-30 z-20 h-32 w-32 -translate-y-1/2">
             <MagicSparkles />
           </div>
-          <Lottie
-            animationData={magicAnimation}
-            loop
-            className="w-full h-full relative z-10 brightness-100 dark:brightness-70"
+          <LottiePlayer
+            src={lotties.magic}
+            className="relative z-10 brightness-100 dark:brightness-70"
           />
         </motion.div>
       </div>
     </motion.section>
   );
 }
+
+export default Hero;

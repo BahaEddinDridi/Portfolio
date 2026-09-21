@@ -2,8 +2,6 @@
 
 import * as React from 'react';
 import {
-    useState,
-    useEffect,
     createContext,
     useContext,
     useMemo,
@@ -15,8 +13,26 @@ import {
 } from 'react';
 import { motion } from "motion/react";
 
-// Helper function to generate a random number in a given range
-const random = (min: number, max: number): number => Math.random() * (max - min) + min;
+/**
+ * Deterministic pseudo-random source.
+ *
+ * Sparkle placement has to match between the server render and hydration, so it
+ * is seeded by the sparkle's index rather than drawn from `Math.random()`. The
+ * previous version generated positions in an effect purely to dodge a hydration
+ * mismatch, which meant the sparkles popped in a frame after paint.
+ */
+const seeded = (seed: number): number => {
+    const value = Math.sin(seed * 12.9898) * 43758.5453;
+    return value - Math.floor(value);
+};
+
+/**
+ * Rounded to three decimals on purpose: `Math.sin` differs in its last few
+ * floating-point digits between Node and the browser, and an unrounded value
+ * makes React report a hydration mismatch on every sparkle.
+ */
+const random = (seed: number, min: number, max: number): number =>
+    Math.round((seeded(seed) * (max - min) + min) * 1000) / 1000;
 
 // --- TYPE DEFINITIONS ---
 
@@ -25,6 +41,7 @@ interface Sparkle {
     id: string;
     color: string;
     size: number;
+    duration: number;
     style: {
         top: string;
         left: string;
@@ -48,6 +65,7 @@ interface SparklesContextType {
 interface SparkleInstanceProps {
     size: number;
     color: string;
+    duration: number;
     style: CSSProperties;
     key?: string; // Add key prop to fix the type error
 }
@@ -78,29 +96,24 @@ const useSparkles = ({
     sparkleCount = 20,
     sparkleSize = 12,
 }: UseSparklesOptions = {}): Sparkle[] => {
-    const [sparkles, setSparkles] = useState<Sparkle[]>([]);
-
-    useEffect(() => {
-        const generateSparkle = (): Sparkle => {
-            const color = Math.random() > 0.5 ? colors.first : colors.second;
-            return {
-                id: crypto.randomUUID(),
-                color,
-                size: random(sparkleSize * 0.7, sparkleSize * 1.3),
-                style: {
-                    top: `${random(0, 100)}%`,
-                    left: `${random(0, 100)}%`,
-                    // animationDelay is a valid CSS property, so we can assert the type
-                    animationDelay: `${random(0, 2.5)}s`,
-                },
-            };
-        };
-
-        const newSparkles = Array.from({ length: sparkleCount }, generateSparkle);
-        setSparkles(newSparkles);
-    }, [sparkleCount, colors.first, colors.second, sparkleSize]);
-
-    return sparkles;
+    return useMemo(
+        () =>
+            Array.from({ length: sparkleCount }, (_, index): Sparkle => {
+                const seed = index + 1;
+                return {
+                    id: `sparkle-${index}`,
+                    color: seeded(seed * 7) > 0.5 ? colors.first : colors.second,
+                    size: random(seed * 2, sparkleSize * 0.7, sparkleSize * 1.3),
+                    duration: random(seed * 13, 1.5, 2.5),
+                    style: {
+                        top: `${random(seed * 3, 0, 100)}%`,
+                        left: `${random(seed * 5, 0, 100)}%`,
+                        animationDelay: `${random(seed * 11, 0, 2.5)}s`,
+                    },
+                };
+            }),
+        [sparkleCount, colors.first, colors.second, sparkleSize]
+    );
 };
 
 // --- CONTEXT ---
@@ -113,7 +126,7 @@ const SparklesContext = createContext<SparklesContextType | null>(null);
  * SparkleInstance Component
  * Renders a single animated sparkle using an SVG shape.
  */
-const SparkleInstance: FC<SparkleInstanceProps> = React.memo(({ size, color, style }) => {
+const SparkleInstance: FC<SparkleInstanceProps> = React.memo(({ size, color, duration, style }) => {
     const path = "M120 80L100 0 80 80 0 100l80 20 20 80 20-80 80-20-80-20z";
 
     return (
@@ -123,7 +136,7 @@ const SparkleInstance: FC<SparkleInstanceProps> = React.memo(({ size, color, sty
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: [0, 1, 0], scale: 1, rotate: [0, 90, 180] }}
             transition={{
-                duration: random(1.5, 2.5),
+                duration,
                 ease: 'easeInOut',
                 repeat: Infinity,
                 delay: parseFloat(style.animationDelay as string),
@@ -163,6 +176,7 @@ const SparklesWrapper: FC = React.memo(() => {
                     key={sparkle.id}
                     size={sparkle.size}
                     color={sparkle.color}
+                    duration={sparkle.duration}
                     style={sparkle.style as CSSProperties}
                 />
             ))}

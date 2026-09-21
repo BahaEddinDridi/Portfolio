@@ -1,191 +1,141 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+
+import { SpinnerIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
-const Loader2: React.FC<{ className?: string }> = ({ className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={cn("animate-spin", className)}
-  >
-    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-  </svg>
+const buttonVariants = cva(
+  "relative inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-md text-sm font-medium transition-transform duration-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-slate-900 text-slate-50 hover:bg-slate-900/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90",
+        destructive:
+          "bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700",
+        outline:
+          "border border-slate-200 bg-transparent text-slate-900 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-50 dark:hover:bg-slate-800",
+        secondary:
+          "bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-700",
+        ghost:
+          "text-slate-900 hover:bg-slate-100 dark:text-slate-50 dark:hover:bg-slate-800",
+        link: "text-slate-900 underline-offset-4 hover:underline dark:text-slate-50",
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-9 rounded-md px-3",
+        lg: "h-11 rounded-md px-8",
+        icon: "h-10 w-10 p-0",
+        "icon-sm": "h-9 w-9 p-0",
+        "icon-lg": "h-11 w-11 p-0",
+      },
+    },
+    defaultVariants: { variant: "default", size: "default" },
+  }
 );
 
-type ButtonVariant =
-  | "default"
-  | "destructive"
-  | "outline"
-  | "secondary"
-  | "ghost"
-  | "link";
-type ButtonSize = "default" | "sm" | "lg";
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  loading?: boolean;
-  iconLeft?: React.ReactNode;
-  iconRight?: React.ReactNode;
+interface Ripple {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
 }
 
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  loading?: boolean;
+  /** Render as the single child element instead of a `<button>` — for links. */
+  asChild?: boolean;
+}
+
+/**
+ * The app's button.
+ *
+ * The click ripple is decorative and lives in component state; its keyframes are
+ * declared in `globals.css` rather than injected into `document.head` at
+ * runtime, which is what the previous version did on every mount.
+ */
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    {
-      className,
-      variant = "default",
-      size = "default",
-      children,
-      loading,
-      onClick,
-      iconLeft,
-      iconRight,
-      ...props
-    },
+    { className, variant, size, children, loading, onClick, asChild, ...props },
     ref
   ) => {
-    const [ripples, setRipples] = useState<Ripple[]>([]);
+    const [ripples, setRipples] = React.useState<Ripple[]>([]);
 
-    const iconOnly = !Boolean(children) && Boolean(iconLeft || iconRight);
-
-    useEffect(() => {
-      const styleId = "ripple-animation-style";
-      if (document.getElementById(styleId)) return;
-
-      const style = document.createElement("style");
-      style.id = styleId;
-      style.innerHTML = `
-            @keyframes ripple-effect {
-                from {
-                    transform: scale(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: scale(2);
-                    opacity: 0;
-                }
-            }
-            .animate-ripple {
-                animation: ripple-effect 0.7s ease-out forwards;
-            }
-        `;
-      document.head.appendChild(style);
-    }, []);
-
-    const createRipple = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
       if (loading) return;
 
-      const button = event.currentTarget;
-      const rect = button.getBoundingClientRect();
-      const rippleSize = Math.max(rect.width, rect.height);
-      const x = event.clientX - rect.left - rippleSize / 2;
-      const y = event.clientY - rect.top - rippleSize / 2;
+      const rect = event.currentTarget.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const ripple: Ripple = {
+        id: Date.now(),
+        x: event.clientX - rect.left - size / 2,
+        y: event.clientY - rect.top - size / 2,
+        size,
+      };
 
-      const newRipple: Ripple = { x, y, size: rippleSize, id: Date.now() };
-
-      setRipples((currentRipples) => [...currentRipples, newRipple]);
-
-      setTimeout(() => {
-        setRipples((currentRipples) => currentRipples.slice(1));
-      }, 700);
+      setRipples((current) => [...current, ripple]);
+      window.setTimeout(
+        () => setRipples((current) => current.filter((r) => r.id !== ripple.id)),
+        700
+      );
 
       onClick?.(event);
     };
 
+    const classes = cn(buttonVariants({ variant, size }), className);
+
+    // A slotted child owns its own rendering, so the ripple layer is skipped.
+    if (asChild) {
+      return (
+        <Slot className={classes} ref={ref} onClick={onClick} {...props}>
+          {children}
+        </Slot>
+      );
+    }
+
     const rippleColor =
-      variant === "default" || variant === "destructive"
+      variant === "destructive" || variant == null || variant === "default"
         ? "bg-white/30 dark:bg-slate-900/20"
         : "bg-slate-900/10 dark:bg-white/10";
 
-    const baseClasses =
-      "relative inline-flex items-center justify-center rounded-md text-sm font-medium transition-transform duration-75 focus:outline-none disabled:opacity-50 disabled:pointer-events-none overflow-hidden active:scale-[0.97] cursor-pointer";
-
-    const variantClasses = {
-      default:
-        "bg-slate-900 text-slate-50 hover:bg-slate-900/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90",
-      destructive:
-        "bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700",
-      outline:
-        "border border-slate-200 bg-transparent hover:bg-slate-100 text-slate-900 dark:border-slate-800 dark:hover:bg-slate-800 dark:text-slate-50",
-      secondary:
-        "bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-700",
-      ghost:
-        "hover:bg-slate-100 text-slate-900 dark:hover:bg-slate-800 dark:text-slate-50",
-      link: "text-slate-900 underline-offset-4 hover:underline dark:text-slate-50",
-    };
-
-    const sizeClasses = {
-      default: iconOnly ? "h-10 w-10 p-0" : "h-10 py-2 px-4",
-      sm: iconOnly ? "h-9 w-9 p-0" : "h-9 px-3 rounded-md",
-      lg: iconOnly ? "h-11 w-11 p-0" : "h-11 px-8 rounded-md",
-    };
-
     return (
       <button
-        className={cn(
-          baseClasses,
-          variantClasses[variant],
-          sizeClasses[size],
-          className
-        )}
-        onClick={createRipple}
-        disabled={loading}
+        className={classes}
+        onClick={handleClick}
+        disabled={loading || props.disabled}
         ref={ref}
         {...props}
       >
         <span className="relative z-10 flex items-center gap-2">
-          {loading && <Loader2 className="h-4 w-4" />}
-          {!loading && iconLeft && (
-            <span className="flex items-center justify-center">{iconLeft}</span>
-          )}
+          {loading && <SpinnerIcon className="h-4 w-4 animate-spin" />}
           {children}
-          {!loading && iconRight && (
-            <span className="flex items-center justify-center">
-              {iconRight}
-            </span>
-          )}
         </span>
 
-        {!loading && (
-          <div className="absolute inset-0 z-0">
-            {ripples.map((ripple) => (
-              <span
-                key={ripple.id}
-                className={cn(
-                  "absolute rounded-full animate-ripple",
-                  rippleColor
-                )}
-                style={{
-                  left: ripple.x,
-                  top: ripple.y,
-                  width: ripple.size,
-                  height: ripple.size,
-                }}
-              />
-            ))}
-          </div>
-        )}
+        <span aria-hidden className="absolute inset-0 z-0">
+          {ripples.map((ripple) => (
+            <span
+              key={ripple.id}
+              className={cn("animate-ripple absolute rounded-full", rippleColor)}
+              style={{
+                left: ripple.x,
+                top: ripple.y,
+                width: ripple.size,
+                height: ripple.size,
+              }}
+            />
+          ))}
+        </span>
       </button>
     );
   }
 );
 
-interface Ripple {
-  x: number;
-  y: number;
-  size: number;
-  id: number;
-}
-
 Button.displayName = "Button";
 
+export { buttonVariants };
 export default Button;

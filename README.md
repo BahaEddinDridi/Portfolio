@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio — Baha Eddine Dridi
 
-## Getting Started
+Personal developer portfolio: a single scrolling page built with Next.js 16 (App
+Router), React 19, Tailwind CSS 4 and Motion.
 
-First, run the development server:
+## Getting started
+
+```bash
+npm install
+```
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The site runs at http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Script | What it does |
+| --- | --- |
+| `npm run dev` | Dev server with Turbopack |
+| `npm run build` | Production build |
+| `npm start` | Serve the production build |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | `tsc --noEmit` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project structure
 
-## Learn More
+```
+src/
+  app/                 Route files, global CSS, metadata, sitemap and robots
+  components/
+    sections/          One file per page section — thin, data-driven
+    layouts/           Navbar, Footer, loading and background chrome
+    projects/          Project carousel, card, modal, gallery
+    experience/        Timeline and its items
+    skills/            Constellation, nodes, connections, legend
+    effects/           Canvas / WebGL / decorative animation components
+    ui/                Primitives (button, badge, sheet)
+  data/                All site content — edit these, not the components
+  hooks/               Shared hooks (theme, media queries, carousel rotation)
+  lib/                 Pure helpers: icons, motion tokens, constellation maths
+  types/               Shared type definitions
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Editing content
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Everything that reads as content lives in `src/data/` and none of it requires
+touching a component:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| File | Holds |
+| --- | --- |
+| `projects.ts` | The project carousel entries |
+| `experience.ts` | The professional timeline |
+| `skills.ts` | Skill nodes, categories and constellation layout |
+| `contact.ts` | Contact channels |
+| `navigation.ts` | Section ids and nav labels (navbar **and** footer) |
+| `site.ts` | Name, tagline, canonical URL, social links |
+| `lotties.ts` | Lottie animation URLs |
 
-## Deploy on Vercel
+## Conventions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Icons come from one place.** Import from `@/lib/icons`, which re-exports
+  `react-icons` under intent-revealing names. `src/lib/techIcons.ts` is the
+  separate registry for technology brand marks used by the skills constellation.
+- **Animation tokens live in `@/lib/motion`.** Reach for the shared variants and
+  transitions rather than re-declaring durations and easings per component.
+- **Theme is the `dark` class on `<html>`.** Read it with `useTheme()`; an inline
+  script in the layout applies it before first paint to avoid a flash.
+- **Client components still server-render.** Only components that genuinely need
+  a browser API (WebGL, canvas) use `dynamic(..., { ssr: false })`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Known constraints
+
+- **TypeScript is pinned to 5.x.** TS 7 compiles and builds fine, but
+  `typescript-eslint` does not support it yet
+  ([typescript-eslint#10940](https://github.com/typescript-eslint/typescript-eslint/issues/10940)),
+  which breaks `npm run lint`.
+- **ESLint is pinned to 9.x.** `eslint-config-next` 16 bundles an
+  `eslint-plugin-react` that is not ESLint 10 compatible.

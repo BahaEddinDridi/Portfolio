@@ -1,63 +1,66 @@
 "use client";
 
-import { motion } from "motion/react";
 import dynamic from "next/dynamic";
+import { motion } from "motion/react";
 
+import {
+  fadeUpVariants,
+  headingVariants,
+  sectionTransition,
+  viewportOnce,
+} from "@/lib/motion";
+
+/** Drag-driven and image-heavy, so it stays out of the initial chunk. */
 const ProjectCarousel = dynamic(
-  () => import("../project-carousel").then((mod) => mod.ProjectCarousel),
-  { ssr: false } // disable server-side rendering
+  () =>
+    import("@/components/projects/ProjectCarousel").then(
+      (mod) => mod.ProjectCarousel
+    ),
+  { ssr: false }
 );
-import { useRef } from "react";
 
 export function Projects() {
-  const ref = useRef(null);
-
   return (
     <motion.section
+      id="projects"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-      ref={ref}
-      id="projects"
-      className="relative min-h-screen py-10 px-4  transition-all duration-1000"
+      viewport={viewportOnce}
+      transition={sectionTransition}
+      className="relative min-h-screen px-4 py-10"
     >
-      
-
-      <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Section Header */}
+      <div className="relative z-10 mx-auto max-w-7xl">
         <motion.div
-          initial={{ opacity: 0, y: 16, scale: 0.99 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          variants={headingVariants}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center space-y-4"
+          className="space-y-4 text-center"
         >
-          <h2 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-5xl font-bold text-slate-900 md:text-6xl dark:text-white">
             Featured Projects
           </h2>
-          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl text-lg text-slate-600 dark:text-slate-400">
             Explore my latest work and creative solutions. Click on any project
             to learn more.
           </p>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 18, scale: 0.99 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.06 }}
+          variants={fadeUpVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
         >
           <ProjectCarousel />
         </motion.div>
 
-        {/* Navigation Hint */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeUpVariants}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
-          className="text-center mt-12"
+          className="mt-12 text-center"
         >
           <p className="text-sm text-slate-500 dark:text-slate-500">
             Drag to rotate, use arrow buttons, or click indicators to navigate
@@ -68,3 +71,5 @@ export function Projects() {
     </motion.section>
   );
 }
+
+export default Projects;

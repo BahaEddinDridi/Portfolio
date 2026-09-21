@@ -3,6 +3,15 @@
 import { motion } from "motion/react"
 import { useState, useEffect } from "react"
 
+const COLORS = [
+  "#ffd6a5",
+  "#fdffb6",
+  "#caffbf",
+  "#9bf6ff",
+  "#bdb2ff",
+  "#ffc6ff",
+]
+
 export const MagicSparkles = () => {
   // ============================================
   // CONFIGURATION
@@ -13,15 +22,6 @@ export const MagicSparkles = () => {
   const MAX_DELAY = 0.5
   const BASE_SIZE = 10
   // ============================================
-
-  const COLORS = [
-    "#ffd6a5",
-    "#fdffb6",
-    "#caffbf",
-    "#9bf6ff",
-    "#bdb2ff",
-    "#ffc6ff",
-  ]
 
   const [sparkles, setSparkles] = useState<
     Array<{

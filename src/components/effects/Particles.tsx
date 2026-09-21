@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Renderer, Camera, Geometry, Program, Mesh } from "ogl";
 
 interface ParticlesProps {
@@ -115,7 +115,6 @@ const Particles: React.FC<ParticlesProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [program, setProgram] = useState<Program | null>(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -202,7 +201,7 @@ const Particles: React.FC<ParticlesProps> = ({
       transparent: true,
       depthTest: false,
     });
-    setProgram(prog);
+
 
     const particles = new Mesh(gl, { mode: gl.POINTS, geometry, program: prog });
 
