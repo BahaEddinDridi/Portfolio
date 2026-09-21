@@ -86,9 +86,12 @@ export function AboutMe() {
           viewport={{ once: true, amount: 0.6 }}
           className="mb-8 text-center md:mb-16"
         >
-          <h2 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-            About Me
+          <h2 className="font-display text-gilt-text mb-4 text-4xl font-extrabold tracking-[0.06em] uppercase md:text-5xl lg:text-6xl">
+            The Wizard
           </h2>
+          <p className="mx-auto max-w-2xl text-lg italic opacity-70">
+            Who keeps turning up at the workshop before the coffee does.
+          </p>
         </motion.div>
 
         <div className="space-y-10 text-center">

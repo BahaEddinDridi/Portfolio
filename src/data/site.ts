@@ -5,7 +5,9 @@ export const site = {
   description:
     "Full-stack web developer portfolio showcasing projects, skills, and creativity.",
   url: "https://bahaeddinedridi.vercel.app",
-  tagline: "Building modern web experiences and bringing ideas to life.",
+  tagline:
+    "I turn coffee and stubbornness into web applications that behave themselves. Occasionally on the first try.",
+  /** The hero reads "an aspiring ___" and cycles these. */
   roles: ["Developer", "Engineer", "Wizard", "Creator"],
 } as const;
 

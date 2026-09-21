@@ -3,124 +3,160 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Grimoire.
+ *
+ * Two schools of magic rather than one palette at two brightnesses. Night is
+ * arcane — candlelight and witchfire over blackened plum. Day is holy — gold
+ * leaf and sunlight on ivory. Dark leads; `:root` holds the day values and
+ * `.dark` overrides them.
+ */
+
 @theme inline {
+  --font-display: var(--font-cinzel);
+  --font-sans: var(--font-spectral);
+  --font-mono: var(--font-jetbrains);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
+
+  /* Panels and raised surfaces. */
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+
+  /* The primary accent: candle brass at night, gold leaf by day. */
+  --color-gilt: var(--gilt);
+  /* Large display headings. Deep enough to read on ivory, bright on plum. */
+  --color-heading: var(--heading);
+  --color-gilt-bright: var(--gilt-bright);
+  /* Small text only — the bright gilt fails contrast below 24px on parchment. */
+  --color-gilt-text: var(--gilt-text);
+
+  --color-arcane: var(--arcane);
+  --color-verdigris: var(--verdigris);
+  --color-ember: var(--ember);
+
   --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+
+  --radius-sm: calc(var(--radius) - 1px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Cut corners, not rounded ones. */
+  --radius: 2px;
+
+  /* ---- Day: holy magic ---- */
+  --background: #fdfbf4;
+  --foreground: #2b2114;
+
+  --surface: #f4ead5; /* vellum */
+  --surface-2: #eadcc0;
+
+  --gilt: #b8842a;
+  --gilt-bright: #f5d08a;
+  --gilt-text: #7d5615;
+  --heading: #8a5e1e;
+
+  --arcane: #6b3fa0;
+  --verdigris: #2f6b5a;
+  --ember: #b8461e;
+
+  --muted: #eadcc0;
+  --muted-foreground: #6b5320;
+  --border: rgba(184, 132, 42, 0.42);
+  --ring: #b8842a;
+  --destructive: #a3341a;
+
+  /* Atmosphere: sunlight falls from above. */
+  --glow: rgba(245, 208, 138, 0.55);
+  --halo: rgba(245, 208, 138, 0.75);
+  --page-gradient: linear-gradient(180deg, #fdfbf4 0%, #f7efde 42%, #f0e4cb 100%);
+  --rail: linear-gradient(180deg, #fdfbf4 0%, #f3ebd9 100%);
+  --footer: #e4d8bc;
+  --footer-foreground: #2b2114;
+
   --custom-cursor: url("/cursor/custom-cursor1.png"), auto;
   --custom-pointer: url("/cursor/custom-pointer.png"), pointer;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* ---- Night: arcane magic ---- */
+  --background: #0e0b16;
+  --foreground: #f2e7d0;
+
+  --surface: #2a1b3d; /* plum */
+  --surface-2: #1e1630;
+
+  --gilt: #e3a857;
+  --gilt-bright: #f5d08a;
+  --gilt-text: #e3a857;
+  --heading: #f5d08a;
+
+  --arcane: #a97be0;
+  --verdigris: #57a894;
+  --ember: #e2703a;
+
+  --muted: #221833;
+  --muted-foreground: #a99c88;
+  --border: rgba(227, 168, 87, 0.3);
+  --ring: #e3a857;
+  --destructive: #e2703a;
+
+  /* Atmosphere: candlelight rises from below. */
+  --glow: rgba(227, 168, 87, 0.35);
+  --halo: rgba(169, 123, 224, 0.4);
+  --page-gradient: radial-gradient(
+    120% 90% at 20% 0%,
+    #241a3a 0%,
+    #17112a 45%,
+    #0e0b16 100%
+  );
+  --rail: linear-gradient(180deg, #2a1b3d 0%, #180f26 100%);
+  --footer: #0a1410;
+  --footer-foreground: #f2e7d0;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  /*
+   * These reference the `next/font` variables directly rather than the theme
+   * keys: `@theme inline` inlines its values into utilities and never emits
+   * `--font-sans` as a real custom property, so `var(--font-sans)` here would
+   * resolve to nothing.
+   */
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-spectral), Georgia, serif;
   }
+  /*
+   * Cinzel is opt-in via `font-display`, never automatic on h1-h3. It has no
+   * readable small size and several headings here are 16px card titles, so a
+   * blanket rule would make them illegible.
+   */
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: var(--font-jetbrains), ui-monospace, monospace;
+  }
+}
+
+/* The page's own ground, so sections sit on one continuous atmosphere. */
+@utility page-ground {
+  background: var(--page-gradient);
+}
+
+/* The navbar and footer rails. */
+@utility rail-ground {
+  background: var(--rail);
 }
 
 @keyframes shimmer {
@@ -140,11 +176,10 @@
 @keyframes glow-pulse {
   0%,
   100% {
-    box-shadow: 0 0 10px rgba(94, 234, 212, 0.3);
+    box-shadow: 0 0 10px var(--glow);
   }
   50% {
-    box-shadow: 0 0 20px rgba(94, 234, 212, 0.6),
-      0 0 30px rgba(94, 234, 212, 0.3);
+    box-shadow: 0 0 20px var(--glow), 0 0 30px var(--glow);
   }
 }
 
@@ -157,14 +192,6 @@
     transform: translateY(-5px);
   }
 }
-
-@utility no-scrollbar {
-  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
-}
-
-html, body { cursor: var(--custom-cursor); }
-a, button { cursor: var(--custom-pointer); }
-
 
 /* Orbiting accents around the About portrait. */
 @keyframes orbit {
@@ -191,6 +218,19 @@ a, button { cursor: var(--custom-pointer); }
 
 .animate-ripple {
   animation: ripple-effect 0.7s ease-out forwards;
+}
+
+@utility no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}
+
+html,
+body {
+  cursor: var(--custom-cursor);
+}
+a,
+button {
+  cursor: var(--custom-pointer);
 }
 
 /* Respect users who ask for reduced motion. */

@@ -27,17 +27,17 @@ export function Hero() {
             whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
             viewport={{ once: true, amount: 0.6 }}
             transition={{ duration: 0.85, ease: EASE_OUT_EXPO }}
-            className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl dark:text-white"
+            className="text-2xl italic opacity-70 sm:text-3xl"
           >
-            Hi, I&rsquo;m{" "}
+            They call me{" "}
             <SparklesText
               as="h1"
-              className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl dark:text-white dark:[--sparkle-first:#f0abfc] dark:[--sparkle-second:#a78bfa]"
+              className="font-display text-heading block text-5xl font-extrabold tracking-[0.02em] sm:text-6xl lg:text-7xl dark:[--sparkle-first:#f5d08a] dark:[--sparkle-second:#a97be0]"
               sparkleCount={15}
               sparkleSize={18}
               colors={{
-                first: "var(--sparkle-first, #5b21b6)",
-                second: "var(--sparkle-second, #14b8a6)",
+                first: "var(--sparkle-first, #b8842a)",
+                second: "var(--sparkle-second, #6b3fa0)",
               }}
             >
               {site.name.split(" ").slice(0, 2).join(" ")}
@@ -49,12 +49,12 @@ export function Hero() {
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, amount: 0.6 }}
             transition={{ duration: 0.85, ease: EASE_OUT_EXPO, delay: 0.06 }}
-            className="text-2xl font-semibold whitespace-nowrap text-gray-900 sm:text-3xl lg:text-5xl dark:text-white"
+            className="mt-2 text-2xl whitespace-nowrap sm:text-3xl lg:text-4xl"
           >
-            I&rsquo;m an inspiring{" "}
+            I&rsquo;m an aspiring{" "}
             <RotatingText
               texts={[...site.roles]}
-              mainClassName="inline-block text-teal-600 dark:text-purple-400 font-bold"
+              mainClassName="font-display text-arcane inline-block font-extrabold tracking-[0.04em] uppercase"
               staggerFrom="last"
               initial={{ x: "100%", y: "100%", opacity: 0 }}
               animate={{ x: 0, y: 0, opacity: 1 }}
@@ -71,7 +71,7 @@ export function Hero() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.6 }}
             transition={{ duration: 0.75, ease: EASE_OUT_EXPO, delay: 0.08 }}
-            className="mt-2 max-w-lg text-lg text-gray-800 sm:text-xl lg:text-2xl dark:text-gray-200"
+            className="mt-3 max-w-lg text-lg leading-relaxed opacity-75 sm:text-xl"
           >
             {site.tagline}
           </motion.p>

@@ -193,8 +193,11 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
           <motion.span
             key={currentTextIndex}
             className={cn(splitBy === "lines" ? "flex flex-col w-full" : "flex flex-wrap whitespace-pre-wrap relative")}
-            layout
             aria-hidden="true"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={exit}
+            transition={transition}
           >
             {elements.map((wordObj, wordIndex, array) => {
               const previousCharsCount = array
@@ -207,7 +210,6 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
                       key={charIndex}
                       initial={initial}
                       animate={animate}
-                      exit={exit}
                       transition={{
                         ...transition,
                         delay: getStaggerDelay(

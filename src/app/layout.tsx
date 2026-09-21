@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cinzel, JetBrains_Mono, Spectral } from "next/font/google";
 
 import ClickSpark from "@/components/effects/ClickSpark";
 import { Footer } from "@/components/layouts/Footer";
@@ -9,8 +9,30 @@ import { themeInitScript } from "@/hooks/useTheme";
 
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+/** Display: inscriptional, for headings only — it has no readable small size. */
+const cinzel = Cinzel({
+  variable: "--font-cinzel",
+  subsets: ["latin"],
+  weight: ["600", "800"],
+  display: "swap",
+});
+
+/** Body: a book face. A grimoire is a book, so the running text is a serif. */
+const spectral = Spectral({
+  variable: "--font-spectral",
+  subsets: ["latin"],
+  weight: ["300", "400", "600"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+/** Craft: where the developer shows through the wizard. */
+const jetbrains = JetBrains_Mono({
+  variable: "--font-jetbrains",
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -59,7 +81,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} relative min-h-screen overflow-x-hidden antialiased`}
+        className={`${cinzel.variable} ${spectral.variable} ${jetbrains.variable} relative min-h-screen overflow-x-hidden antialiased`}
       >
         <ClickSpark
           sparkColor="#fff"

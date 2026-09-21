@@ -37,12 +37,11 @@ export function Projects() {
           viewport={{ once: true, amount: 0.4 }}
           className="space-y-4 text-center"
         >
-          <h2 className="text-5xl font-bold text-slate-900 md:text-6xl dark:text-white">
-            Featured Projects
+          <h2 className="font-display text-gilt-text text-5xl font-extrabold tracking-[0.08em] uppercase md:text-6xl">
+            Artifacts
           </h2>
-          <p className="mx-auto max-w-2xl text-lg text-slate-600 dark:text-slate-400">
-            Explore my latest work and creative solutions. Click on any project
-            to learn more.
+          <p className="mx-auto max-w-2xl text-lg italic opacity-70">
+            Nine things I built and did not entirely regret. Turn the wheel.
           </p>
         </motion.div>
 
@@ -62,9 +61,8 @@ export function Projects() {
           viewport={{ once: true, amount: 0.2 }}
           className="mt-12 text-center"
         >
-          <p className="text-sm text-slate-500 dark:text-slate-500">
-            Drag to rotate, use arrow buttons, or click indicators to navigate
-            through projects
+          <p className="font-mono text-xs tracking-[0.2em] uppercase opacity-50">
+            Drag to turn the wheel &middot; click a plate to read it
           </p>
         </motion.div>
       </div>

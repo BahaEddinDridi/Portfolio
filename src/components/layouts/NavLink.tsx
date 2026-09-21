@@ -20,9 +20,9 @@ export function NavLink({ id, label, isActive, onClick }: NavLinkProps) {
       whileHover={{ scale: 1.1, textShadow: "0 0 10px rgba(255,255,150,0.7)" }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className={cn(
-        "relative px-3 py-1 text-lg font-semibold transition-colors duration-300",
-        "text-black hover:text-orange-400 dark:text-white dark:hover:text-yellow-300",
-        isActive && "text-orange-500 dark:text-yellow-300"
+        "font-display relative px-3 py-1 text-sm font-semibold tracking-[0.17em] uppercase transition-colors duration-300",
+        "text-muted-foreground hover:text-gilt",
+        isActive && "text-gilt-text"
       )}
     >
       {label}
@@ -30,7 +30,7 @@ export function NavLink({ id, label, isActive, onClick }: NavLinkProps) {
       {isActive && (
         <motion.span
           layoutId="nav-underline"
-          className="absolute bottom-0 left-0 h-0.5 w-full rounded bg-orange-500 dark:bg-yellow-300"
+          className="bg-gilt absolute bottom-0 left-0 h-px w-full"
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
         />
       )}

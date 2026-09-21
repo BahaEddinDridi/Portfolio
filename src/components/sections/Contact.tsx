@@ -44,11 +44,11 @@ export function ContactMe() {
           viewport={{ once: true, amount: 0.35 }}
           className="mb-16 text-center"
         >
-          <h2 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl dark:text-white">
-            Get In Touch
+          <h2 className="font-display text-gilt-text mb-4 text-4xl font-extrabold tracking-[0.06em] uppercase md:text-5xl">
+            Send a Raven
           </h2>
-          <p className="mx-auto max-w-2xl text-lg text-slate-600 dark:text-slate-300">
-            Feel free to reach out through any of these channels
+          <p className="mx-auto max-w-2xl text-lg italic opacity-70">
+            The bird is reliable. The wizard answers within a day.
           </p>
         </motion.div>
 

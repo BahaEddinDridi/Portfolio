@@ -63,13 +63,13 @@ export function Navbar() {
     <nav className="fixed left-0 top-0 z-50 w-full">
       <motion.div
         style={{ width, borderRadius, padding, marginTop, boxShadow }}
-        className="relative mx-auto flex items-center justify-between overflow-hidden bg-gradient-to-r from-[#9ec0f3] via-[#b7d4f5] to-[#dce8f9] text-black dark:from-[#030f18] dark:via-[#030f18] dark:to-[#1a1f3a] dark:text-white"
+        className="rail-ground border-border text-foreground relative mx-auto flex items-center justify-between overflow-hidden border"
       >
         {isDesktop && (
           <div className="absolute inset-0 z-0 h-full w-full">
             <Particles
-              particleColors={["#ffffff", "#ffffff", "#ffffff"]}
-              darkParticleColors={["#ffffff", "#a5b4fc"]}
+              particleColors={["#b8842a", "#f5d08a", "#2f6b5a"]}
+              darkParticleColors={["#e3a857", "#a97be0", "#f5d08a"]}
               particleCount={2000}
               particleSpread={70}
               speed={0.5}
@@ -101,14 +101,14 @@ export function Navbar() {
                 variant="ghost"
                 size="icon"
                 aria-label="Open navigation menu"
-                className="text-black dark:text-white"
+                className="text-foreground"
               >
                 <MenuIcon className="h-6 w-6" />
               </Button>
             </SheetTrigger>
             <SheetContent
               side="left"
-              className="w-[280px] border-r-2 border-white/20 bg-gradient-to-b from-[#9ec0f3] via-[#b7d4f5] to-[#dce8f9] dark:from-[#030f18] dark:via-[#0a1628] dark:to-[#1a1f3a]"
+              className="rail-ground border-border w-[280px] border-r"
             >
               <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
               <ul className="mt-8 flex list-none flex-col gap-6">
@@ -121,8 +121,8 @@ export function Navbar() {
                       className={cn(
                         "w-full rounded-lg px-4 py-3 text-left text-xl font-semibold transition-all",
                         activeSection === id
-                          ? "border-l-4 border-orange-500 bg-orange-500/20 text-orange-600 dark:border-yellow-300 dark:bg-yellow-300/20 dark:text-yellow-300"
-                          : "text-black hover:bg-white/10 dark:text-white"
+                          ? "border-gilt bg-gilt/15 text-gilt-text border-l-2"
+                          : "text-foreground hover:bg-gilt/10"
                       )}
                     >
                       {label}

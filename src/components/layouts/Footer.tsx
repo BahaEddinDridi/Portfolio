@@ -24,22 +24,22 @@ const socialLinks: SocialLink[] = [
 ];
 
 const UNDERLINE_BASE =
-  "relative transition-all duration-300 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-white after:transition-all after:duration-300 dark:after:bg-gray-900";
+  "font-display relative text-xs tracking-[0.15em] uppercase transition-all duration-300 after:absolute after:bottom-0 after:left-0 after:h-px after:bg-current after:transition-all after:duration-300";
 
 export function Footer() {
   const activeSection = useActiveSection(sectionIds);
 
   return (
-    <footer className="relative overflow-hidden bg-[#030f18] px-4 py-10 sm:px-6 lg:px-8 dark:bg-white">
+    <footer className="relative overflow-hidden px-4 py-10 sm:px-6 lg:px-8" style={{ background: "var(--footer)", color: "var(--footer-foreground)" }}>
       <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center">
         <div className="mb-6 flex items-center justify-center">
-          <span className="text-3xl font-extrabold tracking-wide text-white dark:text-gray-900">
+          <span className="font-display text-gilt text-2xl font-extrabold tracking-[0.2em]">
             {site.name}
           </span>
         </div>
 
         <nav aria-label="Footer" className="mb-2 w-full">
-          <ul className="flex list-none flex-wrap justify-center gap-x-4 gap-y-1 text-base font-medium">
+          <ul className="flex list-none flex-wrap justify-center gap-x-5 gap-y-1">
             {navItems.map(({ id, label }) => (
               <li key={id}>
                 <button
@@ -47,10 +47,10 @@ export function Footer() {
                   onClick={() => scrollToSection(id)}
                   aria-current={activeSection === id ? "true" : undefined}
                   className={cn(
-                    "text-gray-400 hover:text-white dark:text-gray-600 dark:hover:text-gray-900",
+                    "opacity-60 hover:opacity-100",
                     UNDERLINE_BASE,
                     activeSection === id
-                      ? "text-white after:w-full dark:text-gray-900"
+                      ? "text-gilt opacity-100 after:w-full"
                       : "after:w-0 hover:after:w-full"
                   )}
                 >
@@ -69,7 +69,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={name}
-                className="block text-gray-400 transition-colors duration-300 hover:text-white dark:text-gray-600 dark:hover:text-gray-900"
+                className="hover:text-gilt block opacity-60 transition-all duration-300 hover:opacity-100"
               >
                 <Icon className="size-6 transition-transform duration-200 hover:scale-110" />
               </a>
@@ -77,7 +77,7 @@ export function Footer() {
           ))}
         </ul>
 
-        <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
+        <p className="mt-4 text-center text-xs italic opacity-55">
           Made with 💻, ☕, and a sprinkle of ✨ by {site.name} ©{" "}
           {new Date().getFullYear()}
         </p>

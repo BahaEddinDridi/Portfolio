@@ -32,12 +32,11 @@ export function Skills() {
           viewport={{ once: true, amount: 0.4 }}
           className="mb-8 text-center md:mb-16"
         >
-          <h2 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-            Skills &amp; Technologies
+          <h2 className="font-display text-gilt-text mb-4 text-4xl font-extrabold tracking-[0.06em] uppercase md:text-5xl lg:text-6xl">
+            The Grimoire
           </h2>
-          <p className="mx-auto max-w-2xl text-base leading-relaxed text-gray-600 md:text-lg dark:text-gray-400">
-            A constellation of tools and technologies I use to craft exceptional
-            digital experiences
+          <p className="mx-auto max-w-2xl text-lg italic opacity-70">
+            Every spell I have learned to cast, and roughly how often it works.
           </p>
         </motion.div>
 
@@ -50,8 +49,8 @@ export function Skills() {
           viewport={{ once: true, amount: 0.2 }}
           className="mt-4 text-center md:mt-6"
         >
-          <p className="font-mono text-sm text-gray-600 dark:text-gray-600">
-            Always learning, always growing
+          <p className="font-mono text-xs tracking-[0.22em] uppercase opacity-50">
+            Still studying
           </p>
         </motion.div>
       </div>
