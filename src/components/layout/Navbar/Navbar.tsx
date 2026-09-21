@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform } from "motion/react";
 import NavLink from "./NavLink";
 import dynamic from "next/dynamic";
 import { SmallCloud } from "./Clouds";

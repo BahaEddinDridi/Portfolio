@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import dynamic from "next/dynamic";
 import { LoadingScreen } from "@/components/layout/loading/LoadingScreen";
 

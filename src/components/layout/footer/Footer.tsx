@@ -1,7 +1,7 @@
 "use client";
 
-import { useMotionValue, useTransform } from "framer-motion";
-import { motion } from "framer-motion";
+import { useMotionValue, useTransform } from "motion/react";
+import { motion } from "motion/react";
 import React, { useEffect, useState } from "react";
 
 export default function Footer() {

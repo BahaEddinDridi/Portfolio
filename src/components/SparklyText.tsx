@@ -13,7 +13,7 @@ import {
     ComponentProps,
     CSSProperties,
 } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from "motion/react";
 
 // Helper function to generate a random number in a given range
 const random = (min: number, max: number): number => Math.random() * (max - min) + min;

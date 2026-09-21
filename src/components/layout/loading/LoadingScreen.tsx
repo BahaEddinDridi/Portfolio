@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Lottie from "lottie-react";
 
 import loadingAnimation from "@/../public/lotties/Loading.json";

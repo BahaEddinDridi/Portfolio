@@ -1,14 +1,14 @@
 import React from 'react';
 import {
   FaHtml5, FaCss3Alt, FaJs, FaReact, FaNodeJs, FaPython, FaJava, FaPhp, FaDocker,
-  FaGitAlt, FaGithub, FaFigma, FaTrello, FaJenkins, FaAngular, FaLaravel, FaCode, FaBug
+  FaGitAlt, FaGithub, FaFigma, FaTrello, FaJenkins, FaAngular, FaCode, FaBug
 } from 'react-icons/fa';
 import {
-  SiTypescript, SiMongodb, SiMysql, SiPostgresql, SiPrometheus, SiGrafana, SiDjango, SiNextdotjs, SiNestjs, SiNuxtdotjs, SiDotnet, SiSonarqube, SiIntellijidea, SiJira, SiAdobephotoshop,
+  SiTypescript, SiMongodb, SiMysql, SiPostgresql, SiPrometheus, SiGrafana, SiDjango, SiNextdotjs, SiNestjs, SiNuxt, SiDotnet, SiSonarqubeserver, SiIntellijidea, SiJira,
   SiSpring, SiExpress,
   SiLaravel
 } from 'react-icons/si';
-import { DiVisualstudio, DiScrum } from 'react-icons/di';
+import { DiVisualstudio, DiScrum, DiPhotoshop } from 'react-icons/di';
 
 export type IconType = keyof typeof iconComponents;
 
@@ -30,14 +30,14 @@ export const iconComponents = {
   dotnet: { component: SiDotnet, color: '#512BD4' },
   django: { component: SiDjango, color: '#092E20' },
   laravel: { component: SiLaravel, color: '#FF2D20' },
-  nuxt: { component: SiNuxtdotjs, color: '#00C58E' },
+  nuxt: { component: SiNuxt, color: '#00C58E' },
   nest: { component: SiNestjs, color: '#E0234E' },
   next: { component: SiNextdotjs, color: '#000000' },
   mongodb: { component: SiMongodb, color: '#47A248' },
   mysql: { component: SiMysql, color: '#4479A1' },
   postgresql: { component: SiPostgresql, color: '#336791' },
   jenkins: { component: FaJenkins, color: '#D24939' },
-  sonar: { component: SiSonarqube, color: '#4E9BCD' },
+  sonar: { component: SiSonarqubeserver, color: '#4E9BCD' },
   prometheus: { component: SiPrometheus, color: '#E6522C' },
   grafana: { component: SiGrafana, color: '#F46800' },
   docker: { component: FaDocker, color: '#2496ED' },
@@ -48,7 +48,7 @@ export const iconComponents = {
   xray: { component: FaBug, color: '#5C2D91' },
   jira: { component: SiJira, color: '#0052CC' },
   trello: { component: FaTrello, color: '#0079BF' },
-  photoshop: { component: SiAdobephotoshop, color: '#31A8FF' },
+  photoshop: { component: DiPhotoshop, color: '#31A8FF' },
   figma: { component: FaFigma, color: '#F24E1E' },
   scrum: { component: DiScrum, color: '#4CAF50' },
 };

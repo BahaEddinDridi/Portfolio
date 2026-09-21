@@ -4,7 +4,7 @@ import messageSentAnimation from "@/../public/lotties/mail-sent.json";
 import { SiDiscord } from "react-icons/si";
 import Image from "next/image";
 import { useRef } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 export function ContactMe() {
   const ref = useRef(null);

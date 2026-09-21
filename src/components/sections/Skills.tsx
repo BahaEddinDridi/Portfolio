@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { getIconType, iconComponents } from "@/types/techIcons";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 interface Skill {
   name: string;

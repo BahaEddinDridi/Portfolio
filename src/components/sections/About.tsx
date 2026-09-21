@@ -6,7 +6,7 @@ import Image from "next/image";
 import Lottie from "lottie-react";
 
 import coffeeAnimation from "@/../public/lotties/coffee.json";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 export function AboutMe() {
   const ref = useRef(null);
 

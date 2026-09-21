@@ -5,7 +5,7 @@ import { useRef } from "react";
 import SparklesText from "../SparklyText";
 import magicAnimation from "@/../public/lotties/magic.json";
 import { MagicSparkles } from "../MagicSparkles";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 export default function Hero() {
   const roles = ["Developer", "Engineer", "Wizard", "Creator"];

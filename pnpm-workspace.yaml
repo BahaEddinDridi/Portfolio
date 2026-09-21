@@ -1,0 +1,6 @@
+allowBuilds:
+  '@tsparticles/engine': set this to true or false
+  react-tsparticles: set this to true or false
+  sharp: set this to true or false
+  tsparticles-engine: set this to true or false
+  unrs-resolver: set this to true or false

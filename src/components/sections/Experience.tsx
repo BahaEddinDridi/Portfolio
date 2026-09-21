@@ -2,7 +2,7 @@
 
 import { Code, Briefcase, Users } from "lucide-react";
 import { ProfessionalTimeline } from "../professional-timeline";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 const experienceData = [
   {
