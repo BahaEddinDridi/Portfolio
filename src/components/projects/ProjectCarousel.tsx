@@ -8,6 +8,7 @@ import Button from "@/components/ui/button";
 import { projects } from "@/data/projects";
 import { useCarouselRotation } from "@/hooks/useCarouselRotation";
 import { useIsMobile } from "@/hooks/useMediaQuery";
+import { StarGlyph } from "@/components/ui/star-glyph";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import type { Project } from "@/types";
@@ -18,7 +19,7 @@ const RADIUS = { mobile: 130, desktop: 320 } as const;
 const VISIBLE_SPAN = { mobile: 2, desktop: 3 } as const;
 
 const NAV_BUTTON_CLASS =
-  "absolute top-1/2 z-50 -translate-y-1/2 border-yellow-200/30 bg-yellow-50/30 text-gray-800 backdrop-blur-sm hover:bg-yellow-50/50 dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20";
+  "border-gilt/45 bg-surface/70 text-gilt absolute top-1/2 z-50 h-12 w-12 -translate-y-1/2 rounded-full p-0 backdrop-blur-sm hover:bg-gilt/15";
 
 export function ProjectCarousel() {
   const isMobile = useIsMobile();
@@ -116,7 +117,7 @@ export function ProjectCarousel() {
           </div>
 
           <Button
-            variant="outline"
+            variant="etched"
             size={isMobile ? "sm" : "default"}
             className={cn(NAV_BUTTON_CLASS, "left-2 sm:left-4 md:left-8")}
             onClick={() => step("prev")}
@@ -127,7 +128,7 @@ export function ProjectCarousel() {
           </Button>
 
           <Button
-            variant="outline"
+            variant="etched"
             size={isMobile ? "sm" : "default"}
             className={cn(NAV_BUTTON_CLASS, "right-2 sm:right-4 md:right-8")}
             onClick={() => step("next")}
@@ -139,10 +140,12 @@ export function ProjectCarousel() {
         </div>
 
         <div className="flex flex-col items-center justify-center gap-2">
-          <p className="pointer-events-none text-xs text-gray-900 sm:text-sm dark:text-white/50">
-            {isMobile ? "Use arrows to navigate" : "Drag to rotate"}
+          <p className="pointer-events-none font-mono text-[10px] tracking-[0.2em] uppercase opacity-50">
+            {isMobile
+              ? "Use the arrows to turn the wheel"
+              : "Drag to turn the wheel · click a plate to read it"}
           </p>
-          <div className="flex justify-center gap-1.5 sm:gap-2">
+          <div className="flex items-center justify-center gap-2">
             {projects.map((project, index) => (
               <button
                 key={project.id}
@@ -150,13 +153,17 @@ export function ProjectCarousel() {
                 onClick={() => goTo(index)}
                 aria-label={`Go to ${project.title}`}
                 aria-current={Math.round(currentIndex) === index}
-                className={cn(
-                  "h-2 rounded-full transition-all",
-                  Math.round(currentIndex) === index
-                    ? "w-6 bg-gray-900 sm:w-8 dark:bg-white"
-                    : "w-2 bg-gray-900/30 hover:bg-gray-900/50 dark:bg-white/30 dark:hover:bg-white/50"
-                )}
-              />
+                className="p-1 transition-transform hover:scale-125"
+              >
+                <StarGlyph
+                  className={cn(
+                    "transition-all",
+                    Math.round(currentIndex) === index
+                      ? "text-gilt-bright h-3.5 w-3.5 drop-shadow-[0_0_6px_var(--glow)]"
+                      : "text-gilt/40 h-2.5 w-2.5"
+                  )}
+                />
+              </button>
             ))}
           </div>
         </div>

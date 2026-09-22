@@ -9,75 +9,63 @@ interface SkillConnectionsProps {
   connections: SkillConnection[];
   activeCategory: string;
   hoveredSkill: string | null;
-  isDark: boolean;
   hasAnimated: boolean;
 }
 
-/** Stroke and glow for a line, which differ per theme and highlight state. */
-function lineStyle(isDark: boolean, isHighlighted: boolean) {
-  if (isDark) {
-    return {
-      stroke: isHighlighted ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.3)",
-      filter: isHighlighted ? "drop-shadow(0 0 4px rgba(255,255,255,0.8))" : "none",
-    };
-  }
-  return {
-    stroke: isHighlighted ? "rgba(255,215,140,0.9)" : "rgba(255,215,140,0.5)",
-    filter: isHighlighted
-      ? "drop-shadow(0 0 4px rgba(255,215,140,0.5))"
-      : "drop-shadow(0 0 2px rgba(255,215,140,0.2))",
-  };
-}
-
-/** The lines joining the constellation's stars, drawn on beneath the nodes. */
+/**
+ * The lines binding the seals.
+ *
+ * Drawn in a 0-100 viewBox on the same square as the ring, so a chord between
+ * two seals is a straight line rather than a skewed one.
+ */
 export function SkillConnections({
   connections,
   activeCategory,
   hoveredSkill,
-  isDark,
   hasAnimated,
 }: SkillConnectionsProps) {
   return (
     <svg
-      className="absolute inset-0 h-full w-full transition-all duration-700 ease-out"
-      style={{ filter: "drop-shadow(0 0 10px rgba(255, 255, 255, 0.3))" }}
+      viewBox="0 0 100 100"
       aria-hidden
+      className="pointer-events-none absolute inset-0 h-full w-full"
     >
       {connections.map(([from, to], index) => {
         const fromSkill = skillByName[from];
         const toSkill = skillByName[to];
         if (!fromSkill || !toSkill) return null;
 
-        const fromPos = getSkillPosition(fromSkill, activeCategory);
-        const toPos = getSkillPosition(toSkill, activeCategory);
+        const a = getSkillPosition(fromSkill, activeCategory);
+        const b = getSkillPosition(toSkill, activeCategory);
         const opacity = Math.min(
           getSkillOpacity(fromSkill, activeCategory),
           getSkillOpacity(toSkill, activeCategory)
         );
-
-        const isHighlighted = hoveredSkill === from || hoveredSkill === to;
-        const { stroke, filter } = lineStyle(isDark, isHighlighted);
+        const lit = hoveredSkill === from || hoveredSkill === to;
 
         return (
           <motion.line
             key={`${from}-${to}`}
-            x1={`${fromPos.x}%`}
-            y1={`${fromPos.y}%`}
-            x2={`${toPos.x}%`}
-            y2={`${toPos.y}%`}
-            stroke={stroke}
-            strokeWidth={isHighlighted ? 2 : 1}
-            className="transition-all duration-700"
-            style={{ filter, opacity }}
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={hasAnimated ? { pathLength: opacity, opacity } : {}}
+            stroke="var(--gilt)"
+            strokeWidth={lit ? 0.45 : 0.18}
+            strokeOpacity={lit ? 0.95 : 0.3}
+            style={{ filter: lit ? "drop-shadow(0 0 1px var(--gilt))" : undefined }}
+            animate={{
+              x1: a.x,
+              y1: a.y,
+              x2: b.x,
+              y2: b.y,
+              opacity: hasAnimated ? opacity : 0,
+              pathLength: hasAnimated ? 1 : 0,
+            }}
+            initial={{ x1: a.x, y1: a.y, x2: a.x, y2: a.y, opacity: 0, pathLength: 0 }}
             transition={{
-              pathLength: {
-                delay: 0.6 + index * 0.05,
-                duration: 0.5,
-                ease: "easeInOut",
-              },
-              opacity: { delay: 1.8 + index * 0.05, duration: 0.3 },
+              x1: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+              y1: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+              x2: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+              y2: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+              pathLength: { delay: 0.3 + index * 0.03, duration: 0.5 },
+              opacity: { delay: 0.3 + index * 0.03, duration: 0.4 },
             }}
           />
         );

@@ -1,48 +1,77 @@
-import { scatteredPositions, skills } from "@/data/skills";
+import { skills } from "@/data/skills";
 import type { Point, Skill, SkillCategory } from "@/types";
 
-/** How far each category's constellation is blown up when viewed on its own. */
-const SCALE_FACTORS: Record<SkillCategory, number> = {
-  Frontend: 2.2,
-  Backend: 1.7,
-  Tools: 2.0,
+/**
+ * The summoning circle.
+ *
+ * Skills sit on three concentric rings rather than a scatter: the inner ring
+ * is what the visitor sees, the middle is what runs underneath, the outer is
+ * the workshop. Coordinates are percentages of a square container, so the
+ * rings stay circular at any size.
+ */
+
+/** Ring radius as a percentage of the container, per school. */
+const RING_RADIUS: Record<SkillCategory, number> = {
+  Frontend: 17,
+  Backend: 29,
+  Tools: 41,
 };
 
-/**
- * Re-centres one category's constellation on the canvas.
- *
- * The scattered layout spreads all three categories across the panel. When a
- * single category is selected its stars are scaled about their own bounding-box
- * centre and moved to the middle, so the shape a viewer just saw is preserved
- * rather than re-laid out.
- */
-function centreCategory(categorySkills: Skill[], scale: number) {
-  const points = categorySkills.map(
-    (skill) => scatteredPositions[skill.name] ?? { x: skill.x, y: skill.y }
-  );
+/** When one school is selected it moves out to a single, roomier ring. */
+const SOLO_RADIUS = 34;
 
-  const centreX = (Math.min(...points.map((p) => p.x)) + Math.max(...points.map((p) => p.x))) / 2;
-  const centreY = (Math.min(...points.map((p) => p.y)) + Math.max(...points.map((p) => p.y))) / 2;
+/** Rotation offset per ring, so nodes never line up into spokes. */
+const RING_PHASE: Record<SkillCategory, number> = {
+  Frontend: 45,
+  Backend: 0,
+  Tools: 22.5,
+};
 
-  const result: Record<string, Point> = {};
-  categorySkills.forEach((skill, index) => {
-    result[skill.name] = {
-      x: 50 + (points[index].x - centreX) * scale,
-      y: 50 + (points[index].y - centreY) * scale,
-    };
-  });
-  return result;
+const CENTRE = 50;
+
+export const CATEGORY_ORDER: SkillCategory[] = ["Frontend", "Backend", "Tools"];
+
+function onRing(index: number, count: number, radius: number, phase: number): Point {
+  const angle = ((360 / count) * index + phase) * (Math.PI / 180);
+  return {
+    x: CENTRE + Math.cos(angle) * radius,
+    y: CENTRE - Math.sin(angle) * radius,
+  };
 }
 
-/** Positions per category, computed once at module load. */
-export const centeredPositions = Object.fromEntries(
-  (Object.keys(SCALE_FACTORS) as SkillCategory[]).map((category) => [
+/** Skills grouped by school, in data order. */
+export const skillsByCategory = Object.fromEntries(
+  CATEGORY_ORDER.map((category) => [
     category,
-    centreCategory(
-      skills.filter((skill) => skill.category === category),
-      SCALE_FACTORS[category]
-    ),
+    skills.filter((skill) => skill.category === category),
   ])
+) as Record<SkillCategory, Skill[]>;
+
+/** Every skill's seat on its own ring, used by the "All" view. */
+export const ringPositions: Record<string, Point> = Object.fromEntries(
+  CATEGORY_ORDER.flatMap((category) => {
+    const group = skillsByCategory[category];
+    return group.map((skill, index) => [
+      skill.name,
+      onRing(index, group.length, RING_RADIUS[category], RING_PHASE[category]),
+    ]);
+  })
+);
+
+/** Each school's seats when it alone is showing. */
+export const soloPositions = Object.fromEntries(
+  CATEGORY_ORDER.map((category) => {
+    const group = skillsByCategory[category];
+    return [
+      category,
+      Object.fromEntries(
+        group.map((skill, index) => [
+          skill.name,
+          onRing(index, group.length, SOLO_RADIUS, RING_PHASE[category]),
+        ])
+      ),
+    ];
+  })
 ) as Record<SkillCategory, Record<string, Point>>;
 
 export const skillByName: Record<string, Skill> = Object.fromEntries(
@@ -50,34 +79,36 @@ export const skillByName: Record<string, Skill> = Object.fromEntries(
 );
 
 /**
- * Per-star offsets so the pulse animations do not beat in unison.
- *
- * Derived from the index rather than random so the values are stable between
- * server and client renders.
+ * Per-node offsets so the pulses do not beat in unison. Derived from the index
+ * rather than random, so server and client agree.
  */
-export const pulseDelays: Record<string, { midGlow: number; starGlow: number }> =
+export const pulseDelays: Record<string, { glow: number; core: number }> =
   Object.fromEntries(
     skills.map((skill, index) => [
       skill.name,
-      { midGlow: (index % 7) * 0.1, starGlow: ((index * 3) % 10) * 0.07 },
+      { glow: (index % 7) * 0.18, core: ((index * 3) % 10) * 0.13 },
     ])
   );
 
-/** Where a star sits for the currently selected category. */
+/** Where a seal sits for the currently selected school. */
 export function getSkillPosition(skill: Skill, activeCategory: string): Point {
-  if (activeCategory === "All") {
-    return scatteredPositions[skill.name] ?? { x: skill.x, y: skill.y };
-  }
+  if (activeCategory === "All") return ringPositions[skill.name];
   return (
-    centeredPositions[activeCategory as SkillCategory]?.[skill.name] ?? {
-      x: 50,
-      y: 50,
-    }
+    soloPositions[activeCategory as SkillCategory]?.[skill.name] ??
+    ringPositions[skill.name]
   );
 }
 
-/** Stars outside the selected category fade out entirely. */
+/** Seals outside the selected school fade out entirely. */
 export function getSkillOpacity(skill: Skill, activeCategory: string): number {
   if (activeCategory === "All") return 1;
   return skill.category === activeCategory ? 1 : 0;
+}
+
+/** Radius of the ring currently drawn for a school, in container percent. */
+export function getRingRadius(
+  category: SkillCategory,
+  activeCategory: string
+): number {
+  return activeCategory === category ? SOLO_RADIUS : RING_RADIUS[category];
 }

@@ -7,8 +7,9 @@ import { CategoryFilter } from "@/components/skills/CategoryFilter";
 import { ProficiencyLegend } from "@/components/skills/ProficiencyLegend";
 import { SkillConnections } from "@/components/skills/SkillConnections";
 import { SkillNode } from "@/components/skills/SkillNode";
+import { SummoningRing } from "@/components/skills/SummoningRing";
+import { StarGlyph } from "@/components/ui/star-glyph";
 import { categories, connections, skills } from "@/data/skills";
-import { useTheme } from "@/hooks/useTheme";
 import { getSkillOpacity, getSkillPosition } from "@/lib/constellation";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 import type { SkillCategory } from "@/types";
@@ -18,9 +19,8 @@ interface SkillConstellationProps {
   hasAnimated: boolean;
 }
 
-/** The star map: filter, connection lines, nodes and the proficiency key. */
+/** The circle: schools filter, binding lines, seals and the proficiency key. */
 export function SkillConstellation({ hasAnimated }: SkillConstellationProps) {
-  const { isDark } = useTheme();
   const [activeCategory, setActiveCategory] = useState("All");
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
 
@@ -54,25 +54,39 @@ export function SkillConstellation({ hasAnimated }: SkillConstellationProps) {
       />
 
       <motion.div
-        initial={{ opacity: 0, y: 18, scale: 0.995 }}
-        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.85, ease: EASE_OUT_EXPO, delay: 0.04 }}
-        className="flex flex-col items-start gap-4 rounded-xl border border-gray-300 p-4 md:gap-6 lg:flex-row dark:border-transparent dark:bg-transparent"
-        style={{
-          background: isDark
-            ? "transparent"
-            : "radial-gradient(circle, #001f3f 0%, #0077b6 70%, #00b4d8 100%)",
-        }}
+        className="flex flex-col items-center gap-8 lg:flex-row lg:items-center lg:justify-center lg:gap-12"
       >
-        <div className="relative h-[400px] w-full overflow-hidden md:h-[500px] lg:h-[600px] lg:flex-1">
+        {/*
+         * Square on purpose: the ring geometry is percentage-based, so a
+         * non-square box would squash the circles into ellipses.
+         */}
+        <div className="relative aspect-square w-full max-w-[min(100%,34rem)] flex-shrink-0">
+          <div
+            aria-hidden
+            className="absolute inset-[12%] rounded-full"
+            style={{
+              background:
+                "radial-gradient(circle, var(--glow) 0%, transparent 62%)",
+              opacity: 0.6,
+            }}
+          />
+
+          <SummoningRing activeCategory={activeCategory} />
+
           <SkillConnections
             connections={activeConnections}
             activeCategory={activeCategory}
             hoveredSkill={hoveredSkill}
-            isDark={isDark}
             hasAnimated={hasAnimated}
           />
+
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <StarGlyph className="text-gilt-bright h-6 w-6 drop-shadow-[0_0_10px_var(--glow)]" />
+          </div>
 
           {skills.map((skill, index) => (
             <SkillNode
@@ -83,7 +97,6 @@ export function SkillConstellation({ hasAnimated }: SkillConstellationProps) {
               opacity={getSkillOpacity(skill, activeCategory)}
               isHovered={hoveredSkill === skill.name}
               isConnected={connectedSkills.has(skill.name)}
-              isDark={isDark}
               hasAnimated={hasAnimated}
               onHoverChange={setHoveredSkill}
             />

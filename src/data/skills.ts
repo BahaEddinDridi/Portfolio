@@ -54,6 +54,14 @@ export const connections: Record<SkillCategory, SkillConnection[]> = {
 
 export const categories = ["All", "Frontend", "Backend", "Tools"];
 
+/** What each school is called on the page. The data keys stay plain. */
+export const schoolNames: Record<string, string> = {
+  All: "All",
+  Frontend: "Illusion",
+  Backend: "Conjuration",
+  Tools: "Artifice",
+};
+
 export const popupIconAlias: Record<string, string> = {
   ".NET": ".NETFramework",
   Adobe: "AdobePhotoshop",

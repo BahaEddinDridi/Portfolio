@@ -32,7 +32,13 @@ export function ContactMe() {
           aria-hidden
           width={1920}
           height={200}
-          className="h-auto w-full object-cover object-bottom brightness-100 transition-all duration-500 dark:brightness-0 dark:invert"
+          /*
+           * The silhouette is filled near-black. At night that matches the
+           * footer exactly and the treeline runs straight into it; by day it
+           * drops to a haze so it reads as a distant ridge rather than a
+           * black slab dropped on the parchment.
+           */
+          className="h-auto w-full object-cover object-bottom opacity-[0.22] transition-opacity duration-500 dark:opacity-100"
         />
       </div>
 
@@ -63,7 +69,7 @@ export function ContactMe() {
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="m-4 flex aspect-square w-full items-center justify-center rounded-3xl border border-blue-300 bg-gradient-to-br from-blue-500 to-blue-300 backdrop-blur-sm dark:border-purple-400/20 dark:from-purple-500/10 dark:to-blue-500/10"
+              className="border-border bg-surface/40 m-4 flex aspect-square w-full items-center justify-center rounded-sm border backdrop-blur-sm"
             >
               <LottiePlayer
                 src={lotties.mailSent}
@@ -85,18 +91,17 @@ export function ContactMe() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative block rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-100/50 to-gray-100/70 p-6 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 dark:border-purple-400/20 dark:from-purple-500/10 dark:to-blue-500/10 dark:hover:border-purple-400/40"
+                  className="group border-border bg-surface/55 hover:border-gilt/55 relative block rounded-sm border p-5 backdrop-blur-sm transition-all duration-300 hover:shadow-[0_0_28px_var(--glow)]"
                 >
                   <div className="flex items-start gap-4">
-                    <Icon
-                      className="h-9 w-9 flex-shrink-0 text-blue-500 dark:text-white"
-                      aria-hidden
-                    />
+                    <span className="border-gilt/40 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border">
+                      <Icon className="text-gilt h-[18px] w-[18px]" aria-hidden />
+                    </span>
                     <div className="min-w-0 flex-1">
-                      <h3 className="mb-1 text-lg font-semibold text-slate-900 dark:text-white">
+                      <h3 className="font-display text-gilt-text mb-1 text-sm font-bold tracking-[0.1em] uppercase">
                         {label}
                       </h3>
-                      <p className="break-all text-sm text-gray-800 dark:text-gray-400">
+                      <p className="font-mono text-xs break-all opacity-65">
                         {value}
                       </p>
                     </div>

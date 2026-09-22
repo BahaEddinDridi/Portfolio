@@ -4,6 +4,8 @@ import Image from "next/image";
 import { motion } from "motion/react";
 
 import { LottiePlayer } from "@/components/effects/LottiePlayer";
+import { RuneDivider } from "@/components/ui/rune-divider";
+import { StarGlyph } from "@/components/ui/star-glyph";
 import { lotties } from "@/data/lotties";
 import {
   fadeUpVariants,
@@ -14,20 +16,7 @@ import {
 } from "@/lib/motion";
 
 const CARD_CLASS =
-  "rounded-2xl border border-gray-400/50 bg-gray-300/50 p-6 text-gray-800 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500 hover:bg-indigo-50/50 dark:border-white/10 dark:bg-white/5 dark:text-white/90 dark:hover:border-white/20 dark:hover:bg-white/10";
-
-/** The four-pointed star used as a decorative accent. */
-function StarGlyph({ size = 12, className }: { size?: number; className?: string }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} aria-hidden>
-      <path
-        d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z"
-        fill="#4b5563"
-        className="dark:fill-white"
-      />
-    </svg>
-  );
-}
+  "border-border bg-surface/55 rounded-sm border p-6 backdrop-blur-sm transition-all duration-300 hover:border-gilt/60";
 
 function ProfilePortrait() {
   return (
@@ -60,7 +49,7 @@ function ProfilePortrait() {
             className="absolute left-1/2 top-1/2 animate-[orbit_8s_linear_infinite]"
             style={{ animationDelay: `${index * 2}s` }}
           >
-            <StarGlyph className="opacity-60" />
+            <StarGlyph className="text-gilt h-3 w-3 opacity-70" />
           </div>
         ))}
       </div>
@@ -86,9 +75,10 @@ export function AboutMe() {
           viewport={{ once: true, amount: 0.6 }}
           className="mb-8 text-center md:mb-16"
         >
-          <h2 className="font-display text-gilt-text mb-4 text-4xl font-extrabold tracking-[0.06em] uppercase md:text-5xl lg:text-6xl">
+          <h2 className="font-display text-heading mb-4 text-4xl font-extrabold tracking-[0.06em] uppercase md:text-5xl lg:text-6xl">
             The Wizard
           </h2>
+          <RuneDivider className="mx-auto mb-4 max-w-xs" />
           <p className="mx-auto max-w-2xl text-lg italic opacity-70">
             Who keeps turning up at the workshop before the coffee does.
           </p>
@@ -129,19 +119,16 @@ export function AboutMe() {
               transition={{ duration: 0.8, delay: 0.08 }}
               className="group relative"
             >
-              <div className="absolute -inset-1 rounded-2xl bg-gray-200/10 opacity-50 blur-xl transition duration-500 group-hover:opacity-100 dark:bg-white/10" />
+              <div className="absolute -inset-1 rounded-sm opacity-50 blur-xl transition duration-500 group-hover:opacity-100" style={{ background: "var(--glow)" }} />
 
-              <div className="relative overflow-hidden rounded-2xl border border-gray-400/50 bg-gray-300/50 p-8 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500 dark:border-white/20 dark:bg-white/5 dark:hover:border-white/30">
+              <div className="border-border bg-surface/55 hover:border-gilt/60 relative overflow-hidden rounded-sm border p-8 backdrop-blur-sm transition-all duration-300">
                 <div className="relative z-10 flex items-start gap-4">
-                  <StarGlyph
-                    size={32}
-                    className="mt-1 flex-shrink-0 drop-shadow-[0_0_8px_rgba(0,0,0,0.2)] dark:drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]"
-                  />
+                  <StarGlyph className="text-gilt mt-1 h-7 w-7 flex-shrink-0 drop-shadow-[0_0_10px_var(--glow)]" />
                   <div className="max-w-[80%] text-left">
-                    <h3 className="mb-3 text-xl font-semibold text-gray-900 dark:text-white">
+                    <h3 className="font-display text-gilt-text mb-3 text-lg font-bold tracking-[0.08em] uppercase">
                       Coffee &amp; Code
                     </h3>
-                    <p className="leading-relaxed text-gray-800 dark:text-white/90">
+                    <p className="leading-relaxed opacity-85">
                       My secret recipe? A cup of coffee, a dash of curiosity,
                       and a sprinkle of chaos. Together, they turn ideas into
                       pixels and bugs into happy little features ✨.

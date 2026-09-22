@@ -8,32 +8,34 @@ import { SpinnerIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "relative inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-md text-sm font-medium transition-transform duration-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50",
+  "font-display rounded-sm relative inline-flex cursor-pointer items-center justify-center overflow-hidden text-xs font-bold tracking-[0.15em] uppercase transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default:
-          "bg-slate-900 text-slate-50 hover:bg-slate-900/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90",
+        /** Struck gold. The one call to action per screen. */
+        gilded:
+          "bg-[linear-gradient(180deg,#e3a857_0%,#c48b3c_100%)] text-[#2a1b08] shadow-[0_6px_18px_var(--glow)] hover:brightness-105",
+        /** Engraved outline. The quiet companion to a gilded button. */
+        etched:
+          "border-gilt/50 text-gilt-text border bg-transparent hover:bg-gilt/10",
+        /** Witchfire. For anything that reads as a spell rather than a link. */
+        arcane:
+          "border-arcane/45 bg-arcane/15 text-arcane border hover:bg-arcane/25",
         destructive:
-          "bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700",
-        outline:
-          "border border-slate-200 bg-transparent text-slate-900 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-50 dark:hover:bg-slate-800",
-        secondary:
-          "bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-700",
-        ghost:
-          "text-slate-900 hover:bg-slate-100 dark:text-slate-50 dark:hover:bg-slate-800",
-        link: "text-slate-900 underline-offset-4 hover:underline dark:text-slate-50",
+          "bg-destructive text-background hover:brightness-110",
+        ghost: "text-foreground hover:bg-gilt/10",
+        link: "text-gilt-text underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
+        default: "h-11 px-6 py-2",
+        sm: "h-9 px-4",
+        lg: "h-12 px-8",
         icon: "h-10 w-10 p-0",
         "icon-sm": "h-9 w-9 p-0",
         "icon-lg": "h-11 w-11 p-0",
       },
     },
-    defaultVariants: { variant: "default", size: "default" },
+    defaultVariants: { variant: "gilded", size: "default" },
   }
 );
 
@@ -98,10 +100,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       );
     }
 
+    // A dark ripple reads on gold; a light one reads on everything else.
     const rippleColor =
-      variant === "destructive" || variant == null || variant === "default"
-        ? "bg-white/30 dark:bg-slate-900/20"
-        : "bg-slate-900/10 dark:bg-white/10";
+      variant == null || variant === "gilded" || variant === "destructive"
+        ? "bg-black/20"
+        : "bg-gilt/25";
 
     return (
       <button

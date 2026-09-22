@@ -118,7 +118,7 @@
     #0e0b16 100%
   );
   --rail: linear-gradient(180deg, #2a1b3d 0%, #180f26 100%);
-  --footer: #0a1410;
+  --footer: #030f18;
   --footer-foreground: #f2e7d0;
 }
 
@@ -242,5 +242,23 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Embers rising off the hearth. Paired with `components/effects/Embers`. */
+@keyframes ember-rise {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(var(--ember-drift, 0), -112vh) scale(1);
+    opacity: 0;
   }
 }

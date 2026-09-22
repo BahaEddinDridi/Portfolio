@@ -1,8 +1,10 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import { useScroll } from "motion/react";
 
 import { TimelineItem } from "@/components/experience/TimelineItem";
+import { TimelineRail } from "@/components/experience/TimelineRail";
 import type { ExpandMode, ExperienceEntry } from "@/types";
 
 interface ProfessionalTimelineProps {
@@ -22,6 +24,17 @@ export function ProfessionalTimeline({
     () => new Set(defaultExpandedIds ?? data.map((item) => item.id))
   );
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  /*
+   * Measured against 55% of the viewport rather than its edges, so the wisp
+   * sits a little above centre — where the reader's eye already is — instead
+   * of racing ahead at the top and lagging at the bottom.
+   */
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 55%", "end 55%"],
+  });
+
   const onToggle = useCallback(
     (id: string) => {
       setExpanded((previous) => {
@@ -38,7 +51,9 @@ export function ProfessionalTimeline({
   );
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative">
+      <TimelineRail progress={scrollYProgress} />
+
       {data.map((item) => (
         <TimelineItem
           key={item.id}

@@ -6,7 +6,7 @@
  * runtime instead.
  */
 export const lotties = {
-  loading: "/lotties/Loading.json",
+  loading: "/lotties/Wizard.json",
   magic: "/lotties/magic.json",
   coffee: "/lotties/coffee.json",
   mailSent: "/lotties/mail-sent.json",

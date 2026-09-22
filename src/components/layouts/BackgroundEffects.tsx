@@ -9,10 +9,9 @@ import { useIsDesktop } from "@/hooks/useMediaQuery";
 const Particles = dynamic(() => import("@/components/effects/Particles"), {
   ssr: false,
 });
-const ShootingStars = dynamic(
-  () => import("@/components/effects/ShootingStar"),
-  { ssr: false }
-);
+const Embers = dynamic(() => import("@/components/effects/Embers"), {
+  ssr: false,
+});
 
 /** Particle budget scaled to viewport width, so laptops are not overdrawn. */
 function particleCountFor(width: number) {
@@ -38,8 +37,8 @@ export function BackgroundEffects() {
     <>
       <div aria-hidden className="absolute inset-0 z-0 h-full w-full">
         <Particles
-          particleColors={["#4b5563", "#a5b4fc", "#10B981"]}
-          darkParticleColors={["#ffffff", "#a5b4fc"]}
+          particleColors={["#b8842a", "#c8912f", "#2f6b5a"]}
+          darkParticleColors={["#e3a857", "#a97be0", "#f5d08a"]}
           particleCount={particleCount}
           particleSpread={10}
           speed={0.1}
@@ -50,7 +49,7 @@ export function BackgroundEffects() {
         />
       </div>
       <div aria-hidden className="absolute inset-0 z-[5] h-full w-full">
-        <ShootingStars />
+        <Embers />
       </div>
     </>
   );

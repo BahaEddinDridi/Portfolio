@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion, useMotionValue, useTransform } from "motion/react";
 
-import { SmallCloud } from "@/components/effects/Clouds";
 import { NavLink } from "@/components/layouts/NavLink";
 import Button from "@/components/ui/button";
 import {
@@ -134,13 +133,8 @@ export function Navbar() {
           </Sheet>
         </div>
 
+        {/* The wisp carries its own motes, so it needs no decoration around it. */}
         <div className="relative z-10 ml-auto">
-          <div className="pointer-events-none absolute -left-8 -top-2 z-30 h-6 w-12 md:h-8 md:w-16">
-            <SmallCloud delay={0} />
-          </div>
-          <div className="pointer-events-none absolute -bottom-2 -right-6 z-30 h-5 w-10 md:h-7 md:w-14">
-            <SmallCloud delay={2} />
-          </div>
           <ThemeSwitch />
         </div>
       </motion.div>

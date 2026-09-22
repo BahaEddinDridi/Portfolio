@@ -54,17 +54,6 @@ export function Projects() {
           <ProjectCarousel />
         </motion.div>
 
-        <motion.div
-          variants={fadeUpVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          className="mt-12 text-center"
-        >
-          <p className="font-mono text-xs tracking-[0.2em] uppercase opacity-50">
-            Drag to turn the wheel &middot; click a plate to read it
-          </p>
-        </motion.div>
       </div>
     </motion.section>
   );

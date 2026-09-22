@@ -1,5 +1,6 @@
 "use client";
 
+import { RuneDivider } from "@/components/ui/rune-divider";
 import { navItems, sectionIds } from "@/data/navigation";
 import { site, socials } from "@/data/site";
 import { scrollToSection, useActiveSection } from "@/hooks/useActiveSection";
@@ -30,8 +31,12 @@ export function Footer() {
   const activeSection = useActiveSection(sectionIds);
 
   return (
-    <footer className="relative overflow-hidden px-4 py-10 sm:px-6 lg:px-8" style={{ background: "var(--footer)", color: "var(--footer-foreground)" }}>
+    <footer
+      className="relative overflow-hidden px-4 pt-12 pb-10 sm:px-6 lg:px-8"
+      style={{ background: "var(--footer)", color: "var(--footer-foreground)" }}
+    >
       <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center">
+        <RuneDivider className="mb-8 max-w-sm" />
         <div className="mb-6 flex items-center justify-center">
           <span className="font-display text-gilt text-2xl font-extrabold tracking-[0.2em]">
             {site.name}

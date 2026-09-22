@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 
+import { schoolNames } from "@/data/skills";
 import { cn } from "@/lib/utils";
 
 interface CategoryFilterProps {
@@ -47,14 +48,13 @@ export function CategoryFilter({
           onClick={() => onChange(category)}
           aria-pressed={activeCategory === category}
           className={cn(
-            "rounded-full border px-4 py-2 text-sm font-medium transition-all duration-300 md:px-6",
-            "border-gray-300 hover:border-gray-600 dark:border-gray-700",
+            "font-display rounded-sm border px-5 py-2 text-xs font-bold tracking-[0.15em] uppercase transition-all duration-300",
             activeCategory === category
-              ? "border-gray-500 bg-white text-gray-900 shadow-[0_0_15px_rgba(0,0,0,0.3)] dark:border-white dark:bg-white/10 dark:text-white dark:shadow-[0_0_15px_rgba(255,255,255,0.3)]"
-              : "bg-gray-100 text-gray-700 hover:text-gray-900 dark:bg-gray-900/50 dark:text-gray-400"
+              ? "border-gilt bg-gilt/15 text-gilt-text shadow-[0_0_18px_var(--glow)]"
+              : "border-border text-foreground/60 hover:border-gilt/60 hover:text-foreground"
           )}
         >
-          {category}
+          {schoolNames[category] ?? category}
         </motion.button>
       ))}
     </motion.div>

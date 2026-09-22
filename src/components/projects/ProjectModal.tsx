@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
-import { Badge } from "@/components/ui/badge";
 import Button from "@/components/ui/button";
+import { StarGlyph } from "@/components/ui/star-glyph";
+import { WaxSeal } from "@/components/ui/wax-seal";
 import { ProjectGallery } from "@/components/projects/ProjectGallery";
 import { CloseIcon, ExternalLinkIcon, GithubIcon } from "@/lib/icons";
 import type { Project } from "@/types";
@@ -15,7 +16,11 @@ interface ProjectModalProps {
 }
 
 const SCROLLBAR_CLASS =
-  "[&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500";
+  "[&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#e6d7b8] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#b8842a]";
+
+/** The page is warm vellum in both themes: a grimoire spread, not a dialog. */
+const PAGE = "bg-[linear-gradient(180deg,#f4ead5_0%,#ece0c6_100%)] text-[#2b2114]";
+const HEADING = "font-display text-[#8a5e1e] font-extrabold tracking-[0.06em] uppercase";
 
 /**
  * Full project detail, portalled above the carousel's 3D stacking context.
@@ -57,14 +62,14 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
       onClick={onClose}
     >
       <div
-        className="zoom-in-95 animate-in relative max-h-[98vh] w-full max-w-7xl overflow-hidden rounded-xl bg-slate-50 shadow-2xl duration-300 sm:max-h-[95vh] sm:rounded-2xl dark:bg-slate-950"
+        className={`zoom-in-95 animate-in relative max-h-[98vh] w-full max-w-5xl overflow-hidden rounded-sm border border-[rgba(122,88,32,0.5)] shadow-[0_40px_90px_rgba(0,0,0,0.6)] duration-300 sm:max-h-[95vh] ${PAGE}`}
         onClick={(event) => event.stopPropagation()}
       >
         <button
           type="button"
           onClick={onClose}
           aria-label="Close project details"
-          className="absolute right-2 top-2 z-50 rounded-full border border-gray-300 bg-gray-200 p-1.5 text-black backdrop-blur-sm transition-all hover:bg-gray-300 sm:right-4 sm:top-4 sm:p-2 dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
+          className="absolute right-3 top-3 z-50 rounded-full border border-[rgba(122,88,32,0.5)] bg-[#e6d7b8] p-2 text-[#5c4a31] transition-all hover:bg-[#d9c8a4] sm:right-4 sm:top-4"
         >
           <CloseIcon className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
@@ -72,37 +77,50 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
         <div
           className={`flex h-full max-h-[98vh] flex-col overflow-y-auto sm:max-h-[95vh] ${SCROLLBAR_CLASS}`}
         >
-          <div className="space-y-4 bg-slate-50 p-4 sm:space-y-6 sm:p-6 md:p-8 lg:p-10 dark:bg-slate-950">
-            <header>
-              <Badge className="mb-3 border-slate-300 bg-slate-200 text-xs text-slate-900 sm:mb-4 sm:text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-white">
-                {project.category}
-              </Badge>
-              <h2 className="mb-3 pr-8 text-2xl font-bold text-slate-900 sm:mb-4 sm:text-3xl md:text-4xl lg:text-5xl dark:text-white">
+          <div className="relative space-y-5 p-5 sm:space-y-7 sm:p-8 md:p-10">
+            <span className="pointer-events-none absolute inset-3 rounded-[1px] border border-[rgba(122,88,32,0.3)]" />
+
+            <header className="relative text-center">
+              <div className="mb-4 flex justify-center">
+                <WaxSeal tone="ember" size="lg">
+                  {project.category.split("-").map((part) => (
+                    <span key={part} className="block leading-[1.05]">
+                      {part.toUpperCase()}
+                    </span>
+                  ))}
+                </WaxSeal>
+              </div>
+              <h2 className={`${HEADING} mb-3 text-2xl sm:text-3xl md:text-4xl`}>
                 {project.title}
               </h2>
-              <p className="text-sm text-slate-600 sm:text-base dark:text-slate-400">
+              <div className="mx-auto mb-3 flex w-40 items-center gap-2">
+                <span className="h-px flex-grow bg-[rgba(122,88,32,0.45)]" />
+                <StarGlyph className="h-3 w-3 text-[#8a5e1e]" />
+                <span className="h-px flex-grow bg-[rgba(122,88,32,0.45)]" />
+              </div>
+              <p className="text-sm italic text-[#5c4a31] sm:text-base">
                 {project.shortDescription}
               </p>
             </header>
 
-            <section>
-              <h3 className="mb-2 text-lg font-semibold text-slate-900 sm:mb-3 sm:text-xl md:text-2xl dark:text-white">
-                About This Project
+            <section className="relative">
+              <h3 className={`${HEADING} mb-2 text-xs sm:mb-3 sm:text-sm`}>
+                The Working
               </h3>
-              <p className="text-sm leading-relaxed text-slate-700 sm:text-base dark:text-slate-300">
+              <p className="text-sm leading-relaxed text-[#4a3a22] sm:text-[15px]">
                 {project.fullDescription}
               </p>
             </section>
 
-            <section>
-              <h3 className="mb-3 text-lg font-semibold text-slate-900 sm:mb-4 sm:text-xl md:text-2xl dark:text-white">
-                Technologies Used
+            <section className="relative">
+              <h3 className={`${HEADING} mb-3 text-xs sm:text-sm`}>
+                Components of the Spell
               </h3>
               <ul className="flex list-none flex-wrap gap-1.5 sm:gap-2">
                 {project.technologies.map((tech) => (
                   <li
                     key={tech}
-                    className="rounded-full border border-slate-300 bg-slate-200 px-2.5 py-1 text-xs font-medium text-slate-900 sm:px-3 sm:py-1.5 sm:text-sm md:px-4 md:py-2 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="rounded-sm border border-[rgba(122,88,32,0.45)] px-2.5 py-1 font-mono text-[11px] tracking-wide text-[#6b5320] sm:px-3 sm:py-1.5"
                   >
                     {tech}
                   </li>
@@ -126,12 +144,9 @@ function ProjectLinks({ project }: { project: Project }) {
   if (!liveUrl && !frontendGithubUrl && !backendGithubUrl) return null;
 
   return (
-    <div className="flex flex-col gap-2 pt-2 sm:gap-3 sm:pt-4 md:gap-4">
+    <div className="relative flex flex-col gap-3 pt-2 sm:pt-4">
       {liveUrl && (
-        <Button
-          asChild
-          className="h-10 w-full bg-slate-900 text-sm text-white hover:bg-slate-800 sm:h-11 sm:text-base md:h-12 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
-        >
+        <Button asChild className="h-11 w-full sm:h-12">
           <a href={liveUrl} target="_blank" rel="noopener noreferrer">
             <ExternalLinkIcon className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
             View Live Demo
@@ -155,8 +170,8 @@ function SourceLink({ href, label }: { href: string; label: string }) {
   return (
     <Button
       asChild
-      variant="outline"
-      className="h-10 flex-1 border-slate-300 bg-transparent text-sm text-slate-900 hover:bg-slate-100 sm:h-11 sm:text-base md:h-12 dark:border-slate-700 dark:text-white dark:hover:bg-slate-800"
+      variant="etched"
+      className="h-11 flex-1 border-[rgba(122,88,32,0.55)] text-[#6b5320] hover:bg-[rgba(122,88,32,0.1)] sm:h-12"
     >
       <a href={href} target="_blank" rel="noopener noreferrer">
         <GithubIcon className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
